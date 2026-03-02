@@ -1,21 +1,34 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Detail Barang')
-
 @section('content')
-<div class="card shadow-sm">
-    <div class="card-body">
+<div class="container">
+    <h2>Detail Barang</h2>
 
-        <h5>{{ $barang->nama_barang }}</h5>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <b>Nama Barang:</b> {{ $barang->nama_barang }}
+        </li>
 
-        <p><b>Kode Inventaris:</b> {{ $barang->kode_barang }}</p>
-        <p><b>Lokasi:</b> {{ $barang->ruang->nama_ruang }}</p>
-        <p><b>Tahun Masuk:</b> {{ $barang->tahun_perolehan }}</p>
-        <p><b>Kondisi:</b> {{ $barang->keterangan }}</p>
+        <li class="list-group-item">
+            <b>Kode Inventaris:</b> 
+            <span class="badge bg-dark">{{ $barang->kode_barang }}</span>
+        </li>
 
-        <hr>
+        <li class="list-group-item">
+            <b>Lokasi:</b> {{ $barang->ruang->nama_ruang }}
+        </li>
 
-        <h6>QR Code Barang</h6>
+        <li class="list-group-item">
+            <b>Tahun Masuk:</b> {{ $barang->tahun_perolehan }}
+        </li>
+
+        <li class="list-group-item">
+            <b>Kondisi:</b> {{ $barang->keterangan ?? '-' }}
+        </li>
+    </ul>
+
+    <div class="mt-4">
+        <h5>QR Code Barang</h5>
 
         <div class="p-3 bg-light d-inline-block">
             {!! QrCode::size(150)->generate(route('barang.scan', $barang->kode_barang)) !!}
@@ -24,9 +37,11 @@
         <p class="mt-2 text-muted">
             Scan untuk melihat informasi barang.
         </p>
+    </div>
 
+    <div class="mt-3">
         <a href="{{ route('barang.index') }}" class="btn btn-secondary">
-            Kembali
+            <i class="fa-solid fa-arrow-left me-1"></i>Kembali
         </a>
     </div>
 </div>

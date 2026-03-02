@@ -1,38 +1,39 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Detail Jenis Barang')
-
 @section('content')
-<div class="card shadow-sm">
-    <div class="card-body">
+<div class="container">
+    <h2>Detail Jenis Barang</h2>
 
-        <h5 class="mb-3">
-            Kode Jenis: <span class="badge bg-dark">{{ $jenis->kode_jenis }}</span>
-        </h5>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <b>Kode Jenis:</b> 
+            <span class="badge bg-dark">{{ $jenis->kode_jenis }}</span>
+        </li>
 
-        <p>
-            <b>Nama Jenis:</b><br>
+        <li class="list-group-item">
+            <b>Nama Jenis:</b> 
             {{ $jenis->nama_jenis }}
-        </p>
+        </li>
 
-        <p>
-            <b>Kelompok Barang:</b><br>
+        <li class="list-group-item">
+            <b>Kelompok Barang:</b> 
             {{ $jenis->kelompok->nama_kelompok }}
-        </p>
+        </li>
 
-        <p>
-            <b>Deskripsi:</b><br>
+        <li class="list-group-item">
+            <b>Deskripsi:</b> 
             {{ $jenis->deskripsi ?? '-' }}
-        </p>
+        </li>
+    </ul>
 
+    <div class="mt-3">
         <a href="{{ route('jenis.index') }}" class="btn btn-secondary">
-            Kembali
+            <i class="fa-solid fa-arrow-left me-1"></i>Kembali
         </a>
 
         <a href="{{ route('jenis.edit', $jenis->id) }}" class="btn btn-warning">
-            Edit
+            <i class="fa-solid fa-pen-to-square me-1"></i>Edit
         </a>
-
     </div>
 </div>
 @endsection
