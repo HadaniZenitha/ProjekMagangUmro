@@ -22,8 +22,7 @@ class BarangController extends Controller
     {
         
         $query = Barang::with('divisi','pic','ruang')
-        ->orderBy('kode_barang')
-        ->get();
+        ->orderBy('kode_barang');
         
         if ($request->divisi_id) {
         $query->where('divisi_id', $request->divisi_id);
