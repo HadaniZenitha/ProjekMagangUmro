@@ -29,7 +29,8 @@
             {{-- Divisi --}}
             <div class="mb-3">
                 <label class="form-label">Divisi</label>
-                <select name="divisi_id" class="form-control" required>
+                <select name="divisi_id" id="divisiSelect" class="form-control" required>
+                    <option value="">-- Pilih Divisi --</option>
                     @foreach($divisis as $d)
                         <option value="{{ $d->id }}">
                             {{ $d->nama_divisi }}
