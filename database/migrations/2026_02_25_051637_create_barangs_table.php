@@ -37,10 +37,11 @@ return new class extends Migration
     $table->string('serial_number')->nullable();
     $table->integer('tahun_perolehan')->nullable();
     $table->text('keterangan')->nullable();
-
+    
     $table->integer('urutan')->default(0);
-
+    
     $table->boolean('is_active')->default(true);
+    $table->text('catatan_nonaktif')->nullable();
 
     $table->timestamps();
         });

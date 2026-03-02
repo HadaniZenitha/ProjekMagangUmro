@@ -121,7 +121,7 @@
             {{-- Status --}}
             <div class="mb-4">
                 <label class="form-label">Status</label>
-                <select name="is_active" class="form-select" required>
+                <select name="is_active" id="statusSelect" class="form-control" required>
                     <option value="1" {{ $barang->is_active ? 'selected' : '' }}>
                         Aktif
                     </option>
@@ -129,6 +129,14 @@
                         Tidak Aktif
                     </option>
                 </select>
+            </div>
+            {{-- Catatan Keterangan Nonaktif --}}
+            <div class="mb-3" id="catatanWrapper"
+                 style="{{ $barang->is_active ? 'display:none;' : '' }}">
+                <label>Catatan Nonaktif</label>
+                <textarea name="catatan_nonaktif"
+                          class="form-control"
+                          rows="3">{{ old('catatan_nonaktif', $barang->catatan_nonaktif) }}</textarea>
             </div>
 
             <div class="d-flex gap-2">
@@ -145,5 +153,18 @@
 
     </div>
 </div>
+<script>
+const statusSelect = document.getElementById('statusSelect');
+const catatanWrapper = document.getElementById('catatanWrapper');
 
+statusSelect.addEventListener('change', function() {
+
+    if(this.value == "0") {
+        catatanWrapper.style.display = 'block';
+    } else {
+        catatanWrapper.style.display = 'none';
+    }
+
+});
+</script>
 @endsection

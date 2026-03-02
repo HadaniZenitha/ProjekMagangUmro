@@ -68,4 +68,5 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/get-pic-by-divisi/{divisi}', 
     [PicController::class, 'getByDivisi']);
 
-
+Route::get('/barang/export', [BarangController::class, 'export'])
+      ->name('barang.export');
