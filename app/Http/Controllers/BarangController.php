@@ -90,6 +90,7 @@ class BarangController extends Controller
         ]);
 
         $divisi = Divisi::findOrFail($request->divisi_id);
+        $ruang = Ruang::findOrFail($request->ruang_id);
         $subjenis = SubJenisBarang::with('jenis.kelompok')
                     ->findOrFail($request->sub_jenis_barang_id);
         $kelompok = $subjenis->jenis->kelompok;
@@ -109,7 +110,7 @@ class BarangController extends Controller
         $subjenis->kode_subjenis . '/' .
         $formatUrutan . '/' .
         $tahun . '/' .
-        $divisi->kode_divisi;
+        $ruang->nama_ruang;
 
         Barang::create([
             'divisi_id' => $divisi->id,
