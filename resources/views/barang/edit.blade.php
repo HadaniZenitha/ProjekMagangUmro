@@ -3,10 +3,15 @@
 @section('title', 'Edit Barang Inventaris')
 
 @section('content')
-<div class="card shadow-sm">
+<div class="card shadow-sm border-0">
     <div class="card-body">
 
-        {{-- Tampilkan Error Validasi --}}
+        <h4 class="mb-4">
+            <i class="fas fa-edit text-warning"></i>
+            Edit Barang Inventaris
+        </h4>
+
+        {{-- Error Validasi --}}
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
@@ -21,26 +26,27 @@
             @csrf
             @method('PUT')
 
-            {{-- Kode Barang (Readonly) --}}
+            {{-- Kode Barang --}}
             <div class="mb-3">
-                <label class="form-label">Kode Barang</label>
+                <label class="form-label fw-semibold">Kode Barang</label>
                 <input type="text"
-                       class="form-control"
+                       class="form-control bg-light"
                        value="{{ $barang->kode_barang }}"
                        readonly>
             </div>
 
+            {{-- Sub Jenis --}}
             <div class="mb-3">
-                <label>Sub Jenis</label>
+                <label class="form-label fw-semibold">Sub Jenis</label>
                 <input type="text"
-                    class="form-control"
-                    value="{{ $barang->subjenis->nama_subjenis }}"
-                    readonly>
+                       class="form-control bg-light"
+                       value="{{ $barang->subjenis->nama_subjenis }}"
+                       readonly>
             </div>
 
             {{-- Nama Barang --}}
             <div class="mb-3">
-                <label class="form-label">Nama Barang</label>
+                <label class="form-label fw-semibold">Nama Barang</label>
                 <input type="text"
                        name="nama_barang"
                        class="form-control"
@@ -50,8 +56,13 @@
 
             {{-- PIC --}}
             <div class="mb-3">
-                <label class="form-label">PIC (Penanggung Jawab)</label>
-                <select name="pic_id" class="form-control" required>
+                <label class="form-label fw-semibold">
+                    PIC (Penanggung Jawab)
+                </label>
+                <select name="pic_id"
+                        class="form-select"
+                        required>
+                    <option value="">-- Pilih PIC --</option>
                     @foreach($pics as $p)
                         <option value="{{ $p->id }}"
                             {{ $barang->pic_id == $p->id ? 'selected' : '' }}>
@@ -64,7 +75,7 @@
 
             {{-- Merk --}}
             <div class="mb-3">
-                <label class="form-label">Merk</label>
+                <label class="form-label fw-semibold">Merk</label>
                 <input type="text"
                        name="merk"
                        class="form-control"
@@ -73,7 +84,7 @@
 
             {{-- Serial Number --}}
             <div class="mb-3">
-                <label class="form-label">Serial Number</label>
+                <label class="form-label fw-semibold">Serial Number</label>
                 <input type="text"
                        name="serial_number"
                        class="form-control"
@@ -82,7 +93,7 @@
 
             {{-- Tahun Perolehan --}}
             <div class="mb-3">
-                <label class="form-label">Tahun Perolehan</label>
+                <label class="form-label fw-semibold">Tahun Perolehan</label>
                 <input type="number"
                        name="tahun_perolehan"
                        class="form-control"
@@ -91,8 +102,9 @@
 
             {{-- Lokasi Ruang --}}
             <div class="mb-3">
-                <label class="form-label">Lokasi Ruang</label>
-                <select name="ruang_id" class="form-control">
+                <label class="form-label fw-semibold">Lokasi Ruang</label>
+                <select name="ruang_id" class="form-select">
+                    <option value="">-- Pilih Ruang --</option>
                     @foreach($ruangs as $r)
                         <option value="{{ $r->id }}"
                             {{ $barang->ruang_id == $r->id ? 'selected' : '' }}>
@@ -104,16 +116,18 @@
 
             {{-- Keterangan --}}
             <div class="mb-3">
-                <label class="form-label">Keterangan</label>
+                <label class="form-label fw-semibold">Keterangan</label>
                 <textarea name="keterangan"
                           class="form-control"
                           rows="3">{{ old('keterangan', $barang->keterangan) }}</textarea>
             </div>
 
-            {{-- Status Aktif --}}
-            <div class="mb-3">
-                <label class="form-label">Status</label>
-                <select name="is_active" class="form-control" required>
+            {{-- Status --}}
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Status</label>
+                <select name="is_active"
+                        class="form-select"
+                        required>
                     <option value="1" {{ $barang->is_active ? 'selected' : '' }}>
                         Aktif
                     </option>
@@ -123,13 +137,20 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">
-                Update
-            </button>
+            {{-- Tombol --}}
+            <div class="d-flex gap-2">
+                <button type="submit"
+                        class="btn btn-warning px-4 text-white">
+                    <i class="fas fa-save me-1"></i>
+                    Update
+                </button>
 
-            <a href="{{ route('barang.index') }}" class="btn btn-secondary">
-                Kembali
-            </a>
+                <a href="{{ route('barang.index') }}"
+                   class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Kembali
+                </a>
+            </div>
 
         </form>
 

@@ -1,12 +1,14 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Edit Kelompok Barang')
+@section('page-title', 'Edit Kelompok Barang')
 
 @section('content')
+
 <div class="card shadow-sm">
     <div class="card-body">
 
-        <form method="POST" action="{{ route('kelompok.update', $kelompok->id) }}">
+        <form action="{{ route('kelompok.update', $kelompok->id) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -15,17 +17,16 @@
 
                 <!-- tampil tapi tidak bisa diedit -->
                 <input type="text"
-                        class="form-control"
-                        value="{{ $kelompok->kode_kelompok }}"
-                        readonly>
+                       class="form-control bg-light"
+                       value="{{ $kelompok->kode_kelompok }}"
+                       readonly>
 
-                <!-- dikirim ke server -->
+                <!-- tetap dikirim -->
                 <input type="hidden"
-                        name="kode_kelompok"
-                        value="{{ $kelompok->kode_kelompok }}">
+                       name="kode_kelompok"
+                       value="{{ $kelompok->kode_kelompok }}">
             </div>
 
-            <!-- Nama -->
             <div class="mb-3">
                 <label class="form-label">Nama Kelompok</label>
                 <input type="text"
@@ -35,7 +36,6 @@
                        required>
             </div>
 
-            <!-- Deskripsi -->
             <div class="mb-3">
                 <label class="form-label">Deskripsi</label>
                 <textarea name="deskripsi"
@@ -43,14 +43,20 @@
                           rows="3">{{ old('deskripsi', $kelompok->deskripsi) }}</textarea>
             </div>
 
-            <button class="btn btn-primary">Update</button>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success shadow-sm">
+                    <i class="fa-solid fa-check me-2"></i> Update
+                </button>
 
-            <a href="{{ route('kelompok.index') }}" class="btn btn-secondary">
-                Batal
-            </a>
+                <a href="{{ route('kelompok.index') }}" 
+                   class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Batal
+                </a>
+            </div>
 
         </form>
 
     </div>
 </div>
+
 @endsection

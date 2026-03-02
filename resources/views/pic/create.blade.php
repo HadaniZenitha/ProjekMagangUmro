@@ -52,11 +52,17 @@
                     <option value="0">Nonaktif</option>
                 </select>
             </div>
+            <div class="d-flex left-content-end mt-3">
+                <a href="{{ route('pic.index') }}" 
+                class="btn btn-secondary me-2">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+                </a>
 
-            <button class="btn btn-primary">Simpan</button>
-            <a href="{{ route('pic.index') }}" 
-               class="btn btn-secondary">Kembali</a>
-
+                <button type="submit" 
+                        class="btn btn-success shadow-sm">
+                    <i class="fa-solid fa-floppy-disk me-1"></i> Simpan
+                </button>
+            </div>
         </form>
 
     </div>

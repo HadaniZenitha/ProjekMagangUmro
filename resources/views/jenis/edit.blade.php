@@ -1,29 +1,29 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Edit Jenis Barang')
+@section('page-title', 'Edit Jenis Barang')
 
 @section('content')
+
 <div class="card shadow-sm">
     <div class="card-body">
 
-        <form method="POST" action="{{ route('jenis.update', $jenis->id) }}">
+        <form action="{{ route('jenis.update', $jenis->id) }}" method="POST">
             @csrf
             @method('PUT')
 
-            <!-- Kelompok -->
             <div class="mb-3">
                 <label class="form-label">Kelompok Barang</label>
-                <select name="kelompok_barang_id" class="form-control" required>
+                <select name="kelompok_barang_id" class="form-select" required>
                     @foreach($kelompoks as $k)
                         <option value="{{ $k->id }}"
-                            {{ $jenis->kelompok_barang_id == $k->id ? 'selected' : '' }}>
+                            {{ old('kelompok_barang_id', $jenis->kelompok_barang_id) == $k->id ? 'selected' : '' }}>
                             {{ $k->nama_kelompok }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            <!-- Nama -->
             <div class="mb-3">
                 <label class="form-label">Nama Jenis</label>
                 <input type="text"
@@ -33,7 +33,6 @@
                        required>
             </div>
 
-            <!-- Deskripsi -->
             <div class="mb-3">
                 <label class="form-label">Deskripsi</label>
                 <textarea name="deskripsi"
@@ -41,23 +40,34 @@
                           rows="3">{{ old('deskripsi', $jenis->deskripsi) }}</textarea>
             </div>
 
-            <!-- Status -->
             <div class="mb-3">
                 <label class="form-label">Status</label>
-                <select name="is_active" class="form-control">
-                    <option value="1" {{ $jenis->is_active ? 'selected' : '' }}>Aktif</option>
-                    <option value="0" {{ !$jenis->is_active ? 'selected' : '' }}>Nonaktif</option>
+                <select name="is_active" class="form-select">
+                    <option value="1"
+                        {{ old('is_active', $jenis->is_active) == 1 ? 'selected' : '' }}>
+                        Aktif
+                    </option>
+                    <option value="0"
+                        {{ old('is_active', $jenis->is_active) == 0 ? 'selected' : '' }}>
+                        Nonaktif
+                    </option>
                 </select>
             </div>
 
-            <button class="btn btn-primary">Update</button>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success shadow-sm">
+                    <i class="fa-solid fa-check me-2"></i> Update
+                </button>
 
-            <a href="{{ route('jenis.index') }}" class="btn btn-secondary">
-                Batal
-            </a>
+                <a href="{{ route('jenis.index') }}" 
+                   class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Batal
+                </a>
+            </div>
 
         </form>
 
     </div>
 </div>
+
 @endsection
