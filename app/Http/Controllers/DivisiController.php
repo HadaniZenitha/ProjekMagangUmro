@@ -14,6 +14,7 @@ class DivisiController extends Controller
     {
         $divisis = Divisi::orderBy('kode_divisi')->get();
         return view('divisi.index', compact('divisis'));
+        
     }
 
     /**
