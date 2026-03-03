@@ -245,4 +245,19 @@ class BarangController extends Controller
         return Excel::download(new BarangExport($data), 'laporan_barang.xlsx');
     }
 
+    public function import(Request $request)
+    {
+        // Validasi file
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        // Jalankan proses import
+        Excel::import(new BarangImport, $request->file('file_excel'));
+
+        // Arahkan kembali ke halaman index dengan pesan sukses
+        return redirect()->route('barang.index')
+            ->with('success', 'Data Barang berhasil diimport dari Excel!');
+    }
+
 }

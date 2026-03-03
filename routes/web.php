@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/barang/import', [BarangController::class, 'import'])->name('barang.import');
     Route::resource('barang', BarangController::class);
     Route::get('/scan/{kode}', [BarangController::class, 'scan'])
     ->name('barang.scan');
