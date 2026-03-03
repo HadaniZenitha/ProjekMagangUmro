@@ -1,20 +1,35 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Detail Sub Jenis Barang')
-
 @section('content')
-<div class="card shadow-sm">
-    <div class="card-body">
+<div class="container">
+    <h2>Detail Sub Jenis Barang</h2>
 
-        <h5>Kode: {{ $subjenis->kode_subjenis }}</h5>
-        <p><b>Nama:</b> {{ $subjenis->nama_subjenis }}</p>
-        <p><b>Jenis:</b> {{ $subjenis->jenis->nama_jenis }}</p>
-        <p><b>Deskripsi:</b> {{ $subjenis->deskripsi }}</p>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <b>Kode Sub Jenis:</b> 
+            <span class="badge bg-dark">{{ $subjenis->kode_subjenis }}</span>
+        </li>
 
+        <li class="list-group-item">
+            <b>Nama Sub Jenis:</b> 
+            {{ $subjenis->nama_subjenis }}
+        </li>
+
+        <li class="list-group-item">
+            <b>Jenis Barang:</b> 
+            {{ $subjenis->jenis->nama_jenis }}
+        </li>
+
+        <li class="list-group-item">
+            <b>Deskripsi:</b> 
+            {{ $subjenis->deskripsi ?? '-' }}
+        </li>
+    </ul>
+
+    <div class="mt-3">
         <a href="{{ route('subjenis.index') }}" class="btn btn-secondary">
-            Kembali
+            <i class="fa-solid fa-arrow-left me-1"></i>Kembali
         </a>
-
     </div>
 </div>
 @endsection

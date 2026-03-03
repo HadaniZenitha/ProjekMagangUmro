@@ -1,50 +1,106 @@
 @extends('layouts.dashboard')
 
-@section('page-title', 'Edit Lantai')
+@section('title', 'Edit Lantai')
 
 @section('content')
 
-<form action="{{ route('lantai.update', $lantai->id) }}" method="POST">
-    @csrf
-    @method('PUT')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Edit Lantai</h5>
+    <a href="{{ route('lantai.index') }}" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    </a>
+</div>
 
-    <div class="mb-3">
-        <label>Gedung</label>
-        <select name="gedung_id" class="form-control">
-            @foreach($gedungs as $g)
-                <option value="{{ $g->id }}"
-                    {{ $lantai->gedung_id == $g->id ? 'selected' : '' }}>
-                    {{ $g->kode_gedung }} - {{ $g->nama_gedung }}
-                </option>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
             @endforeach
-        </select>
+        </ul>
     </div>
+@endif
 
-    <div class="mb-3">
-        <label>Kode Lantai</label>
-        <input type="text" name="kode_lantai"
-               value="{{ $lantai->kode_lantai }}"
-               class="form-control" required>
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+
+        <form action="{{ route('lantai.update', $lantai->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="mb-3">
+                <label class="form-label">Gedung</label>
+                <select name="gedung_id" class="form-select" required>
+                    @foreach($gedungs as $g)
+                        <option value="{{ $g->id }}"
+                            {{ $lantai->gedung_id == $g->id ? 'selected' : '' }}>
+                            {{ $g->kode_gedung }} - {{ $g->nama_gedung }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Kode Lantai</label>
+                <input type="text"
+                       name="kode_lantai"
+                       value="{{ $lantai->kode_lantai }}"
+                       class="form-control"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nama Lantai</label>
+                <input type="text"
+                       name="nama_lantai"
+                       value="{{ $lantai->nama_lantai }}"
+                       class="form-control">
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Status</label>
+                <select name="is_active" class="form-select">
+                    <option value="1" {{ $lantai->is_active ? 'selected' : '' }}>
+                        Aktif
+                    </option>
+                    <option value="0" {{ !$lantai->is_active ? 'selected' : '' }}>
+                        Nonaktif
+                    </option>
+                </select>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fa-solid fa-save me-1"></i> Update
+                </button>
+
+                <a href="{{ route('lantai.index') }}" class="btn btn-danger">
+                    Batal
+                </a>
+            </div>
+
+        </form>
+
     </div>
+</div>
 
-    <div class="mb-3">
-        <label>Nama Lantai</label>
-        <input type="text" name="nama_lantai"
-               value="{{ $lantai->nama_lantai }}"
-               class="form-control">
-    </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const select = document.getElementById("statusSelect");
 
-    <div class="mb-3">
-        <label>Status</label>
-        <select name="is_active" class="form-control">
-            <option value="1" {{ $lantai->is_active ? 'selected' : '' }}>Aktif</option>
-            <option value="0" {{ !$lantai->is_active ? 'selected' : '' }}>Nonaktif</option>
-        </select>
-    </div>
+    function updateColor() {
+        if (select.value == "1") {
+            select.classList.remove("border-danger", "text-danger");
+            select.classList.add("border-success", "text-success");
+        } else {
+            select.classList.remove("border-success", "text-success");
+            select.classList.add("border-danger", "text-danger");
+        }
+    }
 
-    <button class="btn btn-primary">Update</button>
-    <a href="{{ route('lantai.index') }}" class="btn btn-secondary">Kembali</a>
-
-</form>
+    updateColor();
+    select.addEventListener("change", updateColor);
+});
+</script>
 
 @endsection
