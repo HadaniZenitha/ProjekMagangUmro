@@ -8,6 +8,10 @@
     + Tambah Barang
 </a>
 
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalImport">
+        <i class="fas fa-file-excel"></i> Import Excel
+</button>
+
 <div class="card shadow-sm">
     <div class="card-body">
 
@@ -52,6 +56,32 @@
             @endforeach
         </table>
 
+    </div>
+</div>
+
+<!-- Modal Import Excel -->
+<div class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="modalImportLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalImportLabel">Import Data Barang dari Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('barang.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="file_excel" class="form-label">Pilih File Excel</label>
+                        <input type="file" class="form-control" id="file_excel" name="file_excel" accept=".xlsx,.xls,.csv" required>
+                        <small class="text-muted">Format: .xlsx, .xls, atau .csv</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
