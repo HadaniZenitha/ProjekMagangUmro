@@ -20,6 +20,10 @@
     </div>
 @endif
 
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalImport">
+        <i class="fas fa-file-excel"></i> Import Excel
+    </button>
+
 <div class="card shadow-sm border-0">
     <div class="card-body">
 
@@ -83,8 +87,6 @@
 
     </div>
 </div>
-
-{{-- Modal Import Excel --}}
 <div class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="modalImportLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -109,5 +111,4 @@
         </div>
     </div>
 </div>
-
 @endsection
