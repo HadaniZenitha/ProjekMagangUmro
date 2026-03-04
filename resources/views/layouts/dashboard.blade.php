@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>i-Row | Sistem Inventarisasi UNIT UMRO</title>
+<title>SMART-UMRO | Smart Management of Assets and Resource Terintegrasi UMRO</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -270,8 +270,8 @@ body {
     </div>
 
     <div class="sidebar-header">
-        <h3>i - Noni</h3>
-        <p>Sistem Inventarisasi</p>
+        <h3>SMART-UMRO</h3>
+        <p>Smart Management of Assets and Resource Terintegrasi UMRO</p>
     </div>
 
     <div class="menu-container">
