@@ -96,17 +96,21 @@
 
         <!-- Pagination -->
         @if(method_exists($pics, 'hasPages') && $pics->hasPages())
-        <div class="d-flex justify-content-between align-items-center mt-3">
 
-            <small class="text-muted">
+        <div class="mt-3 text-center">
+
+            <small class="text-muted d-block mb-2">
                 Menampilkan {{ $pics->firstItem() }} 
                 sampai {{ $pics->lastItem() }} 
                 dari {{ $pics->total() }} data
             </small>
 
-            {{ $pics->links('pagination::bootstrap-5') }}
+            <div class="d-flex justify-content-center">
+                {{ $pics->links('pagination::bootstrap-5') }}
+            </div>
 
         </div>
+
         @endif
 
     </div>

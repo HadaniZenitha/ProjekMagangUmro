@@ -23,71 +23,94 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <table class="table table-bordered align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Kode</th>
-                        <th>Gedung</th>
-                        <th>Lantai</th>
-                        <th>Jenis</th>
-                        <th>Nama</th>
-                        <th>Status</th>
-                        <th width="220">Aksi</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    @forelse($ruangs as $r)
-                    <tr>
-                        <td>{{ $r->kode_ruang }}</td>
-                        <td>{{ $r->lantai->gedung->nama_gedung ?? '-' }}</td>
-                        <td>{{ $r->lantai->kode_lantai ?? '-' }}</td>
-                        <td>{{ $r->jenisRuangan->nama_jenis_ruangan ?? '-' }}</td>
-                        <td>{{ $r->nama_ruang }}</td>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Kode</th>
+                            <th>Gedung</th>
+                            <th>Lantai</th>
+                            <th>Jenis</th>
+                            <th>Nama</th>
+                            <th>Status</th>
+                            <th width="220">Aksi</th>
+                        </tr>
+                    </thead>
 
-                        <td>
-                            @if($r->is_active)
-                                <span class="badge bg-success">Aktif</span>
-                            @else
-                                <span class="badge bg-danger">Nonaktif</span>
-                            @endif
-                        </td>
+                    <tbody>
+                        @forelse($ruangs as $r)
+                        <tr>
+                            <td>{{ $r->kode_ruang }}</td>
+                            <td>{{ $r->lantai->gedung->nama_gedung ?? '-' }}</td>
+                            <td>{{ $r->lantai->kode_lantai ?? '-' }}</td>
+                            <td>{{ $r->jenisRuangan->nama_jenis_ruangan ?? '-' }}</td>
+                            <td>{{ $r->nama_ruang }}</td>
 
-                        <td>
-                            <a href="{{ route('ruangs.show', $r->id) }}" 
-                               class="btn btn-info btn-sm text-white">
-                                <i class="fa-solid fa-eye"></i>
-                            </a>
+                            <td>
+                                @if($r->is_active)
+                                    <span class="badge bg-success">Aktif</span>
+                                @else
+                                    <span class="badge bg-danger">Nonaktif</span>
+                                @endif
+                            </td>
 
-                            <a href="{{ route('ruangs.edit', $r->id) }}" 
-                               class="btn btn-warning btn-sm text-dark">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
+                            <td>
+                                <a href="{{ route('ruangs.show', $r->id) }}" 
+                                   class="btn btn-info btn-sm text-white">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
 
-                            <form action="{{ route('ruangs.destroy', $r->id) }}"
-                                  method="POST"
-                                  class="d-inline">
-                                @csrf
-                                @method('DELETE')
+                                <a href="{{ route('ruangs.edit', $r->id) }}" 
+                                   class="btn btn-warning btn-sm text-dark">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
 
-                                <button onclick="return confirm('Hapus ruang?')"
-                                        class="btn btn-danger btn-sm">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
+                                <form action="{{ route('ruangs.destroy', $r->id) }}"
+                                      method="POST"
+                                      class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
 
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" class="text-center py-3 text-muted">
-                            Belum ada data ruang yang terdaftar.
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
+                                    <button onclick="return confirm('Hapus ruang?')"
+                                            class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
 
-            </table>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-3 text-muted">
+                                Belum ada data ruang yang terdaftar.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            @if(method_exists($ruangs, 'hasPages') && $ruangs->hasPages())
+
+            <div class="mt-3 text-center">
+
+                <small class="text-muted d-block mb-2">
+                    Menampilkan {{ $ruangs->firstItem() }}
+                    sampai {{ $ruangs->lastItem() }}
+                    dari {{ $ruangs->total() }} data
+                </small>
+
+                <div class="d-flex justify-content-center">
+                    {{ $ruangs->links('pagination::bootstrap-5') }}
+                </div>
+
+            </div>
+
+            @endif
+
         </div>
     </div>
 

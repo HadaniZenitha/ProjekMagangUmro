@@ -5,6 +5,8 @@
 
 @section('content')
 
+<div class="container">
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0">Data Barang Inventaris</h4>
 
@@ -18,8 +20,9 @@
     <div class="card-body">
 
         <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-                <thead class="table-light">
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-light text-center">
                     <tr>
                         <th>Kode</th>
                         <th>PIC</th>
@@ -36,10 +39,8 @@
                     @forelse($barangs as $b)
                     <tr>
 
-                        <!-- Kode -->
                         <td>{{ $b->kode_barang }}</td>
 
-                        <!-- PIC -->
                         <td>
                             @if($b->pic)
                                 {{ $b->pic->nama_pic }}
@@ -51,19 +52,14 @@
                             @endif
                         </td>
 
-                        <!-- Nama Barang -->
                         <td>{{ $b->nama_barang }}</td>
 
-                        <!-- Lokasi -->
-                        <td>
-                            {{ $b->ruang->nama_ruang ?? '-' }}
-                        </td>
+                        <td>{{ $b->ruang->nama_ruang ?? '-' }}</td>
 
-                        <!-- Tahun -->
                         <td>{{ $b->tahun_perolehan }}</td>
 
-                        <!-- Kondisi -->
-                        <td>
+                        <td class="text-center">
+
                             @if($b->keterangan == 'Baik')
                                 <span class="badge bg-success">
                                     <i class="fa-solid fa-circle-check me-1"></i> Baik
@@ -84,31 +80,25 @@
                                     {{ $b->keterangan }}
                                 </span>
                             @endif
+
                         </td>
 
-                        <!-- QR Code -->
-                        <td>
-                            <div class="text-center">
-                                {!! QrCode::size(80)->generate($b->kode_barang) !!}
-                            </div>
+                        <td class="text-center">
+                            {!! QrCode::size(80)->generate($b->kode_barang) !!}
                         </td>
 
-                        <!-- Aksi -->
-                        <td>
+                        <td class="text-center">
 
-                            <!-- Detail -->
                             <a href="{{ route('barang.show', $b->id) }}" 
                                class="btn btn-info btn-sm text-white">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
 
-                            <!-- Edit -->
                             <a href="{{ route('barang.edit', $b->id) }}" 
                                class="btn btn-warning btn-sm text-dark">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
 
-                            <!-- Hapus -->
                             <form action="{{ route('barang.destroy', $b->id) }}"
                                   method="POST"
                                   class="d-inline">
@@ -124,6 +114,7 @@
                         </td>
 
                     </tr>
+
                     @empty
                     <tr>
                         <td colspan="8" class="text-center text-muted py-3">
@@ -136,7 +127,24 @@
             </table>
         </div>
 
+        <!-- INFO DATA + PAGINATION -->
+        <div class="d-flex flex-column align-items-center mt-3">
+
+            <div class="text-muted mb-2">
+                Menampilkan {{ $barangs->firstItem() }} - {{ $barangs->lastItem() }}
+                dari {{ $barangs->total() }} data
+            </div>
+
+            <div>
+                {{ $barangs->onEachSide(1)->links('pagination::bootstrap-5') }}
+            </div>
+
+        </div>
+
     </div>
+</div>
+
+
 </div>
 
 @endsection

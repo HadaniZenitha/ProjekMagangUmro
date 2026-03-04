@@ -12,7 +12,7 @@ class GedungController extends Controller
      */
     public function index()
     {
-        $gedungs = Gedung::orderBy('kode_gedung')->get();
+        $gedungs = Gedung::orderBy('kode_gedung')->paginate(10);
         return view('gedung.index', compact('gedungs'));
     }
 

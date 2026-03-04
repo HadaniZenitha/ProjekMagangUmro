@@ -16,9 +16,9 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $barangs = Barang::with('divisi', 'ruang')
+        $barangs = Barang::with(['divisi','ruang','pic','subjenis'])
             ->orderBy('kode_barang')
-            ->get();
+            ->paginate(10);
 
         return view('barang.index', compact('barangs'));
     }
@@ -29,16 +29,24 @@ class BarangController extends Controller
     public function create()
     {
         $divisis = Divisi::where('is_active', true)->get();
+
         $ruangs = Ruang::where('is_active', true)->get();
+
         $subjenisList = SubJenisBarang::with('jenis')
                         ->where('is_active', true)
                         ->orderBy('kode_subjenis')
                         ->get();
+
         $pics = Pic::with('divisi')
                 ->where('is_active', true)
                 ->get();
 
-        return view('barang.create', compact('divisis', 'ruangs', 'subjenisList', 'pics'));
+        return view('barang.create', compact(
+            'divisis',
+            'ruangs',
+            'subjenisList',
+            'pics'
+        ));
     }
 
     /**
@@ -55,14 +63,16 @@ class BarangController extends Controller
         ]);
 
         $divisi = Divisi::findOrFail($request->divisi_id);
+
         $subjenis = SubJenisBarang::with('jenis.kelompok')
                     ->findOrFail($request->sub_jenis_barang_id);
+
         $kelompok = $subjenis->jenis->kelompok;
+
         $tahun = $request->tahun_perolehan;
 
-        // ambil urutan terakhir per divisi per tahun
+        // ambil urutan terakhir
         $lastUrutan = Barang::where('divisi_id', $divisi->id)
-            // ->whereYear('tahun_perolehan', $tahun)
             ->max('urutan');
 
         $urutanBaru = $lastUrutan ? $lastUrutan + 1 : 1;
@@ -87,14 +97,12 @@ class BarangController extends Controller
             'serial_number' => $request->serial_number,
             'tahun_perolehan' => $request->tahun_perolehan,
             'keterangan' => $request->keterangan,
-            'kode_barang' => $kodeBarang,
             'urutan' => $urutanBaru,
             'is_active' => true,
         ]);
 
         return redirect()->route('barang.index')
             ->with('success', 'Barang berhasil ditambahkan');
-
     }
 
     /**
@@ -112,9 +120,17 @@ class BarangController extends Controller
     {
         $divisis = Divisi::all();
         $ruangs = Ruang::all();
-        $pics = Pic::with('divisi')->where('is_active', true)->get();
 
-        return view('barang.edit', compact('barang', 'divisis', 'ruangs', 'pics'));
+        $pics = Pic::with('divisi')
+                ->where('is_active', true)
+                ->get();
+
+        return view('barang.edit', compact(
+            'barang',
+            'divisis',
+            'ruangs',
+            'pics'
+        ));
     }
 
     /**
@@ -128,7 +144,6 @@ class BarangController extends Controller
             'is_active' => 'required|boolean'
         ]);
 
-        // kode_barang tidak diubah!
         $barang->update([
             'nama_barang' => $request->nama_barang,
             'pic_id' => $request->pic_id,
@@ -155,6 +170,9 @@ class BarangController extends Controller
             ->with('success', 'Barang berhasil dihapus');
     }
 
+    /**
+     * Scan QR Code
+     */
     public function scan($kode)
     {
         $barang = Barang::where('kode_barang', $kode)
@@ -163,5 +181,4 @@ class BarangController extends Controller
 
         return view('barang.scan', compact('barang'));
     }
-
 }

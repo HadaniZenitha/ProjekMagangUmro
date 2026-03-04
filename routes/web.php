@@ -12,6 +12,8 @@ use App\Http\Controllers\GedungController;
 use App\Http\Controllers\LantaiController;
 use App\Http\Controllers\JenisRuanganController;
 use App\Http\Controllers\PicController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -70,3 +72,8 @@ Route::get('/get-pic-by-divisi/{divisi}',
 
 Route::get('/barang/export', [BarangController::class, 'export'])
       ->name('barang.export');
+
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
+Route::post('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])
+->name('profile.update');

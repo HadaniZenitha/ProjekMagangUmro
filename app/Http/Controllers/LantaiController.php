@@ -16,7 +16,7 @@ class LantaiController extends Controller
         $lantais = Lantai::with('gedung')
             ->orderBy('gedung_id')
             ->orderBy('kode_lantai')
-            ->get();
+            ->paginate(10); // pagination
 
         return view('lantai.index', compact('lantais'));
     }

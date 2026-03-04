@@ -13,7 +13,10 @@ class PicController extends Controller
      */
     public function index()
     {
-        $pics = Pic::with('divisi')->orderBy('nama_pic')->get();
+        $pics = Pic::with('divisi')
+                ->orderBy('nama_pic')
+                ->paginate(10);
+
         return view('pic.index', compact('pics'));
     }
 
@@ -35,10 +38,9 @@ class PicController extends Controller
             'divisi_id' => 'required|exists:divisis,id',
             'nama_pic' => 'required',
             'nid_pic' => [
-                            'required',
-                            'unique:pics,nid_pic',
-                            // 'regex:/^[0-9]{8}[A-Za-z]{2}$/'
-                    ],
+                'required',
+                'unique:pics,nid_pic',
+            ],
             'jabatan' => 'nullable',
             'is_active' => 'required|boolean'
         ]);
@@ -78,17 +80,16 @@ class PicController extends Controller
         $request->validate([
             'divisi_id' => 'required|exists:divisis,id',
             'nama_pic' => 'required',
-            // 'nid_pic' => 'required|unique:pics,nid_pic,' . $pic->id,
             'jabatan' => 'nullable',
             'is_active' => 'required|boolean'
         ]);
 
         $pic->update([
-                'divisi_id' => $request->divisi_id,
-                'nama_pic' => $request->nama_pic,
-                'jabatan' => $request->jabatan,
-                'is_active' => $request->is_active,
-                ]);
+            'divisi_id' => $request->divisi_id,
+            'nama_pic' => $request->nama_pic,
+            'jabatan' => $request->jabatan,
+            'is_active' => $request->is_active,
+        ]);
 
         return redirect()->route('pic.index')
             ->with('success', 'PIC berhasil diperbarui');
@@ -107,11 +108,11 @@ class PicController extends Controller
 
     public function getByDivisi($divisiId)
     {
-        $pics = \App\Models\Pic::where('divisi_id', $divisiId)
+        $pics = Pic::where('divisi_id', $divisiId)
                 ->where('is_active', true)
                 ->orderBy('nama_pic')
                 ->get();
-    
+
         return response()->json($pics);
     }
 }

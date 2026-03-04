@@ -39,16 +39,18 @@
                        placeholder="Contoh: Lantai Tengah">
             </div>
 
-            <div class="d-flex left-content-end mt-3">
-                <a href="{{ route('lantai.index') }}" 
-                   class="btn btn-warning me-2 shadow-sm text-dark">
-                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-                </a>
+            <div class="d-flex left-content-between mt-3">
 
                 <button type="submit" 
                         class="btn btn-success shadow-sm">
                     <i class="fa-solid fa-floppy-disk me-1"></i> Simpan
                 </button>
+
+                <a href="{{ route('lantai.index') }}" 
+                   class="btn btn-warning shadow-sm text-dark">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+                </a>
+
             </div>
 
         </form>

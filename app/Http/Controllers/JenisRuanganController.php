@@ -12,7 +12,9 @@ class JenisRuanganController extends Controller
      */
     public function index()
     {
-        $jenisRuangans = JenisRuangan::orderBy('kode_jenis_ruangan')->get();
+        $jenisRuangans = JenisRuangan::orderBy('kode_jenis_ruangan')
+                        ->paginate(10);
+
         return view('jenis_ruangan.index', compact('jenisRuangans'));
     }
 

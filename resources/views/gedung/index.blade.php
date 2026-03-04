@@ -20,20 +20,23 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
+
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>Kode</th>
+                        <th width="120">Kode</th>
                         <th>Nama Gedung</th>
-                        <th>Status</th>
+                        <th width="120">Status</th>
                         <th width="200">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @forelse($gedungs as $g)
                     <tr>
                         <td>{{ $g->kode_gedung }}</td>
                         <td>{{ $g->nama_gedung }}</td>
+
                         <td>
                             @if($g->is_active)
                                 <span class="badge bg-success">Aktif</span>
@@ -41,6 +44,7 @@
                                 <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
+
                         <td>
                             <a href="{{ route('gedung.show', $g->id) }}" 
                                class="btn btn-info btn-sm">
@@ -54,7 +58,7 @@
 
                             <form action="{{ route('gedung.destroy', $g->id) }}"
                                   method="POST"
-                                  style="display:inline-block">
+                                  class="d-inline">
                                 @csrf
                                 @method('DELETE')
 
@@ -65,6 +69,7 @@
                             </form>
                         </td>
                     </tr>
+
                     @empty
                     <tr>
                         <td colspan="4" class="text-center py-3 text-muted">
@@ -74,6 +79,12 @@
                     @endforelse
                 </tbody>
             </table>
+
+            {{-- Pagination --}}
+            <div class="d-flex justify-content-center mt-3">
+                {{ $gedungs->links() }}
+            </div>
+
         </div>
     </div>
 

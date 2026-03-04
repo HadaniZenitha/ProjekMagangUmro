@@ -20,6 +20,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
+
             <table class="table table-bordered align-middle">
                 <thead class="table-light">
                     <tr>
@@ -30,6 +31,7 @@
                         <th width="200">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @forelse($lantais as $l)
                     <tr>
@@ -43,6 +45,7 @@
                                 <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
+
                         <td>
                             <a href="{{ route('lantai.show', $l->id) }}" 
                                class="btn btn-info btn-sm">
@@ -59,6 +62,7 @@
                                   style="display:inline-block">
                                 @csrf
                                 @method('DELETE')
+
                                 <button class="btn btn-danger btn-sm"
                                         onclick="return confirm('Hapus lantai ini?')">
                                     <i class="fa-solid fa-trash"></i>
@@ -66,6 +70,7 @@
                             </form>
                         </td>
                     </tr>
+
                     @empty
                     <tr>
                         <td colspan="5" class="text-center py-3 text-muted">
@@ -74,7 +79,14 @@
                     </tr>
                     @endforelse
                 </tbody>
+
             </table>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-3">
+                {{ $lantais->links() }}
+            </div>
+
         </div>
     </div>
 
