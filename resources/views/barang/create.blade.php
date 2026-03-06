@@ -3,23 +3,26 @@
 @section('title', 'Tambah Barang Inventaris')
 
 @section('content')
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Tambah Barang Inventaris</h5>
+    <a href="{{ route('barang.index') }}" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    </a>
+</div>
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <div class="card shadow-sm border-0">
     <div class="card-body">
-
-        <h4 class="mb-4">
-            <i class="fas fa-box-open text-primary"></i>
-            Tambah Barang Inventaris
-        </h4>
-
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <form method="POST" action="{{ route('barang.store') }}">
             @csrf
@@ -33,11 +36,8 @@
 
             <!-- Divisi -->
             <div class="mb-3">
-                <label class="form-label fw-semibold">Divisi</label>
-                <select name="divisi_id"
-                        id="divisiSelect"
-                        class="form-select"
-                        required>
+                <label class="form-label">Divisi</label>
+                <select name="divisi_id" id="divisiSelect" class="form-select" required>
                     <option value="">-- Pilih Divisi --</option>
                     @foreach($divisis as $d)
                         <option value="{{ $d->id }}">
@@ -49,23 +49,16 @@
 
             <!-- PIC -->
             <div class="mb-3">
-                <label class="form-label fw-semibold">
-                    PIC (Penanggung Jawab)
-                </label>
-                <select name="pic_id"
-                        id="picSelect"
-                        class="form-select"
-                        required>
+                <label class="form-label">PIC (Penanggung Jawab)</label>
+                <select name="pic_id" id="picSelect" class="form-select" required>
                     <option value="">-- Pilih PIC --</option>
                 </select>
             </div>
 
             <!-- Sub Jenis -->
             <div class="mb-3">
-                <label class="form-label fw-semibold">Sub Jenis Barang</label>
-                <select name="sub_jenis_barang_id"
-                        class="form-select"
-                        required>
+                <label class="form-label">Sub Jenis Barang</label>
+                <select name="sub_jenis_barang_id" class="form-select" required>
                     <option value="">-- Pilih Sub Jenis --</option>
                     @foreach($subjenisList as $s)
                         <option value="{{ $s->id }}">
@@ -77,10 +70,8 @@
 
             <!-- Ruang -->
             <div class="mb-3">
-                <label class="form-label fw-semibold">Lokasi Ruang</label>
-                <select name="ruang_id"
-                        class="form-select"
-                        required>
+                <label class="form-label">Lokasi Ruang</label>
+                <select name="ruang_id" class="form-select" required>
                     <option value="">-- Pilih Ruang --</option>
                     @foreach($ruangs as $r)
                         <option value="{{ $r->id }}">
@@ -102,7 +93,7 @@
 
             <!-- Kondisi -->
             <div class="mb-4">
-                <label class="form-label fw-semibold">Kondisi Barang</label>
+                <label class="form-label">Kondisi Barang</label>
                 <select name="keterangan" class="form-select">
                     <option value="Baik">Baik</option>
                     <option value="Rusak">Rusak</option>
@@ -110,17 +101,13 @@
                 </select>
             </div>
 
-            <!-- Tombol -->
             <div class="d-flex gap-2">
-                <button class="btn btn-success px-4">
-                    <i class="fas fa-save me-1"></i>
-                    Simpan
+                <button type="submit" class="btn btn-warning">
+                    <i class="fa-solid fa-save me-1"></i> Simpan
                 </button>
 
-                <a href="{{ route('barang.index') }}"
-                   class="btn btn-outline-secondary px-4">
-                    <i class="fas fa-arrow-left me-1"></i>
-                    Kembali
+                <a href="{{ route('barang.index') }}" class="btn btn-danger">
+                    Batal
                 </a>
             </div>
 
@@ -129,33 +116,37 @@
     </div>
 </div>
 
-{{-- Script Ajax PIC berdasarkan Divisi --}}
 <script>
-document.getElementById('divisiSelect').addEventListener('change', function() {
-
-    let divisiId = this.value;
+document.addEventListener('DOMContentLoaded', function() {
+    let divisiSelect = document.getElementById('divisiSelect');
     let picSelect = document.getElementById('picSelect');
 
-    picSelect.innerHTML = '<option value="">Loading...</option>';
+    function loadPicByDivisi(divisiId) {
+        picSelect.innerHTML = '<option value="">Loading...</option>';
 
-    if(divisiId) {
-        fetch('/get-pic-by-divisi/' + divisiId)
-        .then(response => response.json())
-        .then(data => {
-
+        if (divisiId) {
+            fetch('/get-pic-by-divisi/' + divisiId)
+                .then(response => response.json())
+                .then(data => {
+                    picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
+                    data.forEach(function(pic) {
+                        picSelect.innerHTML += 
+                            `<option value="${pic.id}">
+                                ${pic.nama_pic}
+                            </option>`;
+                    });
+                })
+                .catch(function() {
+                    picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
+                });
+        } else {
             picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
-
-            data.forEach(function(pic) {
-                picSelect.innerHTML += 
-                    `<option value="${pic.id}">
-                        ${pic.nama_pic}
-                    </option>`;
-            });
-
-        });
-    } else {
-        picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
+        }
     }
+
+    divisiSelect.addEventListener('change', function() {
+        loadPicByDivisi(this.value);
+    });
 });
 </script>
 

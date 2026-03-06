@@ -17,6 +17,7 @@
             <b>Status:</b>
 
             @if($divisi->is_active)
+<<<<<<< HEAD
                 <span class="badge bg-success px-3 py-2">
                     Aktif
                 </span>
@@ -35,5 +36,21 @@
             <i class="fa-solid fa-arrow-left me-1"></i> Kembali
         </a>
     </div>
+=======
+                <span class="badge bg-success ms-2">
+                    <i class="fa-solid fa-circle-check me-1"></i> Aktif
+                </span>
+            @else
+                <span class="badge bg-danger ms-2">
+                    <i class="fa-solid fa-circle-xmark me-1"></i> Nonaktif
+                </span>
+            @endif
+        </li>
+    </ul>
+
+    <a href="{{ route('divisi.index') }}" class="btn btn-secondary mt-3">
+        <i class="fa-solid fa-arrow-left me-1"></i>Kembali
+    </a>
+>>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
 </div>
 @endsection

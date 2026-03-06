@@ -8,17 +8,24 @@ use App\Models\Divisi;
 use App\Models\Ruang;
 use App\Models\Pic;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BarangExport;
+use App\Imports\BarangImport;
 
 class BarangController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $barangs = Barang::with(['divisi','ruang','pic','subjenis'])
-            ->orderBy('kode_barang')
-            ->paginate(10);
+        
+        $query = Barang::with('divisi','pic','ruang')
+        ->orderBy('kode_barang');
+        
+        if ($request->divisi_id) {
+        $query->where('divisi_id', $request->divisi_id);
+        }
 
         return view('barang.index', compact('barangs'));
     }
@@ -181,4 +188,50 @@ class BarangController extends Controller
 
         return view('barang.scan', compact('barang'));
     }
+    public function getByDivisi($divisiId)
+    {
+        $pics = \App\Models\Pic::where('divisi_id', $divisiId)
+                ->where('is_active', true)
+                ->orderBy('nama_pic')
+                ->get();
+    
+        return response()->json($pics);
+    }
+
+    public function export(Request $request)
+    {
+        $query = Barang::with('divisi','pic','ruang');
+
+        // pakai filter yang sama seperti index
+        // (copy filter logic di atas)
+
+        $data = $query->get()->map(function ($b) {
+            return [
+                $b->kode_barang,
+                $b->nama_barang,
+                $b->divisi->nama_divisi ?? '-',
+                $b->pic->nama_pic ?? '-',
+                $b->ruang->nama_ruang ?? '-',
+                $b->is_active ? 'Aktif' : 'Nonaktif'
+            ];
+        });
+
+        return Excel::download(new BarangExport($data), 'laporan_barang.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        // Validasi file
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        // Jalankan proses import
+        Excel::import(new BarangImport, $request->file('file_excel'));
+
+        // Arahkan kembali ke halaman index dengan pesan sukses
+        return redirect()->route('barang.index')
+            ->with('success', 'Data Barang berhasil diimport dari Excel!');
+    }
+
 }
