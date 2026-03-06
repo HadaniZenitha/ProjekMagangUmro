@@ -5,247 +5,182 @@
 
 @section('content')
 
-<<<<<<< HEAD
-<div class="container">
-
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0">Data Barang Inventaris</h4>
-
-    <a href="{{ route('barang.create') }}" 
-       class="btn btn-primary shadow-sm">
-        <i class="fa-solid fa-plus me-2"></i> Tambah Barang
-    </a>
-=======
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Data Barang Inventaris</h5>
-    <a href="{{ route('barang.create') }}" class="btn btn-warning">
-        <i class="fa-solid fa-plus"></i> Tambah Barang
-    </a>
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalImport">
-        <i class="fas fa-file-excel"></i> Import Excel
-    </button>
->>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
+
+    <div class="d-flex gap-2">
+        <a href="{{ route('barang.create') }}" class="btn btn-warning">
+            <i class="fa-solid fa-plus"></i> Tambah Barang
+        </a>
+
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalImport">
+            <i class="fas fa-file-excel"></i> Import Excel
+        </button>
+    </div>
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalImport">
-        <i class="fas fa-file-excel"></i> Import Excel
-    </button>
 
 <div class="card shadow-sm border-0">
-    <div class="card-body">
 
-        <div class="table-responsive">
-<<<<<<< HEAD
-            <table class="table table-bordered table-hover align-middle">
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered mb-0">
 
-                <thead class="table-light text-center">
-                    <tr>
-                        <th>Kode</th>
-                        <th>PIC</th>
-                        <th>Nama Barang</th>
-                        <th>Lokasi</th>
-                        <th>Tahun</th>
-                        <th>Kondisi</th>
-                        <th>QR Code</th>
-                        <th width="230">Aksi</th>
-                    </tr>
-                </thead>
+            <thead class="table-light">
+                <tr>
+                    <th>Kode</th>
+                    <th>PIC</th>
+                    <th>Nama Barang</th>
+                    <th>Lokasi</th>
+                    <th>Tahun</th>
+                    <th>Kondisi</th>
+                    <th>QR Code</th>
+                    <th width="220">Aksi</th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    @forelse($barangs as $b)
-                    <tr>
+            <tbody>
 
-                        <td>{{ $b->kode_barang }}</td>
+            @forelse($barangs as $b)
+            <tr>
 
-                        <td>
-                            @if($b->pic)
-                                {{ $b->pic->nama_pic }}
-                            @else
-                                <span class="text-muted">
-                                    <i class="fa-solid fa-circle-chevron-down me-1"></i>
-                                    Belum dipilih
-                                </span>
-                            @endif
-                        </td>
+                <td>
+                    <span class="badge bg-dark">
+                        {{ $b->kode_barang }}
+                    </span>
+                </td>
 
-                        <td>{{ $b->nama_barang }}</td>
+                <td>{{ $b->pic->nama_pic ?? '-' }}</td>
 
-                        <td>{{ $b->ruang->nama_ruang ?? '-' }}</td>
+                <td>{{ $b->nama_barang }}</td>
 
-                        <td>{{ $b->tahun_perolehan }}</td>
+                <td>{{ $b->ruang->nama_ruang ?? '-' }}</td>
 
-                        <td class="text-center">
+                <td>{{ $b->tahun_perolehan }}</td>
 
-                            @if($b->keterangan == 'Baik')
-                                <span class="badge bg-success">
-                                    <i class="fa-solid fa-circle-check me-1"></i> Baik
-                                </span>
+                <td>{{ $b->keterangan ?? '-' }}</td>
 
-                            @elseif($b->keterangan == 'Perlu Perbaikan')
-                                <span class="badge bg-warning text-dark">
-                                    <i class="fa-solid fa-screwdriver-wrench me-1"></i> Perlu Perbaikan
-                                </span>
+                <td>
+                    {!! QrCode::size(70)->generate($b->kode_barang) !!}
+                </td>
 
-                            @elseif($b->keterangan == 'Rusak')
-                                <span class="badge bg-danger">
-                                    <i class="fa-solid fa-circle-xmark me-1"></i> Rusak
-                                </span>
+                <td>
 
-                            @else
-                                <span class="badge bg-secondary">
-                                    {{ $b->keterangan }}
-                                </span>
-                            @endif
+                    <a href="{{ route('barang.show', $b->id) }}"
+                       class="btn btn-info btn-sm">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
 
-                        </td>
+                    <a href="{{ route('barang.edit', $b->id) }}"
+                       class="btn btn-warning btn-sm">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
 
-                        <td class="text-center">
-                            {!! QrCode::size(80)->generate($b->kode_barang) !!}
-                        </td>
+                    <form action="{{ route('barang.destroy', $b->id) }}"
+                          method="POST"
+                          class="d-inline">
 
-                        <td class="text-center">
+                        @csrf
+                        @method('DELETE')
 
-                            <a href="{{ route('barang.show', $b->id) }}" 
-                               class="btn btn-info btn-sm text-white">
-                                <i class="fa-solid fa-eye"></i>
-                            </a>
+                        <button onclick="return confirm('Hapus barang ini?')"
+                                class="btn btn-danger btn-sm">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
 
-                            <a href="{{ route('barang.edit', $b->id) }}" 
-                               class="btn btn-warning btn-sm text-dark">
-=======
-            <table class="table align-middle table-bordered">
-                <thead class="table-light">
-                    <tr>
-                        <th>Kode</th>
-                        <th>PIC</th>
-                        <th>Nama Barang</th>
-                        <th>Lokasi</th>
-                        <th>Tahun</th>
-                        <th>Kondisi</th>
-                        <th>QR Code</th>
-                        <th width="220">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($barangs as $b)
-                    <tr>
-                        <td>
-                            <span class="badge bg-dark">
-                                {{ $b->kode_barang }}
-                            </span>
-                        </td>
-                        <td>{{ $b->pic->nama_pic ?? '-' }}</td>
-                        <td>{{ $b->nama_barang }}</td>
-                        <td>{{ $b->ruang->nama_ruang }}</td>
-                        <td>{{ $b->tahun_perolehan }}</td>
-                        <td>{{ $b->keterangan ?? '-' }}</td>
-                        <td>
-                            {!! QrCode::size(70)->generate($b->kode_barang) !!}
-                        </td>
-                        <td>
-                            <a href="{{ route('barang.show', $b->id) }}" 
-                               class="btn btn-info btn-sm">
-                                <i class="fa-solid fa-eye"></i>
-                            </a>
+                    </form>
 
-                            <a href="{{ route('barang.edit', $b->id) }}" 
-                               class="btn btn-warning btn-sm">
->>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
+                </td>
 
-                            <form action="{{ route('barang.destroy', $b->id) }}"
-                                  method="POST"
-                                  class="d-inline">
-                                @csrf
-                                @method('DELETE')
-<<<<<<< HEAD
+            </tr>
 
-                                <button onclick="return confirm('Hapus barang ini?')"
-=======
-                                <button onclick="return confirm('Hapus barang ini?')" 
->>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
-                                        class="btn btn-danger btn-sm">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
-<<<<<<< HEAD
+            @empty
 
-                        </td>
+            <tr>
+                <td colspan="8" class="text-center text-muted">
+                    Data barang belum tersedia
+                </td>
+            </tr>
 
-                    </tr>
+            @endforelse
 
-                    @empty
-                    <tr>
-                        <td colspan="8" class="text-center text-muted py-3">
-                            Belum ada data barang.
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
+            </tbody>
 
-            </table>
-        </div>
-
-        <!-- INFO DATA + PAGINATION -->
-        <div class="d-flex flex-column align-items-center mt-3">
-
-            <div class="text-muted mb-2">
-                Menampilkan {{ $barangs->firstItem() }} - {{ $barangs->lastItem() }}
-                dari {{ $barangs->total() }} data
-            </div>
-
-            <div>
-                {{ $barangs->onEachSide(1)->links('pagination::bootstrap-5') }}
-            </div>
-
-        </div>
-
+        </table>
     </div>
-</div>
-
 
 </div>
 
-=======
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
 
-    </div>
+{{-- Pagination --}}
+<div class="mt-3">
+    {{ $barangs->links() }}
 </div>
-<div class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="modalImportLabel" aria-hidden="true">
+
+
+{{-- MODAL IMPORT EXCEL --}}
+<div class="modal fade" id="modalImport" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
+
             <div class="modal-header">
-                <h5 class="modal-title" id="modalImportLabel">Import Data Barang dari Excel</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">
+                    Import Data Barang dari Excel
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('barang.import') }}" method="POST" enctype="multipart/form-data">
+
+            <form action="{{ route('barang.import') }}"
+                  method="POST"
+                  enctype="multipart/form-data">
+
                 @csrf
+
                 <div class="modal-body">
+
                     <div class="mb-3">
-                        <label for="file_excel" class="form-label">Pilih File Excel</label>
-                        <input type="file" class="form-control" id="file_excel" name="file_excel" accept=".xlsx,.xls,.csv" required>
-                        <small class="text-muted">Format: .xlsx, .xls, atau .csv</small>
+                        <label class="form-label">Pilih File Excel</label>
+
+                        <input type="file"
+                               class="form-control"
+                               name="file_excel"
+                               accept=".xlsx,.xls,.csv"
+                               required>
+
+                        <small class="text-muted">
+                            Format file: .xlsx, .xls, atau .csv
+                        </small>
                     </div>
+
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Import</button>
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Import
+                    </button>
+
                 </div>
+
             </form>
+
         </div>
     </div>
 </div>
->>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
+
 @endsection
