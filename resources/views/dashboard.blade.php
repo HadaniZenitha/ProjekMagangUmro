@@ -87,7 +87,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-4 text-muted">Belum ada data barang yang terdaftar.</td>
+                                    <td colspan="5" class="text-center align-middle py-4 text-muted">Belum ada data barang yang terdaftar.</td>
                                 </tr>
                                 @endforelse
                             </tbody>

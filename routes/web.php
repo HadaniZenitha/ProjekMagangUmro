@@ -12,6 +12,8 @@ use App\Http\Controllers\GedungController;
 use App\Http\Controllers\LantaiController;
 use App\Http\Controllers\JenisRuanganController;
 use App\Http\Controllers\PicController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -56,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/barang/import', [BarangController::class, 'import'])->name('barang.import');
     Route::resource('barang', BarangController::class);
     Route::get('/scan/{kode}', [BarangController::class, 'scan'])
     ->name('barang.scan');
@@ -68,4 +71,10 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/get-pic-by-divisi/{divisi}', 
     [PicController::class, 'getByDivisi']);
 
+Route::get('/barang/export', [BarangController::class, 'export'])
+      ->name('barang.export');
 
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
+Route::post('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])
+->name('profile.update');
