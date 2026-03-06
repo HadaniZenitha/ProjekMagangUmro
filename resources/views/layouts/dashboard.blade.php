@@ -274,6 +274,18 @@ body {
     .search-box {
         width: 180px;
     }
+
+    .icon-top i{
+    font-size: 20px;   
+    cursor: pointer;
+    }
+
+    .icon-top i:hover {
+    color: #309FB0;
+    transform: scale(1.15);
+    transition: 0.2s;
+    }
+
 }
 </style>
 </head>
@@ -496,6 +508,70 @@ window.addEventListener('resize', function(){
 
 });
 </script>
+<!-- ================= MODAL INFORMASI ================= -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header" style="background:#309FB0; color:white;">
+        <h5 class="modal-title">
+            <i class="fa-solid fa-circle-info me-2"></i>
+            Informasi Sistem
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- HEADER -->
+        <div class="text-center mb-4">
+            <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
+            <h4 class="mt-3 fw-bold">i - Noni</h4>
+            <p class="text-muted mb-0">Sistem Inventarisasi UNIT UMRO</p>
+            <small class="text-muted">Versi 1.0.0</small>
+        </div>
+
+        <hr>
+
+        <!-- DESKRIPSI SISTEM -->
+        <h6 class="fw-bold text-primary">Tentang Sistem</h6>
+        <p style="text-align: justify;">
+            i-Noni adalah sistem inventarisasi yang dirancang untuk membantu 
+            pengelolaan data aset dan barang secara terstruktur dan terintegrasi. 
+            Sistem ini mencakup pengelolaan data karyawan, lokasi (gedung, lantai, ruangan), 
+            serta data barang dan inventaris sehingga proses monitoring menjadi lebih efektif, 
+            akurat, dan transparan.
+        </p>
+
+        <hr>
+
+        <!-- PANDUAN SINGKAT -->
+        <h6 class="fw-bold text-primary">Panduan Singkat Penggunaan</h6>
+        <ol style="font-size: 14px;">
+            <li>Gunakan menu di sidebar untuk memilih modul yang diinginkan.</li>
+            <li>Tambahkan data melalui tombol <strong>Tambah</strong> pada setiap halaman.</li>
+            <li>Gunakan fitur edit untuk memperbarui data yang sudah ada.</li>
+            <li>Pastikan data lokasi dan karyawan telah dibuat sebelum menambahkan inventaris.</li>
+            <li>Gunakan fitur pencarian pada bagian atas untuk menemukan data dengan cepat.</li>
+        </ol>
+
+        <hr>
+
+        <!-- PENGEMBANG -->
+        <h6 class="fw-bold text-primary">Pengembang Sistem</h6>
+        <p class="mb-1"><strong>Nama:</strong> Amanda Audia</p>
+        <p class="mb-1"><strong>Unit:</strong> UNIT UMRO</p>
+        <p class="mb-0"><strong>Tahun Pengembangan:</strong> 2026</p>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <script>
 
