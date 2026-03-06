@@ -29,11 +29,11 @@
             @csrf
             @method('PUT')
 
-            {{-- Kode Barang (Readonly) --}}
+            {{-- Kode Barang --}}
             <div class="mb-3">
-                <label class="form-label">Kode Barang</label>
+                <label class="form-label fw-semibold">Kode Barang</label>
                 <input type="text"
-                       class="form-control"
+                       class="form-control bg-light"
                        value="{{ $barang->kode_barang }}"
                        readonly>
             </div>
@@ -49,7 +49,7 @@
 
             {{-- Nama Barang --}}
             <div class="mb-3">
-                <label class="form-label">Nama Barang</label>
+                <label class="form-label fw-semibold">Nama Barang</label>
                 <input type="text"
                        name="nama_barang"
                        class="form-control"
@@ -72,7 +72,7 @@
 
             {{-- Merk --}}
             <div class="mb-3">
-                <label class="form-label">Merk</label>
+                <label class="form-label fw-semibold">Merk</label>
                 <input type="text"
                        name="merk"
                        class="form-control"
@@ -81,7 +81,7 @@
 
             {{-- Serial Number --}}
             <div class="mb-3">
-                <label class="form-label">Serial Number</label>
+                <label class="form-label fw-semibold">Serial Number</label>
                 <input type="text"
                        name="serial_number"
                        class="form-control"
@@ -90,7 +90,7 @@
 
             {{-- Tahun Perolehan --}}
             <div class="mb-3">
-                <label class="form-label">Tahun Perolehan</label>
+                <label class="form-label fw-semibold">Tahun Perolehan</label>
                 <input type="number"
                        name="tahun_perolehan"
                        class="form-control"
@@ -112,16 +112,30 @@
 
             {{-- Keterangan --}}
             <div class="mb-3">
-                <label class="form-label">Keterangan</label>
+                <label class="form-label fw-semibold">Keterangan</label>
                 <textarea name="keterangan"
                           class="form-control"
                           rows="3">{{ old('keterangan', $barang->keterangan) }}</textarea>
             </div>
 
+<<<<<<< HEAD
+<<<<<<< HEAD
             {{-- Status --}}
             <div class="mb-4">
+                <label class="form-label fw-semibold">Status</label>
+                <select name="is_active"
+                        class="form-select"
+                        required>
+=======
+            {{-- Status Aktif --}}
+            <div class="mb-3">
+=======
+            {{-- Status --}}
+            <div class="mb-4">
+>>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
                 <label class="form-label">Status</label>
                 <select name="is_active" id="statusSelect" class="form-control" required>
+>>>>>>> 0dcaef0538989043409f992b201e2c1fce2dc92e
                     <option value="1" {{ $barang->is_active ? 'selected' : '' }}>
                         Aktif
                     </option>
@@ -139,6 +153,20 @@
                           rows="3">{{ old('catatan_nonaktif', $barang->catatan_nonaktif) }}</textarea>
             </div>
 
+<<<<<<< HEAD
+            {{-- Tombol --}}
+            <div class="d-flex gap-2">
+                <button type="submit"
+                        class="btn btn-warning px-4 text-white">
+                    <i class="fas fa-save me-1"></i>
+                    Update
+                </button>
+
+                <a href="{{ route('barang.index') }}"
+                   class="btn btn-outline-secondary px-4">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Kembali
+=======
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-warning">
                     <i class="fa-solid fa-save me-1"></i> Update
@@ -146,6 +174,7 @@
 
                 <a href="{{ route('barang.index') }}" class="btn btn-danger">
                     Batal
+>>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
                 </a>
             </div>
 
