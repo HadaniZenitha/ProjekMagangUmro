@@ -226,14 +226,32 @@ font-size:14px;
     border: none;
     width: 300px;
 }
-
 .banner-header {
-    background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)),
-    url('https://www.toptal.com/designers/subtlepatterns/patterns/factory.png');
+    position: relative;
     height: 120px;
     padding: 20px 40px;
+    overflow: hidden;
 }
 
+.banner-header::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+    url("/images/header.jpeg");
+
+    background-size:cover;
+    background-position:center;
+
+    z-index:0;
+}
+
+.banner-header h2{
+    position:relative;
+    z-index:2;
+}
 .content-card {
     background: white;
     margin: -40px 30px 30px;
@@ -516,7 +534,22 @@ LOGOUT <i class="fa-solid fa-right-from-bracket"></i>
 @yield('content')
 
 </div>
+<footer class="system-footer">
 
+<div class="container-fluid d-flex justify-content-between align-items-center">
+
+<div class="text-muted small">
+© 2026 PLN Nusantara Power — Sistem Inventarisasi UNIT UMRO
+</div>
+
+<div class="small text-muted">
+<i class="fa-solid fa-code me-1"></i>
+Developed by SMART UMRO
+</div>
+
+</div>
+
+</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

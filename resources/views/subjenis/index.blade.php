@@ -3,8 +3,6 @@
 @section('content')
 
 <div class="container">
-
-```
 <h2 class="mb-3">Master Sub Jenis Barang</h2>
 
 <div class="d-flex justify-content-end mb-3">
@@ -95,7 +93,6 @@
 
     </div>
 </div>
-```
 
 </div>
 @endsection
