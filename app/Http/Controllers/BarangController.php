@@ -19,13 +19,15 @@ class BarangController extends Controller
      */
     public function index(Request $request)
     {
-        
         $query = Barang::with('divisi','pic','ruang')
-        ->orderBy('kode_barang');
-        
+                ->orderBy('kode_barang');
+
         if ($request->divisi_id) {
-        $query->where('divisi_id', $request->divisi_id);
+            $query->where('divisi_id', $request->divisi_id);
         }
+
+        // ambil data barang
+        $barangs = $query->paginate(10);
 
         return view('barang.index', compact('barangs'));
     }
@@ -188,9 +190,10 @@ class BarangController extends Controller
 
         return view('barang.scan', compact('barang'));
     }
+
     public function getByDivisi($divisiId)
     {
-        $pics = \App\Models\Pic::where('divisi_id', $divisiId)
+        $pics = Pic::where('divisi_id', $divisiId)
                 ->where('is_active', true)
                 ->orderBy('nama_pic')
                 ->get();
@@ -201,9 +204,6 @@ class BarangController extends Controller
     public function export(Request $request)
     {
         $query = Barang::with('divisi','pic','ruang');
-
-        // pakai filter yang sama seperti index
-        // (copy filter logic di atas)
 
         $data = $query->get()->map(function ($b) {
             return [
@@ -221,17 +221,13 @@ class BarangController extends Controller
 
     public function import(Request $request)
     {
-        // Validasi file
         $request->validate([
             'file_excel' => 'required|mimes:xlsx,xls,csv'
         ]);
 
-        // Jalankan proses import
         Excel::import(new BarangImport, $request->file('file_excel'));
 
-        // Arahkan kembali ke halaman index dengan pesan sukses
         return redirect()->route('barang.index')
             ->with('success', 'Data Barang berhasil diimport dari Excel!');
     }
-
 }
