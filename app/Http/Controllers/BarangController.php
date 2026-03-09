@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BarangExport;
 use App\Imports\BarangImport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangController extends Controller
 {
@@ -20,43 +21,28 @@ class BarangController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        
-        $query = Barang::with('divisi','pic','ruang')
-        ->orderBy('kode_barang');
-        
-        if ($request->divisi_id) {
-        $query->where('divisi_id', $request->divisi_id);
-        }
+{
+    $query = Barang::with(['divisi','ruang','pic']);
 
-        if ($request->pic_id) {
-            $query->where('pic_id', $request->pic_id);
-        }
+    if ($request->divisi) {
+        $query->where('divisi_id', $request->divisi);
+    }
 
-        if ($request->ruang_id) {
-            $query->where('ruang_id', $request->ruang_id);
-        }
+    if ($request->tahun) {
+        $query->whereYear('created_at', $request->tahun);
+    }
 
-        if ($request->tahun) {
-            $query->whereYear('created_at', $request->tahun);
-        }
-
-        if ($request->bulan) {
-            $query->whereMonth('created_at', $request->bulan);
-        }
-
-        if ($request->triwulan) {
-            $query->whereRaw('QUARTER(created_at) = ?', [$request->triwulan]);
-        }
-
-        if ($request->status !== null) {
-            $query->where('is_active', $request->status);
-        }
+    if ($request->status != null) {
+        $query->where('is_active', $request->status);
+    }
 
     $barangs = $query->get();
 
-    return view('barang.index', compact('barangs'));
-    }
+    $divisis = Divisi::orderBy('nama_divisi')->get();
+    $pics = Pic::with('divisi')->where('is_active', true)->get();
+
+    return view('barang.index', compact('barangs','divisis', 'pics'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -225,25 +211,30 @@ class BarangController extends Controller
         return response()->json($pics);
     }
 
-    public function export(Request $request)
+        public function exportExcel(Request $request)
     {
-        $query = Barang::with('divisi','pic','ruang');
+        $data = $this->buildFilterQuery($request)->get();
 
-        // pakai filter yang sama seperti index
-        // (copy filter logic di atas)
+        return Excel::download(
+            new BarangExport($data),
+            'laporan_barang.xlsx'
+        );
+    }
 
-        $data = $query->get()->map(function ($b) {
-            return [
-                $b->kode_barang,
-                $b->nama_barang,
-                $b->divisi->nama_divisi ?? '-',
-                $b->pic->nama_pic ?? '-',
-                $b->ruang->nama_ruang ?? '-',
-                $b->is_active ? 'Aktif' : 'Nonaktif'
-            ];
-        });
+        public function exportPdf(Request $request)
+    {
+        $data = $this->buildFilterQuery($request)->get();
+    
+        $pdf = Pdf::loadView('barang.export-pdf', compact('data'));
+    
+        return $pdf->stream('laporan_barang.pdf');
+    }
 
-        return Excel::download(new BarangExport($data), 'laporan_barang.xlsx');
+    public function exportPreview(Request $request)
+    {
+        $data = $this->buildFilterQuery($request)->get();
+
+        return view('barang.export-preview', compact('data'));
     }
 
     public function import(Request $request)
@@ -259,6 +250,33 @@ class BarangController extends Controller
         // Arahkan kembali ke halaman index dengan pesan sukses
         return redirect()->route('barang.index')
             ->with('success', 'Data Barang berhasil diimport dari Excel!');
+    }
+
+        private function buildFilterQuery($request)
+    {
+        $query = Barang::with(['divisi','pic','ruang']);
+
+        if ($request->divisi) {
+            $query->where('divisi_id', $request->divisi);
+        }
+
+        if ($request->pic) {
+            $query->where('pic_id', $request->pic);
+        }
+
+        if ($request->ruang) {
+            $query->where('ruang_id', $request->ruang);
+        }
+
+        if ($request->tahun) {
+            $query->where('tahun_perolehan', $request->tahun);
+        }
+
+        if ($request->status !== null && $request->status !== '') {
+            $query->where('is_active', $request->status);
+        }
+
+        return $query;
     }
 
 }

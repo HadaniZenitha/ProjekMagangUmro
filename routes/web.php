@@ -55,6 +55,12 @@ Route::middleware(['auth'])->group(function () {
         ->parameters(['subjenis' => 'subjenis']);
 });
 
+Route::get('/barang/export-excel', [BarangController::class, 'exportExcel'])->name('barang.exportExcel');
+        
+Route::get('/barang/export-pdf', [BarangController::class, 'exportPdf'])->name('barang.exportPdf');
+
+Route::get('/barang/export-preview', [BarangController::class, 'exportPreview'])
+    ->name('barang.exportPreview');
 Route::middleware(['auth'])->group(function () {
     Route::post('/barang/import', [BarangController::class, 'import'])->name('barang.import');
     Route::resource('barang', BarangController::class);
@@ -62,12 +68,10 @@ Route::middleware(['auth'])->group(function () {
     ->name('barang.scan');
     });
     
-Route::middleware(['auth'])->group(function () {
-    Route::resource('pic', PicController::class);
-});
-    
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('pic', PicController::class);
+        });
+        
 Route::get('/get-pic-by-divisi/{divisi}', 
-    [PicController::class, 'getByDivisi']);
-
-Route::get('/barang/export', [BarangController::class, 'export'])
-      ->name('barang.export');
+[PicController::class, 'getByDivisi']);
+        
