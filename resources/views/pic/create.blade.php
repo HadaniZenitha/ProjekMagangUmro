@@ -6,9 +6,6 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Tambah PIC</h5>
-    <a href="{{ route('pic.index') }}" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left me-1"></i>Kembali
-    </a>
 </div>
 
 <div class="card shadow-sm border-0">
@@ -64,28 +61,14 @@
                 </select>
             </div>
 
-<<<<<<< HEAD
-            <div class="d-flex left-content-between mt-3">
-
-                <button type="submit" 
-                        class="btn btn-success shadow-sm">
-                    <i class="fa-solid fa-floppy-disk me-1"></i> Simpan
-                </button>
-
-                <a href="{{ route('pic.index') }}" 
-                   class="btn btn-warning shadow-sm text-dark">
-                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-                </a>
-
-=======
             <div class="d-flex gap-2">
                 <button class="btn btn-warning">
                     <i class="fa-solid fa-save me-1"></i>Simpan
                 </button>
+
                 <a href="{{ route('pic.index') }}" class="btn btn-danger">
                     Batal
                 </a>
->>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
             </div>
 
         </form>

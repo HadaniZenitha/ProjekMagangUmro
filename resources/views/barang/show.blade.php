@@ -4,41 +4,6 @@
 <div class="container">
     <h2>Detail Barang</h2>
 
-<<<<<<< HEAD
-        <h4 class="mb-3">{{ $barang->nama_barang }}</h4>
-
-        <p>
-            <b>Kode Inventaris:</b> 
-            {{ $barang->kode_barang }}
-        </p>
-
-        <p>
-            <b>Lokasi:</b> 
-            {{ $barang->ruang->nama_ruang }}
-        </p>
-
-        <p>
-            <b>Tahun Masuk:</b> 
-            {{ $barang->tahun_perolehan }}
-        </p>
-
-        <p>
-            <b>Status:</b>
-
-            @if($barang->keterangan == 'Baik')
-                <span class="badge bg-success">Baik</span>
-
-            @elseif($barang->keterangan == 'Perlu Perbaikan')
-                <span class="badge bg-warning text-dark">Perlu Perbaikan</span>
-
-            @elseif($barang->keterangan == 'Rusak')
-                <span class="badge bg-danger">Rusak</span>
-
-            @else
-                <span class="badge bg-secondary">{{ $barang->keterangan }}</span>
-            @endif
-        </p>
-=======
     <ul class="list-group">
         <li class="list-group-item">
             <b>Nama Barang:</b> {{ $barang->nama_barang }}
@@ -48,10 +13,9 @@
             <b>Kode Inventaris:</b> 
             <span class="badge bg-dark">{{ $barang->kode_barang }}</span>
         </li>
->>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
 
         <li class="list-group-item">
-            <b>Lokasi:</b> {{ $barang->ruang->nama_ruang }}
+            <b>Lokasi:</b> {{ $barang->ruang->nama_ruang ?? '-' }}
         </li>
 
         <li class="list-group-item">
@@ -75,19 +39,18 @@
         </p>
     </div>
 
-<<<<<<< HEAD
-        <div class="mt-3">
-            <a href="{{ route('barang.index') }}" class="btn btn-outline-secondary">
-                <i class="fa fa-arrow-left"></i> Kembali
-            </a>
-        </div>
+    {{-- Tombol --}}
+    <div class="mt-4 d-flex gap-2">
 
-=======
-    <div class="mt-3">
-        <a href="{{ route('barang.index') }}" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left me-1"></i>Kembali
+        <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-warning text-dark">
+            <i class="fa-solid fa-pen-to-square me-1"></i> Update
         </a>
->>>>>>> 9f836aaacc1194cb67d2ec309e1305e8278b5b44
+
+        <a href="{{ route('barang.index') }}" class="btn btn-danger text-dark">
+            <i class="fa-solid fa-xmark me-1"></i> Batal
+        </a>
+
     </div>
+
 </div>
 @endsection

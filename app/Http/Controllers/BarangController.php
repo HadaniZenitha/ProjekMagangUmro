@@ -7,6 +7,8 @@ use App\Models\SubJenisBarang;
 use App\Models\Divisi;
 use App\Models\Ruang;
 use App\Models\Pic;
+use App\Models\PerluPerbaikan;
+use App\Models\BarangRusak;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BarangExport;
@@ -14,25 +16,20 @@ use App\Imports\BarangImport;
 
 class BarangController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        
         $query = Barang::with('divisi','pic','ruang')
-        ->orderBy('kode_barang');
-        
+                ->orderBy('kode_barang');
+
         if ($request->divisi_id) {
-        $query->where('divisi_id', $request->divisi_id);
+            $query->where('divisi_id', $request->divisi_id);
         }
+
+        $barangs = $query->paginate(10);
 
         return view('barang.index', compact('barangs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $divisis = Divisi::where('is_active', true)->get();
@@ -56,9 +53,6 @@ class BarangController extends Controller
         ));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -78,7 +72,6 @@ class BarangController extends Controller
 
         $tahun = $request->tahun_perolehan;
 
-        // ambil urutan terakhir
         $lastUrutan = Barang::where('divisi_id', $divisi->id)
             ->max('urutan');
 
@@ -93,7 +86,7 @@ class BarangController extends Controller
         $tahun . '/' .
         $divisi->kode_divisi;
 
-        Barang::create([
+        $barang = Barang::create([
             'divisi_id' => $divisi->id,
             'ruang_id' => $request->ruang_id,
             'sub_jenis_barang_id' => $request->sub_jenis_barang_id,
@@ -108,21 +101,40 @@ class BarangController extends Controller
             'is_active' => true,
         ]);
 
+        // jika barang perlu perbaikan
+        if ($request->keterangan == 'Perlu Perbaikan') {
+            PerluPerbaikan::create([
+                'nama_barang' => $request->nama_barang,
+                'kode_barang' => $kodeBarang,
+                'ruang' => $request->ruang_id,
+                'keterangan' => 'Barang perlu diperbaiki'
+            ]);
+        }
+
+        // jika barang rusak
+        if ($request->keterangan == 'Rusak') {
+            BarangRusak::create([
+                'nama_barang' => $request->nama_barang,
+                'kode_barang' => $kodeBarang,
+                'ruang' => $request->ruang_id,
+                'keterangan' => 'Barang rusak'
+            ]);
+        }
+
+        // jika barang baik (tidak perlu perbaikan dan tidak rusak)
+        if ($request->keterangan != 'Perlu Perbaikan' && $request->keterangan != 'Rusak') {
+            $request->merge(['keterangan' => 'Baik']); // otomatis set keterangan 'Baik'
+        }
+
         return redirect()->route('barang.index')
             ->with('success', 'Barang berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Barang $barang)
     {
         return view('barang.show', compact('barang'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Barang $barang)
     {
         $divisis = Divisi::all();
@@ -140,9 +152,6 @@ class BarangController extends Controller
         ));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Barang $barang)
     {
         $request->validate([
@@ -166,9 +175,6 @@ class BarangController extends Controller
             ->with('success', 'Barang berhasil diperbarui');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Barang $barang)
     {
         $barang->delete();
@@ -177,9 +183,6 @@ class BarangController extends Controller
             ->with('success', 'Barang berhasil dihapus');
     }
 
-    /**
-     * Scan QR Code
-     */
     public function scan($kode)
     {
         $barang = Barang::where('kode_barang', $kode)
@@ -188,9 +191,10 @@ class BarangController extends Controller
 
         return view('barang.scan', compact('barang'));
     }
+
     public function getByDivisi($divisiId)
     {
-        $pics = \App\Models\Pic::where('divisi_id', $divisiId)
+        $pics = Pic::where('divisi_id', $divisiId)
                 ->where('is_active', true)
                 ->orderBy('nama_pic')
                 ->get();
@@ -201,9 +205,6 @@ class BarangController extends Controller
     public function export(Request $request)
     {
         $query = Barang::with('divisi','pic','ruang');
-
-        // pakai filter yang sama seperti index
-        // (copy filter logic di atas)
 
         $data = $query->get()->map(function ($b) {
             return [
@@ -221,17 +222,13 @@ class BarangController extends Controller
 
     public function import(Request $request)
     {
-        // Validasi file
         $request->validate([
             'file_excel' => 'required|mimes:xlsx,xls,csv'
         ]);
 
-        // Jalankan proses import
         Excel::import(new BarangImport, $request->file('file_excel'));
 
-        // Arahkan kembali ke halaman index dengan pesan sukses
         return redirect()->route('barang.index')
             ->with('success', 'Data Barang berhasil diimport dari Excel!');
     }
-
 }
