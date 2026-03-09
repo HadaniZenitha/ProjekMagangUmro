@@ -55,7 +55,7 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-clock-rotate-left me-2 text-info"></i>Penambahan Barang Terbaru</h6>
+                    <h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-clock-rotate-left me-2 text-info"></i>Penambahan Terbaru</h6>
                     <a href="{{ route('barang.index') }}" class="btn btn-sm btn-outline-info fw-bold">Lihat Semua</a>
                 </div>
                 <div class="card-body">
@@ -87,7 +87,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-4 text-muted">Belum ada data barang yang terdaftar.</td>
+                                    <td colspan="5" class="text-center align-middle py-4 text-muted">Belum ada data barang yang terdaftar.</td>
                                 </tr>
                                 @endforelse
                             </tbody>

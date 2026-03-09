@@ -12,9 +12,9 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
 <div class="card shadow-sm border-0">
@@ -30,11 +30,13 @@
                         <th width="220">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    @foreach($divisis as $d)
+                    @forelse($divisis as $d)
                     <tr>
                         <td>{{ $d->kode_divisi }}</td>
                         <td>{{ $d->nama_divisi }}</td>
+
                         <td>
                             @if($d->is_active)
                                 <span class="badge bg-success">Aktif</span>
@@ -42,34 +44,55 @@
                                 <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
+
                         <td>
-                            <a href="{{ route('divisi.show', $d->id) }}" 
-                               class="btn btn-info btn-sm">
+                            <a href="{{ route('divisi.show', $d->id) }}" class="btn btn-info btn-sm">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
 
-                            <a href="{{ route('divisi.edit', $d->id) }}" 
-                               class="btn btn-warning btn-sm">
+                            <a href="{{ route('divisi.edit', $d->id) }}" class="btn btn-warning btn-sm">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
 
-                            <form action="{{ route('divisi.destroy', $d->id) }}"
-                                  method="POST"
+                            <form action="{{ route('divisi.destroy', $d->id) }}" 
+                                  method="POST" 
                                   class="d-inline">
                                 @csrf
                                 @method('DELETE')
+
                                 <button onclick="return confirm('Hapus divisi ini?')" 
                                         class="btn btn-danger btn-sm">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
-
                         </td>
                     </tr>
-                    @endforeach
+
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-3">
+                            Belum ada data divisi.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
+
+        {{-- Pagination --}}
+        @if(method_exists($divisis,'hasPages') && $divisis->hasPages())
+        <div class="mt-3 text-center">
+            <small class="text-muted d-block mb-2">
+                Menampilkan {{ $divisis->firstItem() }} 
+                sampai {{ $divisis->lastItem() }} 
+                dari {{ $divisis->total() }} data
+            </small>
+
+            <div class="d-flex justify-content-center">
+                {{ $divisis->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
+        @endif
 
     </div>
 </div>

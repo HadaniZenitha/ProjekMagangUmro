@@ -1,13 +1,13 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Edit Jenis Barang')
+@section('page-title', 'Edit Jenis Barang')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Edit Jenis Barang</h5>
-    <a href="{{ route('jenis.index') }}" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    <a href="{{ route('jenis.index') }}">
     </a>
 </div>
 
@@ -24,24 +24,22 @@
 <div class="card shadow-sm border-0">
     <div class="card-body">
 
-        <form method="POST" action="{{ route('jenis.update', $jenis->id) }}">
+        <form action="{{ route('jenis.update', $jenis->id) }}" method="POST">
             @csrf
             @method('PUT')
 
-            <!-- Kelompok -->
             <div class="mb-3">
                 <label class="form-label">Kelompok Barang</label>
                 <select name="kelompok_barang_id" class="form-select" required>
                     @foreach($kelompoks as $k)
                         <option value="{{ $k->id }}"
-                            {{ $jenis->kelompok_barang_id == $k->id ? 'selected' : '' }}>
+                            {{ old('kelompok_barang_id', $jenis->kelompok_barang_id) == $k->id ? 'selected' : '' }}>
                             {{ $k->nama_kelompok }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            <!-- Nama -->
             <div class="mb-3">
                 <label class="form-label">Nama Jenis</label>
                 <input type="text"
@@ -51,7 +49,6 @@
                        required>
             </div>
 
-            <!-- Deskripsi -->
             <div class="mb-3">
                 <label class="form-label">Deskripsi</label>
                 <textarea name="deskripsi"

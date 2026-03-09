@@ -6,8 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Tambah Kelompok Barang</h5>
-    <a href="{{ route('kelompok.index') }}" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    <a href="{{ route('kelompok.index') }}">
     </a>
 </div>
 

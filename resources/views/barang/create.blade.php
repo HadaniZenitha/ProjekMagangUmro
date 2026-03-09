@@ -6,8 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Tambah Barang Inventaris</h5>
-    <a href="{{ route('barang.index') }}" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    <a href="{{ route('barang.index') }}">
     </a>
 </div>
 
@@ -29,7 +28,7 @@
 
             <!-- Nama Barang -->
             <div class="mb-3">
-                <label class="form-label">Nama Barang</label>
+                <label class="form-label fw-semibold">Nama Barang</label>
                 <input type="text" name="nama_barang"
                        class="form-control" required>
             </div>
@@ -83,10 +82,12 @@
 
             <!-- Tahun Masuk -->
             <div class="mb-3">
-                <label class="form-label">Tahun Masuk</label>
-                <input type="number" name="tahun_perolehan"
+                <label class="form-label fw-semibold">Tahun Masuk</label>
+                <input type="number"
+                       name="tahun_perolehan"
                        class="form-control"
-                       value="{{ date('Y') }}" required>
+                       value="{{ date('Y') }}"
+                       required>
             </div>
 
             <!-- Kondisi -->

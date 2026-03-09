@@ -12,9 +12,9 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
 <div class="card shadow-sm border-0">
@@ -22,6 +22,7 @@
 
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
+
                 <thead class="table-light">
                     <tr>
                         <th>Kode</th>
@@ -33,14 +34,21 @@
                         <th width="220">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    @foreach($ruangs as $r)
+                    @forelse($ruangs as $r)
                     <tr>
+
                         <td>{{ $r->kode_ruang }}</td>
-                        <td>{{ $r->lantai->gedung->nama_gedung }}</td>
-                        <td>{{ $r->lantai->kode_lantai }}</td>
-                        <td>{{ $r->jenisRuangan->nama_jenis_ruangan }}</td>
+
+                        <td>{{ $r->lantai->gedung->nama_gedung ?? '-' }}</td>
+
+                        <td>{{ $r->lantai->kode_lantai ?? '-' }}</td>
+
+                        <td>{{ $r->jenisRuangan->nama_jenis_ruangan ?? '-' }}</td>
+
                         <td>{{ $r->nama_ruang }}</td>
+
                         <td>
                             @if($r->is_active)
                                 <span class="badge bg-success">Aktif</span>
@@ -48,7 +56,9 @@
                                 <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
+
                         <td>
+
                             <a href="{{ route('ruangs.show', $r->id) }}"
                                class="btn btn-info btn-sm">
                                 <i class="fa-solid fa-eye"></i>
@@ -64,17 +74,47 @@
                                   class="d-inline">
                                 @csrf
                                 @method('DELETE')
+
                                 <button onclick="return confirm('Hapus ruang ini?')"
                                         class="btn btn-danger btn-sm">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
+
+                        </td>
+
+                    </tr>
+
+                    @empty
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-3">
+                            Belum ada data ruang yang terdaftar.
                         </td>
                     </tr>
-                    @endforeach
+                    @endforelse
                 </tbody>
+
             </table>
         </div>
+
+        {{-- Pagination --}}
+        @if(method_exists($ruangs,'hasPages') && $ruangs->hasPages())
+
+        <div class="mt-3 text-center">
+
+            <small class="text-muted d-block mb-2">
+                Menampilkan {{ $ruangs->firstItem() }}
+                sampai {{ $ruangs->lastItem() }}
+                dari {{ $ruangs->total() }} data
+            </small>
+
+            <div class="d-flex justify-content-center">
+                {{ $ruangs->links('pagination::bootstrap-5') }}
+            </div>
+
+        </div>
+
+        @endif
 
     </div>
 </div>

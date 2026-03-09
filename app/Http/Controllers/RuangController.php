@@ -16,7 +16,7 @@ class RuangController extends Controller
     {
         $ruangs = Ruang::with('lantai.gedung', 'jenisRuangan')
             ->orderBy('kode_ruang')
-            ->get();
+            ->paginate(10);
 
         return view('ruangs.index', compact('ruangs'));
     }
@@ -46,7 +46,6 @@ class RuangController extends Controller
         $lantai = Lantai::with('gedung')->findOrFail($request->lantai_id);
         $jenis = JenisRuangan::findOrFail($request->jenis_ruangan_id);
 
-        // Hitung urutan terbaru
         $lastUrutan = Ruang::where('lantai_id', $lantai->id)
             ->where('jenis_ruangan_id', $jenis->id)
             ->max('urutan');
@@ -55,8 +54,7 @@ class RuangController extends Controller
 
         $formatUrutan = str_pad($urutanBaru, 2, '0', STR_PAD_LEFT);
 
-        // Format kode ruang
-        $kodeRuang = 
+        $kodeRuang =
             $lantai->gedung->kode_gedung . '-' .
             $lantai->kode_lantai . '-' .
             $jenis->kode_jenis_ruangan . '-' .
@@ -109,7 +107,7 @@ class RuangController extends Controller
             'is_active' => $request->is_active,
         ]);
 
-        return redirect()->route('ruang.index')
+        return redirect()->route('ruangs.index')
             ->with('success', 'Ruang berhasil diperbarui');
     }
 

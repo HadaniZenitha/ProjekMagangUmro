@@ -30,12 +30,12 @@
     <div class="mt-4">
         <h5>QR Code Barang</h5>
 
-        <div class="p-3 bg-light d-inline-block">
+        <div class="p-3 bg-light d-inline-block rounded">
             {!! QrCode::size(150)->generate(route('barang.scan', $barang->kode_barang)) !!}
         </div>
 
         <p class="mt-2 text-muted">
-            Scan untuk melihat informasi barang.
+            Scan QR Code untuk melihat informasi barang.
         </p>
     </div>
 

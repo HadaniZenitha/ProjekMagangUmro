@@ -1,13 +1,13 @@
 @extends('layouts.dashboard')
 
+@section('page-title', 'Edit Ruang')
 @section('title', 'Edit Ruang')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Edit Ruang</h5>
-    <a href="{{ route('ruangs.index') }}" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    <a href="{{ route('ruangs.index') }}">
     </a>
 </div>
 

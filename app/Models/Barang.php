@@ -19,7 +19,6 @@ class Barang extends Model
         'keterangan',
         'urutan',
         'is_active',
-        'catatan_nonaktif',
     ];
 
     public function divisi()
@@ -38,9 +37,5 @@ class Barang extends Model
     public function pic()
     {
         return $this->belongsTo(Pic::class);
-    }
-    public function histories()
-    {
-        return $this->hasMany(BarangHistory::class);
     }
 }

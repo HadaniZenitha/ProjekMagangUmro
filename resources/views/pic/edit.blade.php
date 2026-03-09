@@ -6,8 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Edit PIC</h5>
-    <a href="{{ route('pic.index') }}" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left"></i> Kembali
+    <a href="{{ route('pic.index') }}">
     </a>
 </div>
 
@@ -18,6 +17,7 @@
             @csrf
             @method('PUT')
 
+            {{-- Divisi --}}
             <div class="mb-3">
                 <label class="form-label">Divisi</label>
                 <select name="divisi_id" class="form-control" required>
@@ -38,6 +38,7 @@
                        readonly>
             </div>
 
+            {{-- Nama PIC --}}
             <div class="mb-3">
                 <label class="form-label">Nama PIC</label>
                 <input type="text"
@@ -47,6 +48,7 @@
                        required>
             </div>
 
+            {{-- Jabatan --}}
             <div class="mb-3">
                 <label class="form-label">Jabatan</label>
                 <input type="text"

@@ -12,63 +12,61 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
 <div class="card shadow-sm border-0">
-    <div class="card-body">
 
-        <div class="table-responsive">
-            <table class="table align-middle table-bordered">
-                <thead class="table-light">
-                    <tr>
-                        <th>Kode</th>
-                        <th>Nama Sub Jenis</th>
-                        <th>Jenis Barang</th>
-                        <th width="220">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($subjenis as $s)
-                    <tr>
-                        <td>{{ $s->kode_subjenis }}</td>
-                        <td>{{ $s->nama_subjenis }}</td>
-                        <td>{{ $s->jenis->nama_jenis }}</td>
-                        <td>
-                            <a href="{{ route('subjenis.show', $s->id) }}"
-                               class="btn btn-info btn-sm">
-                                <i class="fa-solid fa-eye"></i>
-                            </a>
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Kode</th>
+                    <th>Nama Sub Jenis</th>
+                    <th>Jenis Barang</th>
+                    <th width="220">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($subjenis as $s)
+                <tr>
+                    <td>{{ $s->kode_subjenis }}</td>
+                    <td>{{ $s->nama_subjenis }}</td>
+                    <td>{{ $s->jenis->nama_jenis }}</td>
+                    <td>
+                        <a href="{{ route('subjenis.show', $s->id) }}"
+                           class="btn btn-info btn-sm">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
 
-                            <a href="{{ route('subjenis.edit', $s->id) }}"
-                               class="btn btn-warning btn-sm">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
+                        <a href="{{ route('subjenis.edit', $s->id) }}"
+                           class="btn btn-warning btn-sm">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
 
-                            <form action="{{ route('subjenis.destroy', $s->id) }}"
-                                  method="POST"
-                                  class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button onclick="return confirm('Hapus sub jenis ini?')"
-                                        class="btn btn-danger btn-sm">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mt-3">
-            {{ $subjenis->links() }}
-        </div>
-
+                        <form action="{{ route('subjenis.destroy', $s->id) }}"
+                              method="POST"
+                              class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button onclick="return confirm('Hapus sub jenis ini?')"
+                                    class="btn btn-danger btn-sm">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
+
+</div>
+
+<div class="mt-3">
+    {{ $subjenis->links() }}
 </div>
 
 @endsection

@@ -6,8 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Tambah Gedung</h5>
-    <a href="{{ route('gedung.index') }}" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    <a href="{{ route('gedung.index') }}">
     </a>
 </div>
 

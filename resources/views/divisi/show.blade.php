@@ -2,16 +2,18 @@
 
 @section('content')
 <div class="container">
-    <h2>Detail Divisi</h2>
+    <h2 class="mb-4">Detail Divisi</h2>
 
-    <ul class="list-group">
+    <ul class="list-group shadow-sm">
         <li class="list-group-item">
             <b>Kode:</b> {{ $divisi->kode_divisi }}
         </li>
+
         <li class="list-group-item">
             <b>Nama:</b> {{ $divisi->nama_divisi }}
         </li>
-        <li class="list-group-item">
+
+        <li class="list-group-item d-flex left-content-between align-items-center">
             <b>Status:</b>
 
             @if($divisi->is_active)

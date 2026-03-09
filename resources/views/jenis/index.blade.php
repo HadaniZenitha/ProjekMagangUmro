@@ -12,9 +12,9 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
 <div class="card shadow-sm border-0">
@@ -22,6 +22,7 @@
 
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
+
                 <thead class="table-light">
                     <tr>
                         <th>Kode</th>
@@ -31,12 +32,17 @@
                         <th width="220">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    @foreach($jenis as $j)
+                    @forelse($jenis as $j)
                     <tr>
+
                         <td>{{ $j->kode_jenis }}</td>
+
                         <td>{{ $j->nama_jenis }}</td>
-                        <td>{{ $j->kelompok->nama_kelompok }}</td>
+
+                        <td>{{ $j->kelompok->nama_kelompok ?? '-' }}</td>
+
                         <td>
                             @if($j->is_active)
                                 <span class="badge bg-success">Aktif</span>
@@ -44,6 +50,7 @@
                                 <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
+
                         <td>
                             <a href="{{ route('jenis.show', $j->id) }}"
                                class="btn btn-info btn-sm">
@@ -60,21 +67,46 @@
                                   class="d-inline">
                                 @csrf
                                 @method('DELETE')
+
                                 <button onclick="return confirm('Hapus jenis ini?')"
                                         class="btn btn-danger btn-sm">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
                         </td>
+
                     </tr>
-                    @endforeach
+
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-3">
+                            Belum ada data jenis barang.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
+
             </table>
         </div>
 
-        <div class="mt-3">
-            {{ $jenis->links() }}
+        {{-- Pagination --}}
+        @if(method_exists($jenis,'hasPages') && $jenis->hasPages())
+
+        <div class="mt-3 text-center">
+
+            <small class="text-muted d-block mb-2">
+                Menampilkan {{ $jenis->firstItem() }}
+                sampai {{ $jenis->lastItem() }}
+                dari {{ $jenis->total() }} data
+            </small>
+
+            <div class="d-flex justify-content-center">
+                {{ $jenis->links('pagination::bootstrap-5') }}
+            </div>
+
         </div>
+
+        @endif
 
     </div>
 </div>
