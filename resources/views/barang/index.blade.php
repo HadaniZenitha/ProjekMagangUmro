@@ -117,9 +117,9 @@
 
 
 {{-- Pagination --}}
-<div class="mt-3">
+{{-- <div class="mt-3">
     {{ $barangs->links() }}
-</div>
+</div> --}}
 
 
 {{-- MODAL IMPORT EXCEL --}}

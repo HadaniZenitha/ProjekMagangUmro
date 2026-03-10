@@ -39,7 +39,7 @@ class BarangExport implements FromCollection, WithHeadings
     {
         return [
             'Kode','Nama','Divisi','PIC',
-            'Ruang','Tahun','Status','Catatan', 'QR Code'
+            'Ruang','Tahun','Status','Catatan'
         ];
     }
 }
