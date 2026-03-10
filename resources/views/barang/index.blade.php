@@ -126,6 +126,72 @@ Import Excel
 </div>
 
 
+{{-- FORM FILTER --}}
+<form method="GET" action="{{ route('barang.index') }}">
+<div class="card mb-3">
+    <div class="card-body row g-2">
+
+        <div class="col-md-3">
+            <select name="divisi" class="form-control">
+                <option value="">Semua Divisi</option>
+                @foreach($divisis as $d)
+                <option value="{{ $d->id }}"
+                    {{ request('divisi')==$d->id?'selected':'' }}>
+                    {{ $d->nama_divisi }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="pic" class="form-control">
+                <option value="">Semua PIC</option>
+                @foreach($pics as $p)
+                <option value="{{ $p->id }}"
+                    {{ request('pic')==$p->id ? 'selected' : '' }}>
+                    {{ $p->nama_pic }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <input type="number" name="tahun"
+                   value="{{ request('tahun') }}"
+                   class="form-control"
+                   placeholder="Tahun">
+        </div>
+
+        <div class="col-md-2">
+            <select name="status" class="form-control">
+                <option value="">Semua Status</option>
+                <option value="1" {{ request('status')==='1'?'selected':'' }}>Aktif</option>
+                <option value="0" {{ request('status')==='0'?'selected':'' }}>Nonaktif</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">
+                Filter
+            </button>
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+            <a href="{{ route('barang.exportPreview', request()->query()) }}"
+               class="btn btn-info w-100" target="_blank">
+               Preview Excel
+            </a>
+
+            <a href="{{ route('barang.exportPdf', request()->query()) }}"
+               class="btn btn-danger w-100">
+               Export PDF
+            </a>
+        </div>
+
+    </div>
+</div>
+</form>
+
 @if(session('success'))
 <div class="alert alert-success">
 {{ session('success') }}

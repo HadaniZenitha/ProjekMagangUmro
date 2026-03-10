@@ -241,6 +241,12 @@ body {
     display: none;
 }
 
+/* Prevent Laravel pagination SVG arrows from stretching in non-Tailwind pages */
+.pagination svg {
+    width: 1rem;
+    height: 1rem;
+}
+
 @media (max-width: 991px) {
 
     .sidebar {

@@ -37,8 +37,7 @@ class BarangController extends Controller
             $query->where('is_active', $request->status);
         }
 
-        // Pagination 10 data per halaman + pertahankan query string
-        $barangs = $query->paginate(10)->withQueryString();
+    $barangs = $query->paginate(15);
 
         $divisis = Divisi::orderBy('nama_divisi')->get();
         $pics = Pic::with('divisi')->where('is_active', true)->get();
@@ -81,7 +80,7 @@ class BarangController extends Controller
         ]);
 
         $divisi = Divisi::findOrFail($request->divisi_id);
-        $ruang = Ruang::find($request->ruang_id);
+        $ruang = Ruang::findOrFail($request->ruang_id);
 
         $subjenis = SubJenisBarang::with('jenis.kelompok')
                     ->findOrFail($request->sub_jenis_barang_id);
@@ -236,10 +235,26 @@ class BarangController extends Controller
             'file_excel' => 'required|mimes:xlsx,xls,csv'
         ]);
 
-        Excel::import(new BarangImport, $request->file('file_excel'));
+        $import = new BarangImport;
+        Excel::import($import, $request->file('file_excel'));
 
-        return redirect()->route('barang.index')
-            ->with('success', 'Data Barang berhasil diimport dari Excel!');
+        $successCount = $import->getSuccessCount();
+        $failedCount = $import->getFailedCount();
+        $failedRows = $import->getFailedRows();
+
+        $message = "Import selesai: {$successCount} barang berhasil ditambahkan";
+        
+        if ($failedCount > 0) {
+            $message .= ", {$failedCount} baris gagal.";
+            
+            // Simpan detail error untuk ditampilkan
+            session()->flash('import_errors', $failedRows);
+            session()->flash('warning', $message);
+        } else {
+            session()->flash('success', $message);
+        }
+
+        return redirect()->route('barang.index');
     }
 
     /**
