@@ -81,23 +81,25 @@ class BarangController extends Controller
         ]);
 
         $divisi = Divisi::findOrFail($request->divisi_id);
+        $ruang = Ruang::find($request->ruang_id);
+
         $subjenis = SubJenisBarang::with('jenis.kelompok')
                     ->findOrFail($request->sub_jenis_barang_id);
         $kelompok = $subjenis->jenis->kelompok;
         $tahun = $request->tahun_perolehan;
 
         // ambil urutan terakhir
-        $lastUrutan = Barang::where('divisi_id', $divisi->id)
+        $lastUrutan = Barang::where('sub_jenis_barang_id', $subjenis->id)
             ->max('urutan');
         $urutanBaru = $lastUrutan ? $lastUrutan + 1 : 1;
         $formatUrutan = str_pad($urutanBaru, 2, '0', STR_PAD_LEFT);
 
         $kodeBarang =
-            $kelompok->kode_kelompok . '/' .
-            $subjenis->kode_subjenis . '/' .
-            $formatUrutan . '/' .
-            $tahun . '/' .
-            $divisi->kode_divisi;
+        $kelompok->kode_kelompok . '/' .
+        $subjenis->kode_subjenis . '/' .
+        $formatUrutan . '/' .
+        $tahun . '/' .
+        $ruang->nama_ruang;
 
         Barang::create([
             'divisi_id' => $divisi->id,
@@ -248,8 +250,10 @@ class BarangController extends Controller
         $query = Barang::with(['divisi','pic','ruang']);
 
         if ($request->divisi) {
-            $query->where('divisi_id', $request->divisi);
-        }
+        $query->whereHas('pic', function($q) use ($request) {
+            $q->where('divisi_id', $request->divisi);
+        });
+    }
 
         if ($request->pic) {
             $query->where('pic_id', $request->pic);
