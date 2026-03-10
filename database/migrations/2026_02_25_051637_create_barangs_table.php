@@ -36,7 +36,7 @@ return new class extends Migration
     $table->string('merk')->nullable();
     $table->string('serial_number')->nullable();
     $table->integer('tahun_perolehan')->nullable();
-    $table->text('keterangan')->nullable();
+    $table->string('kondisi')->default('baik');
     
     $table->integer('urutan')->default(0);
     

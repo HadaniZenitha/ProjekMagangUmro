@@ -19,28 +19,32 @@ class BarangController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $query = Barang::with(['divisi','ruang','pic']);
+    {
+        $query = Barang::with(['divisi','ruang','pic']);
 
-    if ($request->divisi) {
-        $query->where('divisi_id', $request->divisi);
+        // Filter berdasarkan divisi
+        if ($request->divisi) {
+            $query->where('divisi_id', $request->divisi);
+        }
+
+        // Filter berdasarkan tahun (created_at)
+        if ($request->tahun) {
+            $query->whereYear('created_at', $request->tahun);
+        }
+
+        // Filter berdasarkan status aktif
+        if ($request->status !== null && $request->status !== '') {
+            $query->where('is_active', $request->status);
+        }
+
+        // Pagination 10 data per halaman + pertahankan query string
+        $barangs = $query->paginate(10)->withQueryString();
+
+        $divisis = Divisi::orderBy('nama_divisi')->get();
+        $pics = Pic::with('divisi')->where('is_active', true)->get();
+
+        return view('barang.index', compact('barangs','divisis', 'pics'));
     }
-
-    if ($request->tahun) {
-        $query->whereYear('created_at', $request->tahun);
-    }
-
-    if ($request->status != null) {
-        $query->where('is_active', $request->status);
-    }
-
-    $barangs = $query->get();
-
-    $divisis = Divisi::orderBy('nama_divisi')->get();
-    $pics = Pic::with('divisi')->where('is_active', true)->get();
-
-    return view('barang.index', compact('barangs','divisis', 'pics'));
-}
 
     /**
      * Show the form for creating a new resource.
@@ -48,17 +52,12 @@ class BarangController extends Controller
     public function create()
     {
         $divisis = Divisi::where('is_active', true)->get();
-
         $ruangs = Ruang::where('is_active', true)->get();
-
         $subjenisList = SubJenisBarang::with('jenis')
                         ->where('is_active', true)
                         ->orderBy('kode_subjenis')
                         ->get();
-
-        $pics = Pic::with('divisi')
-                ->where('is_active', true)
-                ->get();
+        $pics = Pic::with('divisi')->where('is_active', true)->get();
 
         return view('barang.create', compact(
             'divisis',
@@ -86,17 +85,13 @@ class BarangController extends Controller
 
         $subjenis = SubJenisBarang::with('jenis.kelompok')
                     ->findOrFail($request->sub_jenis_barang_id);
-
         $kelompok = $subjenis->jenis->kelompok;
-
         $tahun = $request->tahun_perolehan;
 
         // ambil urutan terakhir
         $lastUrutan = Barang::where('sub_jenis_barang_id', $subjenis->id)
             ->max('urutan');
-
         $urutanBaru = $lastUrutan ? $lastUrutan + 1 : 1;
-
         $formatUrutan = str_pad($urutanBaru, 2, '0', STR_PAD_LEFT);
 
         $kodeBarang =
@@ -116,7 +111,7 @@ class BarangController extends Controller
             'merk' => $request->merk,
             'serial_number' => $request->serial_number,
             'tahun_perolehan' => $request->tahun_perolehan,
-            'keterangan' => $request->keterangan,
+            'kondisi' => $request->kondisi,
             'urutan' => $urutanBaru,
             'is_active' => true,
         ]);
@@ -140,10 +135,7 @@ class BarangController extends Controller
     {
         $divisis = Divisi::all();
         $ruangs = Ruang::all();
-
-        $pics = Pic::with('divisi')
-                ->where('is_active', true)
-                ->get();
+        $pics = Pic::with('divisi')->where('is_active', true)->get();
 
         return view('barang.edit', compact(
             'barang',
@@ -170,7 +162,7 @@ class BarangController extends Controller
             'merk' => $request->merk,
             'serial_number' => $request->serial_number,
             'tahun_perolehan' => $request->tahun_perolehan,
-            'keterangan' => $request->keterangan,
+            'kondisi' => $request->kondisi,
             'ruang_id' => $request->ruang_id,
             'is_active' => $request->is_active,
         ]);
@@ -212,7 +204,7 @@ class BarangController extends Controller
         return response()->json($pics);
     }
 
-        public function exportExcel(Request $request)
+    public function exportExcel(Request $request)
     {
         $data = $this->buildFilterQuery($request)->get();
 
@@ -222,7 +214,7 @@ class BarangController extends Controller
         );
     }
 
-        public function exportPdf(Request $request)
+    public function exportPdf(Request $request)
     {
         $data = $this->buildFilterQuery($request)->get();
     
@@ -250,7 +242,10 @@ class BarangController extends Controller
             ->with('success', 'Data Barang berhasil diimport dari Excel!');
     }
 
-        private function buildFilterQuery($request)
+    /**
+     * Build query untuk filter Excel/PDF/Preview
+     */
+    private function buildFilterQuery($request)
     {
         $query = Barang::with(['divisi','pic','ruang']);
 
@@ -278,5 +273,4 @@ class BarangController extends Controller
 
         return $query;
     }
-
 }

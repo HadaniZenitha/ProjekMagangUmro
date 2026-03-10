@@ -298,13 +298,20 @@ body {
 <div class="sidebar">
 
     <div class="sidebar-brand d-flex align-items-center gap-2">
+
+        <!-- Tombol back hanya muncul di mobile -->
+        <i class="fa-solid fa-arrow-left d-lg-none me-2"
+        onclick="toggleSidebar()"
+        style="font-size:20px;color:white;cursor:pointer;"></i>
+
         <img src="{{ asset('images/icon.png') }}" height="40" alt="Logo PLN">
+
         <div>
             <div style="font-weight:700; font-size:18px; color:#005697; letter-spacing:12px;">PLN</div>
             <div style="font-weight:400; font-size:13px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
         </div>
-    </div>
 
+</div>
     <div class="sidebar-header">
         <h3>SMART-UMRO</h3>
         <p>Smart Management of Assets and Resource Terintegrasi UMRO</p>
@@ -432,11 +439,6 @@ body {
 <div class="small text-muted">
 <i class="fa-regular fa-calendar me-1"></i>
 {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
-</div>
-
-<!-- SAPAAN USER -->
-<div class="fw-semibold text-dark">
-Hi, {{ Auth::user()->name }}
 </div>
 
 <!-- NOTIFIKASI -->
@@ -913,10 +915,12 @@ Tutup
 <i class="fa-solid fa-user me-2"></i>
 Profil Pengguna
 </h5>
-
 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
 </div>
-
+<!-- SAPAAN USER -->
+<div class="fw-semibold text-dark text-center mb-3">
+Hi, {{ Auth::user()->name }}
+</div>
 <div class="offcanvas-body">
 
 <!-- PROFIL VIEW -->
@@ -931,6 +935,11 @@ Profil Pengguna
 <p class="text-muted mb-2">
 {{ Auth::user()->email }}
 </p>
+<!-- TANGGAL -->
+<div class="small text-muted">
+<i class="fa-regular fa-calendar me-1"></i>
+{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+</div>
 
 <div class="mb-3">
 <span class="badge bg-primary px-3 py-2">
@@ -1014,6 +1023,16 @@ Batal
 Simpan
 </button>
 
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="text-center small text-muted pb-3">
+Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
 </div>
 
 </form>

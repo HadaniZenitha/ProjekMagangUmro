@@ -11,11 +11,11 @@
 {{-- Error Validasi --}}
 @if ($errors->any())
 <div class="alert alert-danger">
-    <ul class="mb-0">
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
+<ul class="mb-0">
+@foreach ($errors->all() as $error)
+<li>{{ $error }}</li>
+@endforeach
+</ul>
 </div>
 @endif
 
@@ -31,132 +31,198 @@
 <div class="mb-3">
 <label class="form-label fw-semibold">Kode Barang</label>
 <input type="text"
-       class="form-control bg-light"
-       value="{{ $barang->kode_barang }}"
-       readonly>
+class="form-control bg-light"
+value="{{ $barang->kode_barang }}"
+readonly>
 </div>
+
 
 {{-- Sub Jenis --}}
 <div class="mb-3">
 <label class="form-label">Sub Jenis</label>
 <input type="text"
-       class="form-control"
-       value="{{ $barang->subjenis->nama_subjenis }}"
-       readonly>
+class="form-control"
+value="{{ $barang->subjenis->nama_subjenis }}"
+readonly>
 </div>
+
 
 {{-- Nama Barang --}}
 <div class="mb-3">
 <label class="form-label fw-semibold">Nama Barang</label>
 <input type="text"
-       name="nama_barang"
-       class="form-control"
-       value="{{ old('nama_barang', $barang->nama_barang) }}"
-       required>
+name="nama_barang"
+class="form-control"
+value="{{ old('nama_barang', $barang->nama_barang) }}"
+required>
 </div>
+
 
 {{-- PIC --}}
 <div class="mb-3">
 <label class="form-label">PIC (Penanggung Jawab)</label>
 <select name="pic_id" class="form-select" required>
+
 @foreach($pics as $p)
+
 <option value="{{ $p->id }}"
 {{ $barang->pic_id == $p->id ? 'selected' : '' }}>
+
 {{ $p->nama_pic }} ({{ $p->divisi->nama_divisi }})
+
 </option>
+
 @endforeach
+
 </select>
 </div>
+
 
 {{-- Merk --}}
 <div class="mb-3">
 <label class="form-label fw-semibold">Merk</label>
 <input type="text"
-       name="merk"
-       class="form-control"
-       value="{{ old('merk', $barang->merk) }}">
+name="merk"
+class="form-control"
+value="{{ old('merk', $barang->merk) }}">
 </div>
+
 
 {{-- Serial Number --}}
 <div class="mb-3">
 <label class="form-label fw-semibold">Serial Number</label>
 <input type="text"
-       name="serial_number"
-       class="form-control"
-       value="{{ old('serial_number', $barang->serial_number) }}">
+name="serial_number"
+class="form-control"
+value="{{ old('serial_number', $barang->serial_number) }}">
 </div>
+
 
 {{-- Tahun Perolehan --}}
 <div class="mb-3">
 <label class="form-label fw-semibold">Tahun Perolehan</label>
 <input type="number"
-       name="tahun_perolehan"
-       class="form-control"
-       value="{{ old('tahun_perolehan', $barang->tahun_perolehan) }}">
+name="tahun_perolehan"
+class="form-control"
+value="{{ old('tahun_perolehan', $barang->tahun_perolehan) }}">
 </div>
+
 
 {{-- Lokasi Ruang --}}
 <div class="mb-3">
 <label class="form-label">Lokasi Ruang</label>
+
 <select name="ruang_id" class="form-select">
+
 @foreach($ruangs as $r)
+
 <option value="{{ $r->id }}"
 {{ $barang->ruang_id == $r->id ? 'selected' : '' }}>
+
 {{ $r->nama_ruang }}
+
 </option>
+
 @endforeach
+
 </select>
+
 </div>
 
-{{-- Keterangan --}}
+
+{{-- KONDISI BARANG --}}
 <div class="mb-3">
-<label class="form-label fw-semibold">Keterangan</label>
-<textarea name="keterangan"
-          class="form-control"
-          rows="3">{{ old('keterangan', $barang->keterangan) }}</textarea>
+
+<label class="form-label fw-semibold">
+Kondisi Barang
+</label>
+
+<select name="kondisi" class="form-select">
+
+<option value="baik"
+{{ $barang->kondisi == 'baik' ? 'selected' : '' }}>
+Baik
+</option>
+
+<option value="perlu_perbaikan"
+{{ $barang->kondisi == 'perlu_perbaikan' ? 'selected' : '' }}>
+Perlu Perbaikan
+</option>
+
+<option value="rusak"
+{{ $barang->kondisi == 'rusak' ? 'selected' : '' }}>
+Rusak
+</option>
+
+</select>
+
 </div>
+
 
 {{-- Status --}}
 <div class="mb-3">
-<label class="form-label fw-semibold">Status</label>
-<select name="is_active" id="statusSelect" class="form-select" required>
-<option value="1" {{ $barang->is_active ? 'selected' : '' }}>
+
+<label class="form-label fw-semibold">
+Status
+</label>
+
+<select name="is_active"
+id="statusSelect"
+class="form-select"
+required>
+
+<option value="1"
+{{ $barang->is_active ? 'selected' : '' }}>
 Aktif
 </option>
 
-<option value="0" {{ !$barang->is_active ? 'selected' : '' }}>
+<option value="0"
+{{ !$barang->is_active ? 'selected' : '' }}>
 Tidak Aktif
 </option>
+
 </select>
+
 </div>
+
 
 {{-- Catatan Nonaktif --}}
 <div class="mb-3"
-     id="catatanWrapper"
-     style="{{ $barang->is_active ? 'display:none;' : '' }}">
+id="catatanWrapper"
+style="{{ $barang->is_active ? 'display:none;' : '' }}">
 
-<label class="form-label">Catatan Nonaktif</label>
+<label class="form-label">
+Catatan Nonaktif
+</label>
 
 <textarea name="catatan_nonaktif"
-          class="form-control"
-          rows="3">{{ old('catatan_nonaktif', $barang->catatan_nonaktif) }}</textarea>
+class="form-control"
+rows="3">{{ old('catatan_nonaktif', $barang->catatan_nonaktif) }}</textarea>
 
 </div>
+
 
 {{-- Tombol --}}
 <div class="d-flex gap-2">
 
-    <button type="submit" class="btn btn-warning">
-        <i class="fa-solid fa-pen me-1 text-dark"></i>
-        <span class="text-dark">Update</span>
-    </button>
+<button type="submit"
+class="btn btn-warning">
 
-    <a href="{{ route('barang.index') }}" class="btn btn-danger">
-        <i class="fa-solid fa-xmark me-1"></i>
-        Batal
-    </a>
+<i class="fa-solid fa-pen me-1 text-dark"></i>
+<span class="text-dark">Update</span>
+
+</button>
+
+<a href="{{ route('barang.index') }}"
+class="btn btn-danger">
+
+<i class="fa-solid fa-xmark me-1"></i>
+Batal
+
+</a>
 
 </div>
+
 </form>
 
 </div>
