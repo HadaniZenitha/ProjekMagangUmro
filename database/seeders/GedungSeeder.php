@@ -17,7 +17,7 @@ class GedungSeeder extends Seeder
         $data =[
             ['kode_gedung' => 'SB', 'nama_gedung' => 'Smart Building'],
             ['kode_gedung' => 'UP', 'nama_gedung' => 'Unit Pembangkit'],
-            ['kode_gedung' => 'GD', 'nama_gedung' => 'Budang Penyimpanan']
+            ['kode_gedung' => 'GD', 'nama_gedung' => 'Gudang Penyimpanan']
         ];
 
         DB::table('gedungs')->insert($data);
