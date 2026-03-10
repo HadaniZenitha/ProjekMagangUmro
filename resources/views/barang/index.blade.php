@@ -5,19 +5,126 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Data Barang Inventaris</h5>
+<style>
 
-    <div class="d-flex gap-2">
-        <a href="{{ route('barang.create') }}" class="btn btn-warning">
-            <i class="fa-solid fa-plus"></i> Tambah Barang
-        </a>
+/* ================= BUTTON PROFESSIONAL ================= */
 
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalImport">
-            <i class="fas fa-file-excel"></i> Import Excel
-        </button>
-    </div>
+.btn-pro{
+border-radius:8px;
+font-weight:500;
+padding:7px 16px;
+box-shadow:0 3px 8px rgba(0,0,0,0.08);
+transition:all .25s ease;
+border:none;
+}
+
+.btn-pro:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 14px rgba(0,0,0,0.15);
+}
+
+.btn-pro:active{
+transform:translateY(0);
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.btn i{
+margin-right:5px;
+}
+
+
+/* ================= TABLE RESPONSIVE ================= */
+
+.table-responsive{
+overflow-x:auto;
+}
+
+.table th,
+.table td{
+white-space:nowrap;
+vertical-align:middle;
+}
+
+
+/* ================= ACTION BUTTON ================= */
+
+.action-btn{
+display:flex;
+gap:5px;
+flex-wrap:wrap;
+}
+
+
+/* ================= QR SIZE ================= */
+
+.qr-box svg{
+width:60px;
+height:60px;
+}
+
+
+/* ================= MOBILE RESPONSIVE ================= */
+
+@media (max-width:768px){
+
+.header-flex{
+flex-direction:column !important;
+align-items:stretch !important;
+gap:10px;
+}
+
+.header-flex .btn{
+width:100%;
+}
+
+.table{
+font-size:13px;
+}
+
+.qr-box svg{
+width:45px;
+height:45px;
+}
+
+.action-btn{
+justify-content:center;
+}
+
+.pagination{
+justify-content:center;
+}
+
+}
+
+</style>
+
+
+<div class="container-fluid">
+
+
+<!-- HEADER -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4 header-flex">
+
+<h5 class="fw-bold mb-0">Data Barang Inventaris</h5>
+
+<div class="d-flex flex-wrap gap-2">
+
+<a href="{{ route('barang.create') }}" class="btn btn-warning btn-pro">
+<i class="fa-solid fa-plus"></i> Tambah Barang
+</a>
+
+<button class="btn btn-success btn-pro"
+data-bs-toggle="modal"
+data-bs-target="#modalImport">
+
+<i class="fas fa-file-excel"></i>
+Import Excel
+
+</button>
+
 </div>
+</div>
+
 
 {{-- FORM FILTER --}}
 <form method="GET" action="{{ route('barang.index') }}">
@@ -86,201 +193,341 @@
 </form>
 
 @if(session('success'))
-<div class="alert alert-success alert-dismissible fade show">
-    {{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<div class="alert alert-success">
+{{ session('success') }}
 </div>
 @endif
 
-@if(session('warning'))
-<div class="alert alert-warning alert-dismissible fade show">
-    <strong>{{ session('warning') }}</strong>
-    @if(session('import_errors'))
-        <button class="btn btn-sm btn-outline-dark mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#errorDetails">
-            <i class="fas fa-eye"></i> Lihat Detail Error
-        </button>
-        <div class="collapse mt-3" id="errorDetails">
-            <div class="table-responsive">
-                <table class="table table-sm table-bordered">
-                    <thead>
-                        <tr>
-                            <th width="80">Baris</th>
-                            <th>Nama Barang</th>
-                            <th>Alasan Gagal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach(session('import_errors') as $error)
-                        <tr>
-                            <td class="text-center">{{ $error['row'] }}</td>
-                            <td>{{ $error['nama_barang'] }}</td>
-                            <td><small class="text-danger">{{ $error['reason'] }}</small></td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    @endif
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-@endif
 
+
+<!-- FILTER -->
+<form method="GET" action="{{ route('barang.index') }}">
+
+<div class="card mb-3">
+
+<div class="card-body">
+
+<div class="row g-2">
+
+<div class="col-lg-3 col-md-6 col-12">
+
+<select name="divisi" class="form-select">
+
+<option value="">Semua Divisi</option>
+
+@foreach($divisis as $d)
+
+<option value="{{ $d->id }}"
+{{ request('divisi')==$d->id?'selected':'' }}>
+
+{{ $d->nama_divisi }}
+
+</option>
+
+@endforeach
+
+</select>
+
+</div>
+
+
+<div class="col-lg-3 col-md-6 col-12">
+
+<select name="pic" class="form-select">
+
+<option value="">Semua PIC</option>
+
+@foreach($pics as $p)
+
+<option value="{{ $p->id }}"
+{{ request('pic')==$p->id ? 'selected' : '' }}>
+
+{{ $p->nama_pic }}
+
+</option>
+
+@endforeach
+
+</select>
+
+</div>
+
+
+<div class="col-lg-2 col-md-6 col-12">
+
+<input type="number"
+name="tahun"
+value="{{ request('tahun') }}"
+class="form-control"
+placeholder="Tahun">
+
+</div>
+
+
+<div class="col-lg-2 col-md-6 col-12">
+
+<select name="status" class="form-select">
+
+<option value="">Semua Status</option>
+
+<option value="1"
+{{ request('status')==='1'?'selected':'' }}>
+Aktif
+</option>
+
+<option value="0"
+{{ request('status')==='0'?'selected':'' }}>
+Nonaktif
+</option>
+
+</select>
+
+</div>
+
+
+<div class="col-lg-2 col-12 d-grid">
+
+<button class="btn btn-primary btn-pro">
+Filter
+</button>
+
+</div>
+
+
+<div class="col-lg-3 col-md-6 col-12 d-grid">
+
+<a href="{{ route('barang.exportPreview', request()->query()) }}"
+class="btn btn-info btn-pro"
+target="_blank">
+
+Preview Excel
+
+</a>
+
+</div>
+
+
+<div class="col-lg-3 col-md-6 col-12 d-grid">
+
+<a href="{{ route('barang.exportPdf', request()->query()) }}"
+class="btn btn-danger btn-pro">
+
+Export PDF
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</form>
+
+
+
+<!-- TABEL -->
 <div class="card shadow-sm border-0">
 
-    <div class="table-responsive">
-        <table class="table align-middle table-bordered mb-0">
+<div class="table-responsive">
 
-            <thead class="table-light">
-                <tr>
-                    <th>Kode</th>
-                    <th>PIC</th>
-                    <th>Nama Barang</th>
-                    <th>Lokasi</th>
-                    <th>Tahun</th>
-                    <th>Kondisi</th>
-                    <th>QR Code</th>
-                    <th width="220">Aksi</th>
-                </tr>
-            </thead>
+<table class="table table-bordered align-middle mb-0">
 
-            <tbody>
+<thead class="table-light">
 
-            @forelse($barangs as $b)
-            <tr>
+<tr>
 
-                <td>
-                    <span class="badge bg-dark">
-                        {{ $b->kode_barang }}
-                    </span>
-                </td>
+<th>Kode</th>
+<th>PIC</th>
+<th>Nama Barang</th>
+<th>Lokasi</th>
+<th>Tahun</th>
+<th>Kondisi</th>
+<th>QR</th>
+<th width="200">Aksi</th>
 
-                <td>{{ $b->pic->nama_pic ?? '-' }}</td>
+</tr>
 
-                <td>{{ $b->nama_barang }}</td>
+</thead>
 
-                <td>{{ $b->ruang->nama_ruang ?? '-' }}</td>
 
-                <td>{{ $b->tahun_perolehan }}</td>
+<tbody>
 
-                <td>{{ $b->keterangan ?? '-' }}</td>
+@forelse($barangs as $b)
 
-                <td>
-                    {!! QrCode::size(70)->generate($b->kode_barang) !!}
-                </td>
+<tr>
 
-                <td>
+<td>
+<span class="badge bg-dark">
+{{ $b->kode_barang }}
+</span>
+</td>
 
-                    <a href="{{ route('barang.show', $b->id) }}"
-                       class="btn btn-info btn-sm">
-                        <i class="fa-solid fa-eye"></i>
-                    </a>
+<td>{{ $b->pic->nama_pic ?? '-' }}</td>
 
-                    <a href="{{ route('barang.edit', $b->id) }}"
-                       class="btn btn-warning btn-sm">
-                        <i class="fa-solid fa-pen"></i>
-                    </a>
+<td>{{ $b->nama_barang }}</td>
 
-                    <form action="{{ route('barang.destroy', $b->id) }}"
-                          method="POST"
-                          class="d-inline">
+<td>{{ $b->ruang->nama_ruang ?? '-' }}</td>
 
-                        @csrf
-                        @method('DELETE')
+<td>{{ $b->tahun_perolehan }}</td>
 
-                        <button onclick="return confirm('Hapus barang ini?')"
-                                class="btn btn-danger btn-sm">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
 
-                    </form>
+<td>
 
-                </td>
+@if($b->kondisi == 'baik')
 
-            </tr>
+<span class="badge bg-success">Baik</span>
 
-            @empty
+@elseif($b->kondisi == 'perlu_perbaikan')
 
-            <tr>
-                <td colspan="8" class="text-center text-muted">
-                    Data barang belum tersedia
-                </td>
-            </tr>
+<span class="badge bg-warning text-dark">
+Perlu Perbaikan
+</span>
 
-            @endforelse
+@elseif($b->kondisi == 'rusak')
 
-            </tbody>
+<span class="badge bg-danger">Rusak</span>
 
-        </table>
-    </div>
+@else
+
+<span class="badge bg-secondary">-</span>
+
+@endif
+
+</td>
+
+
+<td class="qr-box">
+{!! QrCode::size(60)->generate($b->kode_barang) !!}
+</td>
+
+
+<td>
+
+<div class="action-btn">
+
+<a href="{{ route('barang.show',$b->id) }}"
+class="btn btn-info btn-sm btn-pro">
+<i class="fa-solid fa-eye"></i>
+</a>
+
+<a href="{{ route('barang.edit',$b->id) }}"
+class="btn btn-warning btn-sm btn-pro">
+<i class="fa-solid fa-pen"></i>
+</a>
+
+<form action="{{ route('barang.destroy',$b->id) }}"
+method="POST">
+
+@csrf
+@method('DELETE')
+
+<button onclick="return confirm('Hapus barang ini?')"
+class="btn btn-danger btn-sm btn-pro">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</form>
+
+</div>
+
+</td>
+
+</tr>
+
+@empty
+
+<tr>
+<td colspan="8" class="text-center text-muted">
+Data barang belum tersedia
+</td>
+</tr>
+
+@endforelse
+
+</tbody>
+
+</table>
+
+</div>
 
 </div>
 
 
-{{-- Pagination --}}
-<div class="mt-3">
-    {{ $barangs->links('pagination::bootstrap-5') }}
+
+<!-- PAGINATION -->
+<div class="mt-3 d-flex justify-content-center">
+{{ $barangs->links() }}
 </div>
 
 
-{{-- MODAL IMPORT EXCEL --}}
+
+<!-- MODAL IMPORT -->
 <div class="modal fade" id="modalImport" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    Import Data Barang dari Excel
-                </h5>
+<div class="modal-dialog">
 
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"></button>
-            </div>
+<div class="modal-content">
 
-            <form action="{{ route('barang.import') }}"
-                  method="POST"
-                  enctype="multipart/form-data">
+<div class="modal-header">
 
-                @csrf
+<h5 class="modal-title">
+Import Data Barang
+</h5>
 
-                <div class="modal-body">
+<button class="btn-close"
+data-bs-dismiss="modal"></button>
 
-                    <div class="mb-3">
-                        <label class="form-label">Pilih File Excel</label>
+</div>
 
-                        <input type="file"
-                               class="form-control"
-                               name="file_excel"
-                               accept=".xlsx,.xls,.csv"
-                               required>
 
-                        <small class="text-muted">
-                            Format file: .xlsx, .xls, atau .csv
-                        </small>
-                    </div>
+<form action="{{ route('barang.import') }}"
+method="POST"
+enctype="multipart/form-data">
 
-                </div>
+@csrf
 
-                <div class="modal-footer">
+<div class="modal-body">
 
-                    <button type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal">
-                        Batal
-                    </button>
+<input type="file"
+class="form-control"
+name="file_excel"
+accept=".xlsx,.xls,.csv"
+required>
 
-                    <button type="submit"
-                            class="btn btn-primary">
-                        Import
-                    </button>
+<small class="text-muted">
+Format: .xlsx / .xls / .csv
+</small>
 
-                </div>
+</div>
 
-            </form>
 
-        </div>
-    </div>
+<div class="modal-footer">
+
+<button class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Batal
+
+</button>
+
+<button class="btn btn-primary btn-pro">
+Import
+</button>
+
+</div>
+
+</form>
+
+</div>
+</div>
+</div>
+
+
 </div>
 
 @endsection
