@@ -4,12 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\Ruang;
-<<<<<<< HEAD
-use App\Models\BarangRusak;
-use App\Models\PerluPerbaikan;
-use App\Models\Kondisi;
-=======
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,17 +17,6 @@ class HomeController extends Controller
     {
         $totalBarang = Barang::count();
         $totalRuang = Ruang::count();
-<<<<<<< HEAD
-        $totalBarangRusak = BarangRusak::count();
-        $totalPerluPerbaikan = PerluPerbaikan::count();
-        $totalKondisi = Kondisi::count();
-        $totalBarangBaik = Barang::where('keterangan', 'Baik')->count();
-
-        $barangTerbaru = Barang::with('divisi', 'ruang', 'pic')
-                        ->orderByDesc('id')
-                        ->take(5)
-                        ->get();
-=======
 
         $barangBaik = Barang::where('kondisi','baik')->count();
 
@@ -45,21 +28,13 @@ class HomeController extends Controller
             ->latest()
             ->take(5)
             ->get();
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
         return view('dashboard', compact(
             'totalBarang',
             'totalRuang',
-<<<<<<< HEAD
-            'totalBarangRusak',
-            'totalPerluPerbaikan',
-            'totalKondisi',
-            'totalBarangBaik',
-=======
             'barangBaik',
             'barangPerbaikan',
             'barangRusak',
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
             'barangTerbaru'
         ));
     }
