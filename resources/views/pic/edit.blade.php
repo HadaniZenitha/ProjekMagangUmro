@@ -6,11 +6,8 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Edit PIC</h5>
-<<<<<<< HEAD
-=======
     <a href="{{ route('pic.index') }}">
     </a>
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 
 <div class="card shadow-sm border-0">
@@ -76,7 +73,6 @@
                 <button class="btn btn-warning">
                     <i class="fa-solid fa-save"></i> Update
                 </button>
-
                 <a href="{{ route('pic.index') }}" class="btn btn-danger">
                     Batal
                 </a>
