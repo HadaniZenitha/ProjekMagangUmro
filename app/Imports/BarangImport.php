@@ -7,13 +7,12 @@ use App\Models\Pic;
 use App\Models\Ruang;
 use App\Models\SubJenisBarang;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class BarangImport implements ToModel, WithHeadingRow
+class BarangImport implements ToModel
 {
     public $successCount = 0;
     public $failedRows = [];
-    private $currentRow = 1; // Skip header
+    private $currentRow = 0;
 
     /**
     * @param array $row
@@ -23,11 +22,22 @@ class BarangImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $this->currentRow++;
-        
-        $namaBarang = trim((string) ($row['nama_barang'] ?? ''));
-        $nomorBarang = trim((string) ($row['nomor_barang'] ?? ''));
-        $namaPic = trim((string) ($row['nama_pic'] ?? ''));
-        $kondisi = trim((string) ($row['kondisi'] ?? ''));
+
+        // Gunakan posisi kolom agar tidak bergantung pada nama header.
+        // Format 4 kolom: [nama_barang, nomor_barang, kondisi, nama_pic]
+        $values = array_values($row);
+        $namaBarang = trim((string) ($values[0] ?? ''));
+        $nomorBarang = trim((string) ($values[1] ?? ''));
+        $kondisi = trim((string) ($values[2] ?? ''));
+        $namaPic = trim((string) ($values[3] ?? ''));
+
+        // Jika file masih menyertakan header, skip baris header tanpa dianggap gagal.
+        if (
+            in_array(strtolower($namaBarang), ['nama barang', 'nama_barang'], true) &&
+            in_array(strtolower($nomorBarang), ['nomor barang', 'nomor_barang'], true)
+        ) {
+            return null;
+        }
 
         // Abaikan baris kosong/tidak valid minimum
         if ($namaBarang === '' || $nomorBarang === '' || $namaPic === '') {
@@ -64,14 +74,10 @@ class BarangImport implements ToModel, WithHeadingRow
         // Cari PIC berdasarkan nama (case-insensitive)
         $pic = Pic::whereRaw('LOWER(nama_pic) = ?', [strtolower($namaPic)])->first();
 
-        // ruang_id boleh dikosongkan di Excel, fallback cari dari nama ruang di nomor barang
-        $ruang = null;
-        if (!empty($row['ruang_id'])) {
-            $ruang = Ruang::find($row['ruang_id']);
-        }
-        if (!$ruang && $namaRuang !== '') {
-            $ruang = Ruang::whereRaw('LOWER(nama_ruang) = ?', [strtolower($namaRuang)])->first();
-        }
+        // Ruang ditentukan dari segmen terakhir nomor_barang
+        $ruang = $namaRuang !== ''
+            ? Ruang::whereRaw('LOWER(nama_ruang) = ?', [strtolower($namaRuang)])->first()
+            : null;
 
         // Jika FK wajib tidak valid, jangan simpan baris ini
         if (!$ruang || !$subjenis || !$pic) {
@@ -107,11 +113,8 @@ class BarangImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        // Legacy: kolom "Kondisi" di UI masih mengambil data dari field keterangan.
-        $keterangan = $row['keterangan'] ?? null;
-        if ((is_null($keterangan) || trim((string) $keterangan) === '') && $kondisi !== '') {
-            $keterangan = $kondisi;
-        }
+        // Prioritaskan kolom kondisi. Tetap dukung file lama yang masih pakai keterangan.
+        $kondisiValue = $kondisi !== '' ? $kondisi : trim((string) ($row['keterangan'] ?? ''));
 
         $this->successCount++;
         
@@ -121,10 +124,10 @@ class BarangImport implements ToModel, WithHeadingRow
             'sub_jenis_barang_id' => $subjenis->id,
             'pic_id'              => $pic->id,
             'nama_barang'         => $namaBarang,
-            'merk'                => $row['merk'] ?? null,
-            'serial_number'       => $row['serial_number'] ?? null,
+            'merk'                => null,
+            'serial_number'       => null,
             'tahun_perolehan'     => $tahun > 0 ? $tahun : null,
-            'keterangan'          => $keterangan,
+            'kondisi'             => $kondisiValue !== '' ? $kondisiValue : null,
             'kode_barang'         => $kodeBarang,
             'urutan'              => $urutan,
             'is_active'           => true,

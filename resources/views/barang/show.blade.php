@@ -23,7 +23,7 @@
         </li>
 
         <li class="list-group-item">
-            <b>Kondisi:</b> {{ $barang->keterangan ?? '-' }}
+            <b>Kondisi:</b> {{ $barang->kondisi ?? '-' }}
         </li>
     </ul>
 
