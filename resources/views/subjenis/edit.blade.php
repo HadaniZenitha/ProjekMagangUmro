@@ -5,82 +5,52 @@
 
 @section('content')
 
-<<<<<<< HEAD
-<div class="mb-4">
-    <h5 class="fw-bold mb-0">Edit Sub Jenis Barang</h5>
-=======
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Edit Sub Jenis Barang</h5>
     <a href="{{ route('subjenis.index') }}">
     </a>
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 
 @if ($errors->any())
-<div class="alert alert-danger">
-    <ul class="mb-0">
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
 @endif
 
 <div class="card shadow-sm border-0">
-<<<<<<< HEAD
-<div class="card-body">
-=======
     <div class="card-body">
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
-<form action="{{ route('subjenis.update', $subjenis->id) }}" method="POST">
-@csrf
-@method('PUT')
+        <form action="{{ route('subjenis.update', $subjenis->id) }}" method="POST">
+            @csrf
+            @method('PUT')
 
-<!-- Jenis Barang -->
-<div class="mb-3">
-<label class="form-label">Jenis Barang</label>
-<select name="jenis_barang_id" class="form-select" required>
-@foreach($jenisList as $j)
-<option value="{{ $j->id }}"
-{{ old('jenis_barang_id', $subjenis->jenis_barang_id) == $j->id ? 'selected' : '' }}>
-{{ $j->nama_jenis }}
-</option>
-@endforeach
-</select>
-</div>
+            <!-- Jenis Barang -->
+            <div class="mb-3">
+                <label class="form-label">Jenis Barang</label>
+                <select name="jenis_barang_id" class="form-select" required>
+                    @foreach($jenisList as $j)
+                        <option value="{{ $j->id }}"
+                            {{ old('jenis_barang_id', $subjenis->jenis_barang_id) == $j->id ? 'selected' : '' }}>
+                            {{ $j->nama_jenis }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-<!-- Nama Sub Jenis -->
-<div class="mb-3">
-<label class="form-label">Nama Sub Jenis</label>
-<input type="text"
-       name="nama_subjenis"
-       value="{{ old('nama_subjenis', $subjenis->nama_subjenis) }}"
-       class="form-control"
-       required>
-</div>
+            <!-- Nama Sub Jenis -->
+            <div class="mb-3">
+                <label class="form-label">Nama Sub Jenis</label>
+                <input type="text"
+                       name="nama_subjenis"
+                       value="{{ old('nama_subjenis', $subjenis->nama_subjenis) }}"
+                       class="form-control"
+                       required>
+            </div>
 
-<<<<<<< HEAD
-<!-- Deskripsi -->
-<div class="mb-4">
-<label class="form-label">Deskripsi</label>
-<textarea name="deskripsi"
-          class="form-control"
-          rows="3">{{ old('deskripsi', $subjenis->deskripsi) }}</textarea>
-</div>
-
-<div class="d-flex gap-2">
-
-<button type="submit" class="btn btn-warning">
-<i class="fa-solid fa-save me-1"></i> Update
-</button>
-
-<a href="{{ route('subjenis.index') }}" class="btn btn-danger">
-<i class="fa-solid fa-xmark me-1"></i> Batal
-</a>
-
-</div>
-=======
             <!-- Deskripsi -->
             <div class="mb-4">
                 <label class="form-label">Deskripsi</label>
@@ -98,11 +68,10 @@
                     Batal
                 </a>
             </div>
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
-</form>
+        </form>
 
-</div>
+    </div>
 </div>
 
 @endsection
