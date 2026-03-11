@@ -2,27 +2,15 @@
 
 @section('content')
 <div class="container">
+    <h2>Detail Jenis Ruangan</h2>
 
-<<<<<<< HEAD
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Detail Jenis Ruangan</h2>
-
-        <a href="{{ route('jenis-ruangan.index') }}" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-        </a>
-    </div>
-
-=======
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
     <ul class="list-group">
         <li class="list-group-item">
             <b>Kode:</b> {{ $jenis_ruangan->kode_jenis_ruangan }}
         </li>
-
         <li class="list-group-item">
             <b>Nama:</b> {{ $jenis_ruangan->nama_jenis_ruangan }}
         </li>
-
         <li class="list-group-item">
             <b>Status:</b>
 
@@ -38,5 +26,8 @@
         </li>
     </ul>
 
+    <a href="{{ route('jenis-ruangan.index') }}" class="btn btn-secondary mt-3">
+        <i class="fa-solid fa-arrow-left me-1"></i>Kembali
+    </a>
 </div>
 @endsection
