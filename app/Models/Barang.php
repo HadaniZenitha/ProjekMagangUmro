@@ -16,7 +16,7 @@ class Barang extends Model
         'merk',
         'serial_number',
         'tahun_perolehan',
-        'keterangan',
+        'kondisi',
         'urutan',
         'is_active',
     ];

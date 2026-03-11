@@ -15,7 +15,7 @@
             <p><b>Kode:</b> {{ $barang->kode_barang }}</p>
             <p><b>Lokasi:</b> {{ $barang->ruang->nama_ruang }}</p>
             <p><b>Tahun Masuk:</b> {{ $barang->tahun_perolehan }}</p>
-            <p><b>Keterangan:</b> {{ $barang->keterangan }}</p>
+            <p><b>Kondisi:</b> {{ $barang->kondisi ?? '-' }}</p>
         </div>
     </div>
 </div>

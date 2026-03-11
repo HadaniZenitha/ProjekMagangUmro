@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
 
+<<<<<<< HEAD
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Detail Lantai</h2>
 
@@ -11,6 +12,8 @@
         </a>
     </div>
 
+=======
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
     <ul class="list-group">
         <li class="list-group-item">
             <b>Gedung:</b> {{ $lantai->gedung->nama_gedung }}

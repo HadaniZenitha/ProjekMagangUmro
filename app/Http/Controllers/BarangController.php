@@ -13,11 +13,13 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BarangExport;
 use App\Imports\BarangImport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BarangController extends Controller
 {
     public function index(Request $request)
     {
+<<<<<<< HEAD
         $query = Barang::with('divisi','pic','ruang')
                 ->orderBy('kode_barang');
 
@@ -28,22 +30,42 @@ class BarangController extends Controller
         $barangs = $query->paginate(10);
 
         return view('barang.index', compact('barangs'));
+=======
+        $query = Barang::with(['divisi','ruang','pic']);
+
+        // Filter berdasarkan divisi
+        if ($request->divisi) {
+            $query->where('divisi_id', $request->divisi);
+        }
+
+        // Filter berdasarkan tahun (created_at)
+        if ($request->tahun) {
+            $query->whereYear('created_at', $request->tahun);
+        }
+
+        // Filter berdasarkan status aktif
+        if ($request->status !== null && $request->status !== '') {
+            $query->where('is_active', $request->status);
+        }
+
+    $barangs = $query->paginate(15);
+
+        $divisis = Divisi::orderBy('nama_divisi')->get();
+        $pics = Pic::with('divisi')->where('is_active', true)->get();
+
+        return view('barang.index', compact('barangs','divisis', 'pics'));
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
     }
 
     public function create()
     {
         $divisis = Divisi::where('is_active', true)->get();
-
         $ruangs = Ruang::where('is_active', true)->get();
-
         $subjenisList = SubJenisBarang::with('jenis')
                         ->where('is_active', true)
                         ->orderBy('kode_subjenis')
                         ->get();
-
-        $pics = Pic::with('divisi')
-                ->where('is_active', true)
-                ->get();
+        $pics = Pic::with('divisi')->where('is_active', true)->get();
 
         return view('barang.create', compact(
             'divisis',
@@ -64,19 +86,21 @@ class BarangController extends Controller
         ]);
 
         $divisi = Divisi::findOrFail($request->divisi_id);
+        $ruang = Ruang::findOrFail($request->ruang_id);
 
         $subjenis = SubJenisBarang::with('jenis.kelompok')
                     ->findOrFail($request->sub_jenis_barang_id);
-
         $kelompok = $subjenis->jenis->kelompok;
-
         $tahun = $request->tahun_perolehan;
 
+<<<<<<< HEAD
         $lastUrutan = Barang::where('divisi_id', $divisi->id)
+=======
+        // ambil urutan terakhir
+        $lastUrutan = Barang::where('sub_jenis_barang_id', $subjenis->id)
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
             ->max('urutan');
-
         $urutanBaru = $lastUrutan ? $lastUrutan + 1 : 1;
-
         $formatUrutan = str_pad($urutanBaru, 2, '0', STR_PAD_LEFT);
 
         $kodeBarang =
@@ -84,7 +108,7 @@ class BarangController extends Controller
         $subjenis->kode_subjenis . '/' .
         $formatUrutan . '/' .
         $tahun . '/' .
-        $divisi->kode_divisi;
+        $ruang->nama_ruang;
 
         $barang = Barang::create([
             'divisi_id' => $divisi->id,
@@ -96,7 +120,7 @@ class BarangController extends Controller
             'merk' => $request->merk,
             'serial_number' => $request->serial_number,
             'tahun_perolehan' => $request->tahun_perolehan,
-            'keterangan' => $request->keterangan,
+            'kondisi' => $request->kondisi,
             'urutan' => $urutanBaru,
             'is_active' => true,
         ]);
@@ -139,10 +163,7 @@ class BarangController extends Controller
     {
         $divisis = Divisi::all();
         $ruangs = Ruang::all();
-
-        $pics = Pic::with('divisi')
-                ->where('is_active', true)
-                ->get();
+        $pics = Pic::with('divisi')->where('is_active', true)->get();
 
         return view('barang.edit', compact(
             'barang',
@@ -166,7 +187,7 @@ class BarangController extends Controller
             'merk' => $request->merk,
             'serial_number' => $request->serial_number,
             'tahun_perolehan' => $request->tahun_perolehan,
-            'keterangan' => $request->keterangan,
+            'kondisi' => $request->kondisi,
             'ruang_id' => $request->ruang_id,
             'is_active' => $request->is_active,
         ]);
@@ -202,10 +223,11 @@ class BarangController extends Controller
         return response()->json($pics);
     }
 
-    public function export(Request $request)
+    public function exportExcel(Request $request)
     {
-        $query = Barang::with('divisi','pic','ruang');
+        $data = $this->buildFilterQuery($request)->get();
 
+<<<<<<< HEAD
         $data = $query->get()->map(function ($b) {
             return [
                 $b->kode_barang,
@@ -216,8 +238,28 @@ class BarangController extends Controller
                 $b->is_active ? 'Aktif' : 'Nonaktif'
             ];
         });
+=======
+        return Excel::download(
+            new BarangExport($data),
+            'laporan_barang.xlsx'
+        );
+    }
 
-        return Excel::download(new BarangExport($data), 'laporan_barang.xlsx');
+    public function exportPdf(Request $request)
+    {
+        $data = $this->buildFilterQuery($request)->get();
+    
+        $pdf = Pdf::loadView('barang.export-pdf', compact('data'));
+    
+        return $pdf->stream('laporan_barang.pdf');
+    }
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
+
+    public function exportPreview(Request $request)
+    {
+        $data = $this->buildFilterQuery($request)->get();
+
+        return view('barang.export-preview', compact('data'));
     }
 
     public function import(Request $request)
@@ -226,9 +268,65 @@ class BarangController extends Controller
             'file_excel' => 'required|mimes:xlsx,xls,csv'
         ]);
 
+<<<<<<< HEAD
         Excel::import(new BarangImport, $request->file('file_excel'));
 
         return redirect()->route('barang.index')
             ->with('success', 'Data Barang berhasil diimport dari Excel!');
     }
+=======
+        $import = new BarangImport;
+        Excel::import($import, $request->file('file_excel'));
+
+        $successCount = $import->getSuccessCount();
+        $failedCount = $import->getFailedCount();
+        $failedRows = $import->getFailedRows();
+
+        $message = "Import selesai: {$successCount} barang berhasil ditambahkan";
+        
+        if ($failedCount > 0) {
+            $message .= ", {$failedCount} baris gagal.";
+            
+            // Simpan detail error untuk ditampilkan
+            session()->flash('import_errors', $failedRows);
+            session()->flash('warning', $message);
+        } else {
+            session()->flash('success', $message);
+        }
+
+        return redirect()->route('barang.index');
+    }
+
+    /**
+     * Build query untuk filter Excel/PDF/Preview
+     */
+    private function buildFilterQuery($request)
+    {
+        $query = Barang::with(['divisi','pic','ruang']);
+
+        if ($request->divisi) {
+        $query->whereHas('pic', function($q) use ($request) {
+            $q->where('divisi_id', $request->divisi);
+        });
+    }
+
+        if ($request->pic) {
+            $query->where('pic_id', $request->pic);
+        }
+
+        if ($request->ruang) {
+            $query->where('ruang_id', $request->ruang);
+        }
+
+        if ($request->tahun) {
+            $query->where('tahun_perolehan', $request->tahun);
+        }
+
+        if ($request->status !== null && $request->status !== '') {
+            $query->where('is_active', $request->status);
+        }
+
+        return $query;
+    }
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 }

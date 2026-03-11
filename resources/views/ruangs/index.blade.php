@@ -3,7 +3,6 @@
 @section('title', 'Master Ruang')
 
 @section('content')
-<div class="container">
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Master Ruang</h5>
@@ -13,16 +12,20 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
 <div class="card shadow-sm">
     <div class="card-body">
 
         <div class="table-responsive">
+<<<<<<< HEAD
             <table class="table table-bordered align-middle">
+=======
+            <table class="table align-middle table-bordered">
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
                 <thead class="table-light">
                     <tr>
@@ -99,7 +102,11 @@
         </div>
 
         {{-- Pagination --}}
+<<<<<<< HEAD
         @if(method_exists($ruangs, 'hasPages') && $ruangs->hasPages())
+=======
+        @if(method_exists($ruangs,'hasPages') && $ruangs->hasPages())
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
         <div class="mt-3 text-center">
 
@@ -114,11 +121,18 @@
             </div>
 
         </div>
+<<<<<<< HEAD
+
+        @endif
+
+    </div>
+</div>
+=======
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
         @endif
 
     </div>
 </div>
 
-</div>
 @endsection

@@ -6,6 +6,11 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Edit Divisi</h5>
+<<<<<<< HEAD
+=======
+    <a href="{{ route('divisi.index') }}">
+    </a>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 
 <div class="card shadow-sm border-0">

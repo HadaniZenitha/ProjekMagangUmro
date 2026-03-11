@@ -31,5 +31,12 @@
             @endif
         </li>
     </ul>
+<<<<<<< HEAD
+=======
+
+    <a href="{{ route('divisi.index') }}" class="btn btn-secondary mt-3">
+        <i class="fa-solid fa-arrow-left me-1"></i>Kembali
+    </a>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 @endsection

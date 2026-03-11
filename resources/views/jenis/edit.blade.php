@@ -5,8 +5,15 @@
 
 @section('content')
 
+<<<<<<< HEAD
 <div class="mb-4">
     <h5 class="fw-bold mb-0">Edit Jenis Barang</h5>
+=======
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Edit Jenis Barang</h5>
+    <a href="{{ route('jenis.index') }}">
+    </a>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 
 @if ($errors->any())
@@ -20,7 +27,11 @@
 @endif
 
 <div class="card shadow-sm border-0">
+<<<<<<< HEAD
 <div class="card-body">
+=======
+    <div class="card-body">
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
 <form action="{{ route('jenis.update', $jenis->id) }}" method="POST">
 @csrf
@@ -54,6 +65,7 @@
           rows="3">{{ old('deskripsi', $jenis->deskripsi) }}</textarea>
 </div>
 
+<<<<<<< HEAD
 <div class="mb-4">
 <label class="form-label">Status</label>
 <select name="is_active" class="form-select">
@@ -75,6 +87,30 @@ Nonaktif
 <a href="{{ route('jenis.index') }}" class="btn btn-danger">
 <i class="fa-solid fa-xmark me-1"></i> Batal
 </a>
+=======
+            <!-- Status -->
+            <div class="mb-4">
+                <label class="form-label">Status</label>
+                <select name="is_active" class="form-select">
+                    <option value="1" {{ $jenis->is_active ? 'selected' : '' }}>
+                        Aktif
+                    </option>
+                    <option value="0" {{ !$jenis->is_active ? 'selected' : '' }}>
+                        Nonaktif
+                    </option>
+                </select>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fa-solid fa-save me-1"></i> Update
+                </button>
+
+                <a href="{{ route('jenis.index') }}" class="btn btn-danger">
+                    Batal
+                </a>
+            </div>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
 </div>
 

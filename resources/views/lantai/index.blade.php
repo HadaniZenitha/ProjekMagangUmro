@@ -3,7 +3,6 @@
 @section('title', 'Master Lantai')
 
 @section('content')
-<div class="container">
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Master Lantai</h5>
@@ -13,9 +12,9 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
 <div class="card shadow-sm border-0">
@@ -32,12 +31,19 @@
                         <th width="220">Aksi</th>
                     </tr>
                 </thead>
+<<<<<<< HEAD
                 <tbody>
                     @foreach($lantais as $l)
+=======
+
+                <tbody>
+                    @forelse($lantais as $l)
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
                     <tr>
                         <td>{{ $l->gedung->nama_gedung ?? '-' }}</td>
                         <td>{{ $l->kode_lantai }}</td>
                         <td>{{ $l->nama_lantai ?? '-' }}</td>
+
                         <td>
                             @if($l->is_active)
                                 <span class="badge bg-success">Aktif</span>
@@ -45,6 +51,7 @@
                                 <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
+<<<<<<< HEAD
                         <td>
                             <a href="{{ route('lantai.show', $l->id) }}"
                                class="btn btn-info btn-sm">
@@ -61,6 +68,24 @@
                                   class="d-inline">
                                 @csrf
                                 @method('DELETE')
+=======
+
+                        <td>
+                            <a href="{{ route('lantai.show', $l->id) }}" class="btn btn-info btn-sm">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+
+                            <a href="{{ route('lantai.edit', $l->id) }}" class="btn btn-warning btn-sm">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+
+                            <form action="{{ route('lantai.destroy', $l->id) }}" 
+                                  method="POST" 
+                                  class="d-inline">
+                                @csrf
+                                @method('DELETE')
+
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
                                 <button class="btn btn-danger btn-sm"
                                         onclick="return confirm('Hapus lantai ini?')">
                                     <i class="fa-solid fa-trash"></i>
@@ -68,10 +93,38 @@
                             </form>
                         </td>
                     </tr>
+<<<<<<< HEAD
                     @endforeach
                 </tbody>
             </table>
+=======
+
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-3">
+                            Belum ada data lantai.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
+
+        {{-- Pagination --}}
+        @if(method_exists($lantais,'hasPages') && $lantais->hasPages())
+        <div class="mt-3 text-center">
+            <small class="text-muted d-block mb-2">
+                Menampilkan {{ $lantais->firstItem() }} 
+                sampai {{ $lantais->lastItem() }} 
+                dari {{ $lantais->total() }} data
+            </small>
+
+            <div class="d-flex justify-content-center">
+                {{ $lantais->links('pagination::bootstrap-5') }}
+            </div>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
+        </div>
+        @endif
 
     </div>
 </div>

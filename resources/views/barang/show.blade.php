@@ -23,7 +23,7 @@
         </li>
 
         <li class="list-group-item">
-            <b>Kondisi:</b> {{ $barang->keterangan ?? '-' }}
+            <b>Kondisi:</b> {{ $barang->kondisi ?? '-' }}
         </li>
     </ul>
 
@@ -39,6 +39,7 @@
         </p>
     </div>
 
+<<<<<<< HEAD
     {{-- Tombol --}}
     <div class="mt-4 d-flex gap-2">
 
@@ -50,6 +51,12 @@
             <i class="fa-solid fa-xmark me-1"></i> Batal
         </a>
 
+=======
+    <div class="mt-3">
+        <a href="{{ route('barang.index') }}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left me-1"></i>Kembali
+        </a>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
     </div>
 
 </div>

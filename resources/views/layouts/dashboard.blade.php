@@ -239,6 +239,15 @@ body {
 
 .overlay {
     display: none;
+<<<<<<< HEAD
+=======
+}
+
+/* Prevent Laravel pagination SVG arrows from stretching in non-Tailwind pages */
+.pagination svg {
+    width: 1rem;
+    height: 1rem;
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 }
 
 /* tombol back sidebar */
@@ -304,14 +313,24 @@ body {
 <div class="sidebar">
 
     <div class="sidebar-brand d-flex align-items-center gap-2">
+<<<<<<< HEAD
         <i class="fa-solid fa-arrow-left mobile-back sidebar-back" onclick="toggleSidebar()"></i>
+=======
+
+        <!-- Tombol back hanya muncul di mobile -->
+        <i class="fa-solid fa-arrow-left d-lg-none me-2"
+        onclick="toggleSidebar()"
+        style="font-size:20px;color:white;cursor:pointer;"></i>
+
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
         <img src="{{ asset('images/icon.png') }}" height="40" alt="Logo PLN">
+
         <div>
             <div style="font-weight:700; font-size:18px; color:#005697; letter-spacing:12px;">PLN</div>
             <div style="font-weight:400; font-size:13px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
         </div>
-    </div>
 
+</div>
     <div class="sidebar-header">
         <h3>SMART-UMRO</h3>
         <p>Smart Management of Assets and Resource Terintegrasi UMRO</p>
@@ -435,6 +454,12 @@ body {
 
 <div class="d-flex align-items-center gap-4 text-muted icon-top">
 
+<!-- TANGGAL -->
+<div class="small text-muted">
+<i class="fa-regular fa-calendar me-1"></i>
+{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+</div>
+
 <!-- NOTIFIKASI -->
 <i class="fa-regular fa-bell"
    data-bs-toggle="modal"
@@ -451,7 +476,6 @@ body {
    data-bs-target="#infoModal"></i>
 
 </div>
-
 </div>
 
 <div class="banner-header">
@@ -485,6 +509,7 @@ Developed by SMART UMRO
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function toggleSidebar() {
+<<<<<<< HEAD
 
     if (window.innerWidth <= 991) {
 
@@ -496,6 +521,19 @@ function toggleSidebar() {
 }
 window.addEventListener('resize', function(){
 
+=======
+
+    if (window.innerWidth <= 991) {
+
+        document.querySelector('.sidebar').classList.toggle('show');
+        document.getElementById('overlay').classList.toggle('show');
+
+    }
+
+}
+window.addEventListener('resize', function(){
+
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
     if(window.innerWidth > 991){
 
         document.querySelector('.sidebar').classList.remove('show');
@@ -505,6 +543,73 @@ window.addEventListener('resize', function(){
 
 });
 </script>
+<<<<<<< HEAD
+=======
+<!-- ================= MODAL INFORMASI ================= -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header" style="background:#309FB0; color:white;">
+        <h5 class="modal-title">
+            <i class="fa-solid fa-circle-info me-2"></i>
+            Informasi Sistem
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- HEADER -->
+        <div class="text-center mb-4">
+            <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
+            <h4 class="mt-3 fw-bold">i - Noni</h4>
+            <p class="text-muted mb-0">Sistem Inventarisasi UNIT UMRO</p>
+            <small class="text-muted">Versi 1.0.0</small>
+        </div>
+
+        <hr>
+
+        <!-- DESKRIPSI SISTEM -->
+        <h6 class="fw-bold text-primary">Tentang Sistem</h6>
+        <p style="text-align: justify;">
+            i-Noni adalah sistem inventarisasi yang dirancang untuk membantu 
+            pengelolaan data aset dan barang secara terstruktur dan terintegrasi. 
+            Sistem ini mencakup pengelolaan data karyawan, lokasi (gedung, lantai, ruangan), 
+            serta data barang dan inventaris sehingga proses monitoring menjadi lebih efektif, 
+            akurat, dan transparan.
+        </p>
+
+        <hr>
+
+        <!-- PANDUAN SINGKAT -->
+        <h6 class="fw-bold text-primary">Panduan Singkat Penggunaan</h6>
+        <ol style="font-size: 14px;">
+            <li>Gunakan menu di sidebar untuk memilih modul yang diinginkan.</li>
+            <li>Tambahkan data melalui tombol <strong>Tambah</strong> pada setiap halaman.</li>
+            <li>Gunakan fitur edit untuk memperbarui data yang sudah ada.</li>
+            <li>Pastikan data lokasi dan karyawan telah dibuat sebelum menambahkan inventaris.</li>
+            <li>Gunakan fitur pencarian pada bagian atas untuk menemukan data dengan cepat.</li>
+        </ol>
+
+        <hr>
+
+        <!-- PENGEMBANG -->
+        <h6 class="fw-bold text-primary">Pengembang Sistem</h6>
+        <p class="mb-1"><strong>Nama:</strong> Hwanzelnuts n Team</p>
+        <p class="mb-1"><strong>Unit:</strong> UNIT UMRO</p>
+        <p class="mb-0"><strong>Tahun Pengembangan:</strong> 2026</p>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
 <script>
 
@@ -686,10 +791,16 @@ Informasi Sistem
     <!-- Title -->
     <h3 class="fw-bold mb-1" style="line-height:1.1;">i - Noni</h3> <!-- line-height rapat -->
 
+<<<<<<< HEAD
     <!-- Subtitle / description -->
     <p class="text-muted mb-1" style="line-height:1.1; font-size:0.9rem;"> <!-- line-height rapat -->
         Sistem Inventarisasi UNIT MAINTENANCE REPAIR AND OVERHAUL
     </p>
+=======
+<p class="text-muted mb-0">
+Sistem Inventarisasi UNIT MAINTENANCE REPAIR AND OVERHAUL
+</p>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
     <!-- Version badge -->
     <span class="badge bg-secondary" style="margin-top:2px;">
@@ -849,10 +960,12 @@ Tutup
 <i class="fa-solid fa-user me-2"></i>
 Profil Pengguna
 </h5>
-
 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
 </div>
-
+<!-- SAPAAN USER -->
+<div class="fw-semibold text-dark text-center mb-3">
+Hi, {{ Auth::user()->name }}
+</div>
 <div class="offcanvas-body">
 
 <!-- PROFIL VIEW -->
@@ -867,6 +980,11 @@ Profil Pengguna
 <p class="text-muted mb-2">
 {{ Auth::user()->email }}
 </p>
+<!-- TANGGAL -->
+<div class="small text-muted">
+<i class="fa-regular fa-calendar me-1"></i>
+{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+</div>
 
 <div class="mb-3">
 <span class="badge bg-primary px-3 py-2">
@@ -960,6 +1078,19 @@ Simpan
 
 <div class="text-center small text-muted pb-3">
 Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
+<<<<<<< HEAD
+=======
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="text-center small text-muted pb-3">
+Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 
 </div>

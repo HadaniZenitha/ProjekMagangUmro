@@ -12,9 +12,9 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
 @endif
 
 <div class="card shadow-sm border-0">
@@ -22,6 +22,7 @@
 
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
+
                 <thead class="table-light">
                     <tr>
                         <th>Kode</th>
@@ -30,11 +31,15 @@
                         <th width="220">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    @foreach($kelompoks as $k)
+                    @forelse($kelompoks as $k)
                     <tr>
+
                         <td>{{ $k->kode_kelompok }}</td>
+
                         <td>{{ $k->nama_kelompok }}</td>
+
                         <td>
                             @if($k->is_active)
                                 <span class="badge bg-success">Aktif</span>
@@ -42,6 +47,7 @@
                                 <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
+
                         <td>
                             <a href="{{ route('kelompok.show', $k->id) }}"
                                class="btn btn-info btn-sm">
@@ -58,21 +64,46 @@
                                   class="d-inline">
                                 @csrf
                                 @method('DELETE')
+
                                 <button onclick="return confirm('Hapus kelompok ini?')"
                                         class="btn btn-danger btn-sm">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
                         </td>
+
                     </tr>
-                    @endforeach
+
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-3">
+                            Belum ada data kelompok barang.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
+
             </table>
         </div>
 
-        <div class="mt-3">
-            {{ $kelompoks->links() }}
+        {{-- Pagination --}}
+        @if(method_exists($kelompoks,'hasPages') && $kelompoks->hasPages())
+
+        <div class="mt-3 text-center">
+
+            <small class="text-muted d-block mb-2">
+                Menampilkan {{ $kelompoks->firstItem() }}
+                sampai {{ $kelompoks->lastItem() }}
+                dari {{ $kelompoks->total() }} data
+            </small>
+
+            <div class="d-flex justify-content-center">
+                {{ $kelompoks->links('pagination::bootstrap-5') }}
+            </div>
+
         </div>
+
+        @endif
 
     </div>
 </div>

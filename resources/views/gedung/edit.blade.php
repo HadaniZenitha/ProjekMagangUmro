@@ -5,8 +5,15 @@
 
 @section('content')
 
+<<<<<<< HEAD
 <div class="mb-4">
     <h5 class="fw-bold mb-0">Tambah Gedung</h5>
+=======
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Edit Gedung</h5>
+    <a href="{{ route('gedung.index') }}">
+    </a>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 
 @if ($errors->any())
@@ -47,22 +54,42 @@
                        required>
             </div>
 
+<<<<<<< HEAD
             <!-- Status -->
             <div class="mb-4">
                 <label class="form-label">Status</label>
                 <select name="is_active" class="form-select">
                     <option value="1" {{ old('is_active', 1) ? 'selected' : '' }}>Aktif</option>
                     <option value="0" {{ old('is_active') === '0' ? 'selected' : '' }}>Nonaktif</option>
+=======
+            <div class="mb-4">
+                <label class="form-label">Status</label>
+                <select name="is_active" class="form-control">
+                    <option value="1" {{ $gedung->is_active ? 'selected' : '' }}>
+                        Aktif
+                    </option>
+                    <option value="0" {{ !$gedung->is_active ? 'selected' : '' }}>
+                        Nonaktif
+                    </option>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
                 </select>
             </div>
 
             <div class="d-flex gap-2">
+<<<<<<< HEAD
                 <button type="submit" class="btn btn-warning">
+=======
+                <button class="btn btn-warning">
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
                     <i class="fa-solid fa-save me-1"></i> Simpan
                 </button>
 
                 <a href="{{ route('gedung.index') }}" class="btn btn-danger">
+<<<<<<< HEAD
                     <i class="fa-solid fa-xmark me-1"></i> X Batal
+=======
+                     Batal
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
                 </a>
             </div>
 

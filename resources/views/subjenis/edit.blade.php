@@ -5,8 +5,15 @@
 
 @section('content')
 
+<<<<<<< HEAD
 <div class="mb-4">
     <h5 class="fw-bold mb-0">Edit Sub Jenis Barang</h5>
+=======
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Edit Sub Jenis Barang</h5>
+    <a href="{{ route('subjenis.index') }}">
+    </a>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 
 @if ($errors->any())
@@ -20,7 +27,11 @@
 @endif
 
 <div class="card shadow-sm border-0">
+<<<<<<< HEAD
 <div class="card-body">
+=======
+    <div class="card-body">
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
 <form action="{{ route('subjenis.update', $subjenis->id) }}" method="POST">
 @csrf
@@ -49,6 +60,7 @@
        required>
 </div>
 
+<<<<<<< HEAD
 <!-- Deskripsi -->
 <div class="mb-4">
 <label class="form-label">Deskripsi</label>
@@ -68,6 +80,25 @@
 </a>
 
 </div>
+=======
+            <!-- Deskripsi -->
+            <div class="mb-4">
+                <label class="form-label">Deskripsi</label>
+                <textarea name="deskripsi"
+                          class="form-control"
+                          rows="3">{{ old('deskripsi', $subjenis->deskripsi) }}</textarea>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fa-solid fa-save me-1"></i> Update
+                </button>
+
+                <a href="{{ route('subjenis.index') }}" class="btn btn-danger">
+                    Batal
+                </a>
+            </div>
+>>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
 </form>
 
