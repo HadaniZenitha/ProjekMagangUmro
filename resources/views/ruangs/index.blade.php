@@ -17,15 +17,11 @@
 </div>
 @endif
 
-<div class="card shadow-sm">
+<div class="card shadow-sm border-0">
     <div class="card-body">
 
         <div class="table-responsive">
-<<<<<<< HEAD
-            <table class="table table-bordered align-middle">
-=======
             <table class="table align-middle table-bordered">
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
                 <thead class="table-light">
                     <tr>
@@ -35,7 +31,7 @@
                         <th>Jenis</th>
                         <th>Nama</th>
                         <th>Status</th>
-                        <th width="200">Aksi</th>
+                        <th width="220">Aksi</th>
                     </tr>
                 </thead>
 
@@ -75,7 +71,7 @@
 
                             <form action="{{ route('ruangs.destroy', $r->id) }}"
                                   method="POST"
-                                  style="display:inline-block">
+                                  class="d-inline">
                                 @csrf
                                 @method('DELETE')
 
@@ -102,11 +98,7 @@
         </div>
 
         {{-- Pagination --}}
-<<<<<<< HEAD
-        @if(method_exists($ruangs, 'hasPages') && $ruangs->hasPages())
-=======
         @if(method_exists($ruangs,'hasPages') && $ruangs->hasPages())
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
         <div class="mt-3 text-center">
 
@@ -121,14 +113,6 @@
             </div>
 
         </div>
-<<<<<<< HEAD
-
-        @endif
-
-    </div>
-</div>
-=======
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
         @endif
 
