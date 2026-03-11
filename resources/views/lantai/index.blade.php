@@ -31,14 +31,9 @@
                         <th width="220">Aksi</th>
                     </tr>
                 </thead>
-<<<<<<< HEAD
-                <tbody>
-                    @foreach($lantais as $l)
-=======
 
                 <tbody>
                     @forelse($lantais as $l)
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
                     <tr>
                         <td>{{ $l->gedung->nama_gedung ?? '-' }}</td>
                         <td>{{ $l->kode_lantai }}</td>
@@ -51,24 +46,6 @@
                                 <span class="badge bg-danger">Nonaktif</span>
                             @endif
                         </td>
-<<<<<<< HEAD
-                        <td>
-                            <a href="{{ route('lantai.show', $l->id) }}"
-                               class="btn btn-info btn-sm">
-                                <i class="fa-solid fa-eye"></i>
-                            </a>
-
-                            <a href="{{ route('lantai.edit', $l->id) }}"
-                               class="btn btn-warning btn-sm">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
-
-                            <form action="{{ route('lantai.destroy', $l->id) }}"
-                                  method="POST"
-                                  class="d-inline">
-                                @csrf
-                                @method('DELETE')
-=======
 
                         <td>
                             <a href="{{ route('lantai.show', $l->id) }}" class="btn btn-info btn-sm">
@@ -85,7 +62,6 @@
                                 @csrf
                                 @method('DELETE')
 
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
                                 <button class="btn btn-danger btn-sm"
                                         onclick="return confirm('Hapus lantai ini?')">
                                     <i class="fa-solid fa-trash"></i>
@@ -93,11 +69,6 @@
                             </form>
                         </td>
                     </tr>
-<<<<<<< HEAD
-                    @endforeach
-                </tbody>
-            </table>
-=======
 
                     @empty
                     <tr>
@@ -122,7 +93,6 @@
             <div class="d-flex justify-content-center">
                 {{ $lantais->links('pagination::bootstrap-5') }}
             </div>
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
         </div>
         @endif
 
