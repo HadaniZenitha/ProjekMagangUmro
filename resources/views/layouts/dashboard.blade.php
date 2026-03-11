@@ -239,33 +239,13 @@ body {
 
 .overlay {
     display: none;
-<<<<<<< HEAD
-=======
 }
 
 /* Prevent Laravel pagination SVG arrows from stretching in non-Tailwind pages */
 .pagination svg {
     width: 1rem;
     height: 1rem;
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 }
-
-/* tombol back sidebar */
-    .sidebar-back{
-        display:none;
-        color:white;
-        font-size:20px;
-        cursor:pointer;
-    }
-
-    /* tampil hanya di mobile */
-    @media (max-width:991px){
-
-        .sidebar-back{
-            display:block !important;
-            margin-right:8px;
-        }
-    }
 
 @media (max-width: 991px) {
 
@@ -301,6 +281,17 @@ body {
         width: 180px;
     }
 
+    .icon-top i{
+    font-size: 20px;   
+    cursor: pointer;
+    }
+
+    .icon-top i:hover {
+    color: #309FB0;
+    transform: scale(1.15);
+    transition: 0.2s;
+    }
+
 }
 </style>
 </head>
@@ -313,16 +304,12 @@ body {
 <div class="sidebar">
 
     <div class="sidebar-brand d-flex align-items-center gap-2">
-<<<<<<< HEAD
-        <i class="fa-solid fa-arrow-left mobile-back sidebar-back" onclick="toggleSidebar()"></i>
-=======
 
         <!-- Tombol back hanya muncul di mobile -->
         <i class="fa-solid fa-arrow-left d-lg-none me-2"
         onclick="toggleSidebar()"
         style="font-size:20px;color:white;cursor:pointer;"></i>
 
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
         <img src="{{ asset('images/icon.png') }}" height="40" alt="Logo PLN">
 
         <div>
@@ -509,7 +496,6 @@ Developed by SMART UMRO
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function toggleSidebar() {
-<<<<<<< HEAD
 
     if (window.innerWidth <= 991) {
 
@@ -521,19 +507,6 @@ function toggleSidebar() {
 }
 window.addEventListener('resize', function(){
 
-=======
-
-    if (window.innerWidth <= 991) {
-
-        document.querySelector('.sidebar').classList.toggle('show');
-        document.getElementById('overlay').classList.toggle('show');
-
-    }
-
-}
-window.addEventListener('resize', function(){
-
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
     if(window.innerWidth > 991){
 
         document.querySelector('.sidebar').classList.remove('show');
@@ -543,8 +516,6 @@ window.addEventListener('resize', function(){
 
 });
 </script>
-<<<<<<< HEAD
-=======
 <!-- ================= MODAL INFORMASI ================= -->
 <div class="modal fade" id="infoModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -609,7 +580,6 @@ window.addEventListener('resize', function(){
     </div>
   </div>
 </div>
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
 <script>
 
@@ -779,36 +749,27 @@ Informasi Sistem
 
 <div class="modal-body">
 
-<!-- LOGO + TITLE RAPAT -->
-<div class="text-center mb-2"> <!-- dari mb-4 jadi mb-2 -->
+<!-- LOGO + TITLE -->
+<div class="text-center mb-4">
 
-    <!-- Logo -->
-    <img src="{{ asset('images/pln.jpeg') }}" 
-         height="70" 
-         alt="Logo PLN"
-         style="display:block; margin:auto; margin-bottom:2px;"> <!-- margin-bottom lebih kecil -->
+<img src="{{ asset('images/pln.jpeg') }}"
+     height="70"
+     class="mb-2">
 
-    <!-- Title -->
-    <h3 class="fw-bold mb-1" style="line-height:1.1;">i - Noni</h3> <!-- line-height rapat -->
+<h3 class="fw-bold mb-1">i - Noni</h3>
 
-<<<<<<< HEAD
-    <!-- Subtitle / description -->
-    <p class="text-muted mb-1" style="line-height:1.1; font-size:0.9rem;"> <!-- line-height rapat -->
-        Sistem Inventarisasi UNIT MAINTENANCE REPAIR AND OVERHAUL
-    </p>
-=======
 <p class="text-muted mb-0">
 Sistem Inventarisasi UNIT MAINTENANCE REPAIR AND OVERHAUL
 </p>
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 
-    <!-- Version badge -->
-    <span class="badge bg-secondary" style="margin-top:2px;">
-        Versi 1.0.0
-    </span>
+<span class="badge bg-secondary mt-2">
+Versi 1.0.0
+</span>
 
 </div>
+
 <hr>
+
 <!-- TENTANG SISTEM -->
 <div class="mb-4">
 
@@ -1078,8 +1039,6 @@ Simpan
 
 <div class="text-center small text-muted pb-3">
 Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
-<<<<<<< HEAD
-=======
 </div>
 
 </form>
@@ -1090,7 +1049,6 @@ Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
 
 <div class="text-center small text-muted pb-3">
 Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
 </div>
 
 </div>
