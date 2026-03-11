@@ -567,7 +567,7 @@ window.addEventListener('resize', function(){
 
         <!-- PENGEMBANG -->
         <h6 class="fw-bold text-primary">Pengembang Sistem</h6>
-        <p class="mb-1"><strong>Nama:</strong> Amanda Audia</p>
+        <p class="mb-1"><strong>Nama:</strong> Hwanzelnuts n Team</p>
         <p class="mb-1"><strong>Unit:</strong> UNIT UMRO</p>
         <p class="mb-0"><strong>Tahun Pengembangan:</strong> 2026</p>
 
