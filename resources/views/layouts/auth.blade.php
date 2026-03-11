@@ -26,7 +26,7 @@
                     </div>
 
                     <h1 class="text-4xl font-extrabold leading-tight">{{ $isLogin ? 'SMART UMRO' : 'SMART UMRO' }}</h1>
-                    <p class="mt-3 text-white/90">{{ $isLogin ? 'Belum punya akun? Silakan daftar untuk melanjutkan ke sistem i-Noni.' : 'Sudah punya akun? Masuk sekarang untuk melanjutkan aktivitas Anda.' }}</p>
+                    <p class="mt-3 text-white/90">{{ $isLogin ? 'Smart Management of Assets and Resource Terintegrasi UMRO' : 'Sudah punya akun? Masuk sekarang untuk melanjutkan aktivitas Anda.' }}</p>
 
                     @if ($isLogin && Route::has('register'))
                         <!-- <a href="{{ route('register') }}" data-auth-switch="register" class="mt-8 inline-flex h-11 items-center justify-center rounded-lg border-2 border-white px-7 text-sm font-semibold text-white transition hover:bg-white hover:text-teal-700">
