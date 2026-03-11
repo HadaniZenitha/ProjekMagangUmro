@@ -15,7 +15,7 @@
         </li>
 
         <li class="list-group-item">
-            <b>Lokasi:</b> {{ $barang->ruang->nama_ruang ?? '-' }}
+            <b>Lokasi:</b> {{ $barang->ruang->nama_ruang }}
         </li>
 
         <li class="list-group-item">
@@ -23,7 +23,7 @@
         </li>
 
         <li class="list-group-item">
-            <b>Kondisi:</b> {{ $barang->kondisi ?? '-' }}
+            <b>Kondisi:</b> {{ $barang->keterangan ?? '-' }}
         </li>
     </ul>
 
@@ -39,25 +39,10 @@
         </p>
     </div>
 
-<<<<<<< HEAD
-    {{-- Tombol --}}
-    <div class="mt-4 d-flex gap-2">
-
-        <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-warning text-dark">
-            <i class="fa-solid fa-pen-to-square me-1"></i> Update
-        </a>
-
-        <a href="{{ route('barang.index') }}" class="btn btn-danger text-dark">
-            <i class="fa-solid fa-xmark me-1"></i> Batal
-        </a>
-
-=======
     <div class="mt-3">
         <a href="{{ route('barang.index') }}" class="btn btn-secondary">
             <i class="fa-solid fa-arrow-left me-1"></i>Kembali
         </a>
->>>>>>> d7302947f020310c79f6a86c9bbc92fdfa6339cf
     </div>
-
 </div>
 @endsection
