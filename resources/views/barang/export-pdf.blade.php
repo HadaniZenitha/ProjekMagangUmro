@@ -60,7 +60,7 @@
                 <tr>
                     <th>Kode</th>
                     <th>Nama</th>
-                    <th>Divisi</th>
+                    <th>Fungsi</th>
                     <th>PIC</th>
                     <th>Ruang</th>
                     <th>Tahun</th>

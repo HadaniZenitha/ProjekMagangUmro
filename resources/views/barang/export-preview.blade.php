@@ -25,7 +25,7 @@
                         <th>No</th>
                         <th>Kode Barang</th>
                         <th>Nama Barang</th>
-                        <th>Divisi</th>
+                        <th>Fungsi</th>
                         <th>Ruang</th>
                         <th>PIC</th>
                         <th>Tahun Perolehan</th>

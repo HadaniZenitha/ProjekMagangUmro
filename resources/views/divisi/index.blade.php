@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Master Divisi</h5>
     <a href="{{ route('divisi.create') }}" class="btn btn-warning">
-        <i class="fa-solid fa-plus"></i> Tambah Divisi
+        <i class="fa-solid fa-plus"></i> Tambah Fungsi
     </a>
 </div>
 
@@ -25,7 +25,7 @@
                 <thead class="table-light">
                     <tr>
                         <th>Kode</th>
-                        <th>Nama Divisi</th>
+                        <th>Nama Fungsi</th>
                         <th>Status</th>
                         <th width="220">Aksi</th>
                     </tr>
