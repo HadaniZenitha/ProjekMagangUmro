@@ -41,8 +41,10 @@
 
 .action-btn {
 	display: flex;
-	gap: 5px;
-	flex-wrap: wrap;
+	ap: 6px;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: nowrap;
 }
 
 .qr-box svg {
@@ -165,77 +167,106 @@
 
 {{-- FORM FILTER --}}
 <form method="GET" action="{{ route('barang.index') }}">
-	<div class="card mb-3">
-		<div class="card-body">
-			<div class="row g-2 align-items-end">
-				<div class="col-lg-3 col-md-6">
-					<label class="form-label small mb-1">Divisi</label>
-					<select name="divisi" class="form-select">
-						<option value="">Semua Divisi</option>
-						@foreach($divisis as $d)
-						<option value="{{ $d->id }}" {{ request('divisi') == $d->id ? 'selected' : '' }}>
-							{{ $d->nama_divisi }}
-						</option>
-						@endforeach
-					</select>
-				</div>
+<div class="card mb-3">
+<div class="card-body">
 
-				<div class="col-lg-3 col-md-6">
-					<label class="form-label small mb-1">PIC</label>
-					<select name="pic" class="form-select">
-						<option value="">Semua PIC</option>
-						@foreach($pics as $p)
-						<option value="{{ $p->id }}" {{ request('pic') == $p->id ? 'selected' : '' }}>
-							{{ $p->nama_pic }}
-						</option>
-						@endforeach
-					</select>
-				</div>
+<div class="row g-2 align-items-end">
 
-				<div class="col-lg-2 col-md-6">
-					<label class="form-label small mb-1">Tahun</label>
-					<input type="number" name="tahun" value="{{ request('tahun') }}" class="form-control" placeholder="Tahun">
-				</div>
+<!-- Fungsi -->
+<div class="col-lg-2 col-md-4">
+<label class="form-label small mb-1">Fungsi</label>
+<select name="divisi" class="form-select">
+<option value="">Semua Fungsi</option>
+@foreach($divisis as $d)
+<option value="{{ $d->id }}" {{ request('divisi') == $d->id ? 'selected' : '' }}>
+{{ $d->nama_divisi }}
+</option>
+@endforeach
+</select>
+</div>
 
-				<div class="col-lg-2 col-md-6">
-					<label class="form-label small mb-1">Status</label>
-					<select name="status" class="form-select">
-						<option value="">Semua Status</option>
-						<option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Aktif</option>
-						<option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Nonaktif</option>
-					</select>
-				</div>
+<!-- PIC -->
+<div class="col-lg-2 col-md-4">
+<label class="form-label small mb-1">PIC</label>
+<select name="pic" class="form-select">
+<option value="">Semua PIC</option>
+@foreach($pics as $p)
+<option value="{{ $p->id }}" {{ request('pic') == $p->id ? 'selected' : '' }}>
+{{ $p->nama_pic }}
+</option>
+@endforeach
+</select>
+</div>
 
-				<div class="col-lg-2 col-md-12">
-					<button type="submit" class="btn btn-primary btn-pro w-100">
-						<i class="fa-solid fa-filter"></i> Filter
-					</button>
-				</div>
+<!-- Ruangan -->
+<div class="col-lg-2 col-md-4">
+<label class="form-label small mb-1">Ruangan</label>
+<select name="ruang" class="form-select">
+<option value="">Semua Ruangan</option>
+@foreach($ruangs as $r)
+<option value="{{ $r->id }}" {{ request('ruang') == $r->id ? 'selected' : '' }}>
+{{ $r->nama_ruang }}
+</option>
+@endforeach
+</select>
+</div>
 
-				<div class="col-lg-6 col-md-6">
-					<a href="{{ route('barang.exportPreview', request()->query()) }}" class="btn btn-info btn-pro w-100" target="_blank">
-						<i class="fa-solid fa-eye"></i> Preview Excel
-					</a>
-				</div>
+<!-- Tahun -->
+<div class="col-lg-2 col-md-4">
+<label class="form-label small mb-1">Tahun</label>
+<input type="number" name="tahun" value="{{ request('tahun') }}" class="form-control">
+</div>
 
-				<div class="col-lg-6 col-md-6">
-					<a href="{{ route('barang.exportPdf', request()->query()) }}" class="btn btn-danger btn-pro w-100">
-						<i class="fa-regular fa-file-pdf"></i> Export PDF
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
+<!-- Status -->
+<div class="col-lg-2 col-md-4">
+<label class="form-label small mb-1">Status</label>
+<select name="status" class="form-select">
+<option value="">Semua Status</option>
+<option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Aktif</option>
+<option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Nonaktif</option>
+</select>
+</div>
 
+<!-- Filter -->
+<div class="col-lg-2 col-md-4 d-grid">
+<button type="submit" class="btn btn-primary btn-pro">
+<i class="fa-solid fa-filter"></i> Filter
+</button>
+</div>
+
+</div>
+
+<hr class="my-3">
+
+<!-- Export Buttons -->
+<div class="row g-2">
+
+<div class="col-md-6">
+<a href="{{ route('barang.exportPreview', request()->query()) }}"
+class="btn btn-info btn-pro w-100"
+target="_blank">
+<i class="fa-solid fa-eye"></i> Preview Excel
+</a>
+</div>
+
+<div class="col-md-6">
+<a href="{{ route('barang.exportPdf', request()->query()) }}"
+class="btn btn-danger btn-pro w-100">
+<i class="fa-regular fa-file-pdf"></i> Export PDF
+</a>
+</div>
+
+</div>
+
+</div>
+</div>
 </form>
-
-
 
 {{-- TABEL DATA --}}
 <div class="card shadow-sm border-0">
 	<div class="table-responsive">
 		<table class="table table-bordered align-middle mb-0">
-			<thead class="table-light">
+			<thead class="table-light text-center">
 				<tr>
 					<th>Kode</th>
 					<th>PIC</th>
@@ -261,7 +292,7 @@
 					<td class="qr-box">
 						{!! QrCode::size(60)->generate($b->kode_barang) !!}
 					</td>
-					<td>
+					<td class="text-center">
 						<div class="action-btn">
 							<a href="{{ route('barang.show', $b->id) }}" class="btn btn-info btn-sm btn-pro">
 								<i class="fa-solid fa-eye"></i>

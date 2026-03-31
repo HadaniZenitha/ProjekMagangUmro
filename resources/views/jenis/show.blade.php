@@ -2,14 +2,7 @@
 
 @section('content')
 <div class="container">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Detail Jenis Barang</h2>
-
-        <a href="{{ route('jenis.index') }}" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-        </a>
-    </div>
+    <h2>Detail Jenis Barang</h2>
 
     <ul class="list-group">
         <li class="list-group-item">
@@ -34,10 +27,13 @@
     </ul>
 
     <div class="mt-3">
+        <a href="{{ route('jenis.index') }}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left me-1"></i>Kembali
+        </a>
+
         <a href="{{ route('jenis.edit', $jenis->id) }}" class="btn btn-warning">
-            <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+            <i class="fa-solid fa-pen-to-square me-1"></i>Edit
         </a>
     </div>
-
 </div>
 @endsection
