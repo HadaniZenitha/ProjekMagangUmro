@@ -23,7 +23,7 @@
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
 
-                <thead class="table-light">
+                <thead class="table-light text-center">
                     <tr>
                         <th>Kode</th>
                         <th>Nama Jenis</th>
@@ -51,7 +51,7 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="text-center d-flex justify-content-center gap-2">
                             <a href="{{ route('jenis.show', $j->id) }}"
                                class="btn btn-info btn-sm">
                                 <i class="fa-solid fa-eye"></i>
@@ -90,23 +90,10 @@
         </div>
 
         {{-- Pagination --}}
-        @if(method_exists($jenis,'hasPages') && $jenis->hasPages())
-
-        <div class="mt-3 text-center">
-
-            <small class="text-muted d-block mb-2">
-                Menampilkan {{ $jenis->firstItem() }}
-                sampai {{ $jenis->lastItem() }}
-                dari {{ $jenis->total() }} data
-            </small>
-
-            <div class="d-flex justify-content-center">
-                {{ $jenis->links('pagination::bootstrap-5') }}
-            </div>
-
+        <div class="mt-3">
+            {{ $jenis->links('pagination::bootstrap-5') }}
         </div>
 
-        @endif
 
     </div>
 </div>

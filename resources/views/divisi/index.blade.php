@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Master Divisi')
+@section('title', 'Master Fungsi')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Master Divisi</h5>
+    <h5 class="fw-bold mb-0">Master Fungsi</h5>
     <a href="{{ route('divisi.create') }}" class="btn btn-warning">
         <i class="fa-solid fa-plus"></i> Tambah Fungsi
     </a>
@@ -22,7 +22,7 @@
 
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
-                <thead class="table-light">
+                <thead class="table-light text-center">
                     <tr>
                         <th>Kode</th>
                         <th>Nama Fungsi</th>
@@ -37,7 +37,7 @@
                         <td>{{ $d->kode_divisi }}</td>
                         <td>{{ $d->nama_divisi }}</td>
 
-                        <td>
+                        <td class="text-center">
                             @if($d->is_active)
                                 <span class="badge bg-success">Aktif</span>
                             @else
@@ -45,7 +45,7 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="text-center d-flex justify-content-center gap-2">
                             <a href="{{ route('divisi.show', $d->id) }}" class="btn btn-info btn-sm">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
@@ -71,7 +71,7 @@
                     @empty
                     <tr>
                         <td colspan="4" class="text-center text-muted py-3">
-                            Belum ada data divisi.
+                            Belum ada data fungsi.
                         </td>
                     </tr>
                     @endforelse
@@ -80,19 +80,10 @@
         </div>
 
         {{-- Pagination --}}
-        @if(method_exists($divisis,'hasPages') && $divisis->hasPages())
-        <div class="mt-3 text-center">
-            <small class="text-muted d-block mb-2">
-                Menampilkan {{ $divisis->firstItem() }} 
-                sampai {{ $divisis->lastItem() }} 
-                dari {{ $divisis->total() }} data
-            </small>
-
-            <div class="d-flex justify-content-center">
-                {{ $divisis->links('pagination::bootstrap-5') }}
-            </div>
+        <div class="mt-3">
+            {{ $divisis->links('pagination::bootstrap-5') }}
         </div>
-        @endif
+
 
     </div>
 </div>

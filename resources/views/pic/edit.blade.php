@@ -19,7 +19,7 @@
 
             {{-- Divisi --}}
             <div class="mb-3">
-                <label class="form-label">Divisi</label>
+                <label class="form-label">Fungsi</label>
                 <select name="divisi_id" class="form-control" required>
                     @foreach($divisis as $d)
                         <option value="{{ $d->id }}"

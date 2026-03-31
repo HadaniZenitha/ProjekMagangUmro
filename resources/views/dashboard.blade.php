@@ -32,6 +32,17 @@
             color: white;
             flex-shrink: 0;
         }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
 
         /* TEXT */
         .stat-title {
@@ -48,7 +59,18 @@
             color: #212529;
             margin-top: 3px;
         }
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #212529;
+            margin-top: 3px;
+        }
 
+        .stat-desc {
+            font-size: 13px;
+            color: #9aa0a6;
+            margin-top: 3px;
+        }
         .stat-desc {
             font-size: 13px;
             color: #9aa0a6;
@@ -118,6 +140,7 @@
         }
     </style>
 
+    <div class="container-fluid">
     <div class="container-fluid">
 
         <!-- ================= STATISTIK ATAS ================= -->
@@ -266,7 +289,9 @@
             </div>
 
         </div>
+        </div>
 
+    </div>
     </div>
 
 @endsection

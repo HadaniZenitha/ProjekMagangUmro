@@ -23,7 +23,7 @@
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
 
-                <thead class="table-light">
+                <thead class="table-light text-center">
                     <tr>
                         <th>Kode</th>
                         <th>Gedung</th>
@@ -31,7 +31,7 @@
                         <th>Jenis</th>
                         <th>Nama</th>
                         <th>Status</th>
-                        <th width="220">Aksi</th>
+                        <th width="160">Aksi</th>
                     </tr>
                 </thead>
 
@@ -49,7 +49,7 @@
 
                         <td>{{ $r->nama_ruang }}</td>
 
-                        <td>
+                        <td class="text-center">
                             @if($r->is_active)
                                 <span class="badge bg-success">Aktif</span>
                             @else
@@ -57,31 +57,32 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="text-center d-flex justify-content-center gap-2">
+                            <div class="d-flex justify-content-center gap-2 flex-nowrap">
 
-                            <a href="{{ route('ruangs.show', $r->id) }}"
-                               class="btn btn-info btn-sm">
-                                <i class="fa-solid fa-eye"></i>
-                            </a>
+                                <a href="{{ route('ruangs.show', $r->id) }}"
+                                class="btn btn-info btn-sm">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
 
-                            <a href="{{ route('ruangs.edit', $r->id) }}"
-                               class="btn btn-warning btn-sm">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
+                                <a href="{{ route('ruangs.edit', $r->id) }}"
+                                class="btn btn-warning btn-sm">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
 
-                            <form action="{{ route('ruangs.destroy', $r->id) }}"
-                                  method="POST"
-                                  class="d-inline">
-                                @csrf
-                                @method('DELETE')
+                                <form action="{{ route('ruangs.destroy', $r->id) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Hapus ruang ini?')">
+                                    @csrf
+                                    @method('DELETE')
 
-                                <button onclick="return confirm('Hapus ruang ini?')"
-                                        class="btn btn-danger btn-sm">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
 
-                        </td>
+                            </div>
+                            </td>
 
                     </tr>
 
@@ -98,23 +99,10 @@
         </div>
 
         {{-- Pagination --}}
-        @if(method_exists($ruangs,'hasPages') && $ruangs->hasPages())
-
-        <div class="mt-3 text-center">
-
-            <small class="text-muted d-block mb-2">
-                Menampilkan {{ $ruangs->firstItem() }}
-                sampai {{ $ruangs->lastItem() }}
-                dari {{ $ruangs->total() }} data
-            </small>
-
-            <div class="d-flex justify-content-center">
-                {{ $ruangs->links('pagination::bootstrap-5') }}
-            </div>
-
+       <div class="mt-3">
+            {{ $ruangs->links('pagination::bootstrap-5') }}
         </div>
 
-        @endif
 
     </div>
 </div>

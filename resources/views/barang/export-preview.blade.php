@@ -19,8 +19,8 @@
 <div class="card shadow-sm border-0">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
+            <table class="table table-bordered align-middle mb-0">
+                <thead class="table-light text-center">
                     <tr>
                         <th>No</th>
                         <th>Kode Barang</th>
@@ -41,7 +41,7 @@
                         <td>{{ $barang->divisi->nama_divisi ?? '-' }}</td>
                         <td>{{ $barang->ruang->nama_ruang ?? '-' }}</td>
                         <td>{{ $barang->pic->nama_pic ?? '-' }}</td>
-                        <td>{{ $barang->tahun_perolehan }}</td>
+                        <td class="text-center">{{ $barang->tahun_perolehan }}</td>
                         <td>
                             <span class="badge {{ $barang->is_active ? 'bg-success' : 'bg-danger' }}">
                                 {{ $barang->is_active ? 'Aktif' : 'Nonaktif' }}

@@ -21,12 +21,12 @@
 
     <div class="table-responsive">
         <table class="table align-middle table-bordered mb-0">
-            <thead class="table-light">
+            <thead class="table-light text-center">
                 <tr>
                     <th>Kode</th>
                     <th>Nama Sub Jenis</th>
                     <th>Jenis Barang</th>
-                    <th width="220">Aksi</th>
+                    <th width="220" class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,8 +34,9 @@
                 <tr>
                     <td>{{ $s->kode_subjenis }}</td>
                     <td>{{ $s->nama_subjenis }}</td>
-                    <td>{{ $s->jenis->nama_jenis }}</td>
-                    <td>
+                    <td class="text-center">{{ $s->jenis->nama_jenis }}</td>
+                    <td class="text-center d-flex justify-content-center gap-2">
+                        <div class="d-flex justify-content-center gap-2 flex-nowrap"></div>
                         <a href="{{ route('subjenis.show', $s->id) }}"
                            class="btn btn-info btn-sm">
                             <i class="fa-solid fa-eye"></i>
@@ -66,7 +67,7 @@
 </div>
 
 <div class="mt-3">
-    {{ $subjenis->links() }}
+    {{ $subjenis->links('pagination::bootstrap-5') }}
 </div>
 
 @endsection
