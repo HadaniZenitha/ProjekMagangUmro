@@ -193,10 +193,10 @@ body {
 
 .main-wrapper {
     margin-left: 280px;
+    width: calc(100% - 280px);
     min-height: 100vh;
     transition: margin-left 0.3s ease-in-out;
 }
-
 .top-navbar {
     background: white;
     padding: 10px 30px;
@@ -212,6 +212,7 @@ body {
     padding: 5px 15px;
     border: none;
     width: 300px;
+    max-width: 100%;
 }
 
 .banner-header {
@@ -229,6 +230,14 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+@media (max-width:768px){
+
+.content-card{
+margin:-40px 10px 20px;
+padding:15px;
+}
+
+}
 /* ================= RESPONSIVE ================= */
 
 .mobile-toggle {
@@ -259,6 +268,7 @@ body {
 
     .main-wrapper {
         margin-left: 0;
+        width:100%
     }
 
     .mobile-toggle {
@@ -291,6 +301,160 @@ body {
     transform: scale(1.15);
     transition: 0.2s;
     }
+
+}
+@media (max-width:768px){
+
+.top-navbar{
+flex-wrap:wrap;
+gap: 8px;
+}
+
+.banner-header{
+padding:20px;
+}
+
+.search-box{
+width:140px;
+}
+
+.container-fluid{
+padding-left:10px;
+padding-right:10px;
+max-width:100%;
+}
+
+/* Fix layout agar tidak melebar */
+body{
+overflow-x:hidden;
+}
+
+/* ================= USER NAVBAR ================= */
+/* DESKTOP */
+@media (min-width:769px){
+.user-top-wrapper{
+display:flex;
+align-items:center;
+gap:20px;
+}
+.user-info{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:13px;
+}
+
+.icon-top{
+display:flex;
+align-items:center;
+gap:16px;
+}
+}
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+
+.top-navbar{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+}
+
+/* wrapper kanan */
+.user-top-wrapper{
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:4px;
+margin-left:auto;
+}
+
+/* user + tanggal */
+.user-info{
+font-size:12px;
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+/* ikon */
+.icon-top{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+/* efek ikon */
+.icon-top i{
+font-size:18px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.icon-top i:hover{
+color:#309FB0;
+transform:scale(1.1);
+}
+
+}
+/* ================= SEARCH RESULT ================= */
+
+.search-item{
+display:flex;
+align-items:center;
+gap:10px;
+padding:8px 14px;
+font-size:14px;
+text-decoration:none;
+color:#333;
+border-bottom:1px solid #f1f1f1;
+transition:all 0.15s ease;
+}
+
+.search-item:last-child{
+border-bottom:none;
+}
+
+.search-item:hover{
+background:#f5f5f5;
+}
+
+.search-icon{
+font-size:12px;
+color:#888;
+width:16px;
+text-align:center;
+}
+
+.search-highlight{
+background:#FFE082;
+padding:2px 4px;
+border-radius:4px;
+font-weight:600;
+}
+
+.search-empty{
+padding:18px;
+text-align:center;
+font-size:13px;
+color:#888;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width:768px){
+
+.footer-inventaris{
+flex-direction:column;
+align-items:center;
+text-align:center;
+gap:6px;
+}
+
+/* optional supaya search tidak terlalu panjang */
+.search-box{
+width:150px;
+}
 
 }
 </style>
@@ -339,7 +503,7 @@ body {
             </a>
         </div>
         <div class="collapse {{ request()->routeIs(['divisi.*','pic.*']) ? 'show' : '' }} sub-menu" id="menuKaryawan">
-            <a href="{{ route('divisi.index') }}" class="{{ request()->routeIs('divisi.*') ? 'active-sub' : '' }}">BIDANG <i class="fa-solid fa-building"></i></a>
+            <a href="{{ route('divisi.index') }}" class="{{ request()->routeIs('divisi.*') ? 'active-sub' : '' }}">FUNGSI <i class="fa-solid fa-building"></i></a>
             <a href="{{ route('pic.index') }}" class="{{ request()->routeIs('pic.*') ? 'active-sub' : '' }}">KARYAWAN <i class="fa-solid fa-user-tie ms-2"></i></a>
         </div>
 
@@ -404,7 +568,8 @@ body {
 
 <div class="top-navbar">
 
-<div class="d-flex align-items-center gap-3">
+<!-- LEFT : TOGGLE + SEARCH -->
+<div class="nav-left d-flex align-items-center gap-3">
 
 <i class="fa-solid fa-bars mobile-toggle" onclick="toggleSidebar()"></i>
 
@@ -422,15 +587,16 @@ body {
 <div id="searchResults" 
      style="
      position:absolute;
-     top:35px;
+     top:38px;
      left:0;
-     width:300px;
+     width:100%;
      background:white;
-     border-radius:6px;
-     box-shadow:0 5px 15px rgba(0,0,0,0.15);
+     border-radius:10px;
+     border:1px solid #e5e7eb;
+     box-shadow:0 10px 25px rgba(0,0,0,0.12);
      display:none;
-     max-height:300px;
-     overflow:auto;
+     max-height:320px;
+     overflow-y:auto;
      z-index:999;">
 </div>
 
@@ -439,32 +605,36 @@ body {
 
 </div>
 
-<div class="d-flex align-items-center gap-4 text-muted icon-top">
+<!-- RIGHT -->
+<div class="user-top-wrapper d-flex align-items-center gap-4 text-muted">
+<!-- ICON -->
+<div class="icon-top d-flex align-items-center gap-4">
+    <i class="fa-regular fa-bell"
+        data-bs-toggle="modal"
+        data-bs-target="#notifModal"></i>
+    <i class="fa-regular fa-user"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#userPanel"></i>
+    <i class="fa-solid fa-circle-info"
+        data-bs-toggle="modal"
+        data-bs-target="#infoModal"></i>
+</div>
+<!-- USER + TANGGAL -->
+<div class="user-info small d-flex align-items-center">
 
-<!-- TANGGAL -->
-<div class="small text-muted">
-<i class="fa-regular fa-calendar me-1"></i>
-{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+<span>
+    <i class="fa-regular fa-user me-1"></i>
+    {{ Auth::user()->name }}
+</span>
+<span class="mx-2">|</span>
+<span>
+    <i class="fa-regular fa-calendar me-1"></i>
+    {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+</span>
 </div>
 
-<!-- NOTIFIKASI -->
-<i class="fa-regular fa-bell"
-   data-bs-toggle="modal"
-   data-bs-target="#notifModal"></i>
-
-<!-- USER -->
-<i class="fa-regular fa-user"
-   data-bs-toggle="offcanvas"
-   data-bs-target="#userPanel"></i>
-
-<!-- INFO -->
-<i class="fa-solid fa-circle-info"
-   data-bs-toggle="modal"
-   data-bs-target="#infoModal"></i>
-
 </div>
 </div>
-
 <div class="banner-header">
 
 <h2 class="fw-bold">@yield('title')</h2>
@@ -477,10 +647,10 @@ body {
 
 <hr>
 
-<footer class="d-flex justify-content-between align-items-center mt-3">
+<footer class="footer-inventaris d-flex justify-content-between align-items-center mt-3">
 
 <div class="text-muted small">
-© 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhoul
+© 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhaul
 </div>
 
 <div class="small text-muted">
@@ -489,7 +659,6 @@ Developed by SMART UMRO
 </div>
 
 </footer>
-
 </div>
 </div>
 
@@ -511,9 +680,7 @@ window.addEventListener('resize', function(){
 
         document.querySelector('.sidebar').classList.remove('show');
         document.getElementById('overlay').classList.remove('show');
-
     }
-
 });
 </script>
 <!-- ================= MODAL INFORMASI ================= -->
@@ -544,253 +711,18 @@ window.addEventListener('resize', function(){
         <!-- DESKRIPSI SISTEM -->
         <h6 class="fw-bold text-primary">Tentang Sistem</h6>
         <p style="text-align: justify;">
-            i-Noni adalah sistem inventarisasi yang dirancang untuk membantu 
-            pengelolaan data aset dan barang secara terstruktur dan terintegrasi. 
-            Sistem ini mencakup pengelolaan data karyawan, lokasi (gedung, lantai, ruangan), 
-            serta data barang dan inventaris sehingga proses monitoring menjadi lebih efektif, 
-            akurat, dan transparan.
+            Smart UMRO merupakan sistem inventarisasi yang dirancang untuk membantu 
+            pengelolaan data aset dan barang secara terstruktur, terintegrasi, dan 
+            mudah diakses. Sistem ini mendukung pengelolaan data fungsi/divisi, 
+            PIC (penanggung jawab), lokasi penyimpanan seperti gedung dan ruangan, 
+            serta data inventaris barang secara menyeluruh. Dengan adanya sistem ini, 
+            proses pencatatan, pemantauan, dan pelaporan aset dapat dilakukan 
+            secara lebih efektif, akurat, dan transparan.
         </p>
 
-        <hr>
-
-        <!-- PANDUAN SINGKAT -->
-        <h6 class="fw-bold text-primary">Panduan Singkat Penggunaan</h6>
-        <ol style="font-size: 14px;">
-            <li>Gunakan menu di sidebar untuk memilih modul yang diinginkan.</li>
-            <li>Tambahkan data melalui tombol <strong>Tambah</strong> pada setiap halaman.</li>
-            <li>Gunakan fitur edit untuk memperbarui data yang sudah ada.</li>
-            <li>Pastikan data lokasi dan karyawan telah dibuat sebelum menambahkan inventaris.</li>
-            <li>Gunakan fitur pencarian pada bagian atas untuk menemukan data dengan cepat.</li>
-        </ol>
 
         <hr>
-
-        <!-- PENGEMBANG -->
-        <h6 class="fw-bold text-primary">Pengembang Sistem</h6>
-        <p class="mb-1"><strong>Nama:</strong> Hwanzelnuts n Team</p>
-        <p class="mb-1"><strong>Unit:</strong> UNIT UMRO</p>
-        <p class="mb-0"><strong>Tahun Pengembangan:</strong> 2026</p>
-
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<script>
-
-function toggleSidebar() {
-
-document.querySelector('.sidebar').classList.toggle('show');
-document.getElementById('overlay').classList.toggle('show');
-
-}
-
-/* ================= LIVE SEARCH ================= */
-
-const searchInput = document.getElementById('liveSearch');
-const resultsBox = document.getElementById('searchResults');
-
-searchInput.addEventListener('keyup', function(){
-
-let keyword = this.value.trim();
-
-if(keyword.length < 2){
-resultsBox.style.display='none';
-resultsBox.innerHTML='';
-return;
-}
-
-fetch(`/search?q=${keyword}`)
-.then(res => res.json())
-.then(data => {
-
-let html = '';
-
-/* BARANG */
-
-if(data.barang && data.barang.length > 0){
-
-html += `<div class="search-category">Barang</div>`;
-
-data.barang.forEach(item=>{
-html += `
-<a href="/barang/${item.id}" class="search-item">
-<i class="fa-solid fa-box text-primary"></i>
-<div>
-<div class="search-title">${item.nama_barang}</div>
-<small class="text-muted">${item.kode_barang}</small>
-</div>
-</a>
-`;
-});
-
-}
-
-/* RUANG */
-
-if(data.ruang && data.ruang.length > 0){
-
-html += `<div class="search-category">Ruang</div>`;
-
-data.ruang.forEach(item=>{
-html += `
-<a href="/ruangs/${item.id}" class="search-item">
-<i class="fa-solid fa-door-open text-success"></i>
-<div>
-<div class="search-title">${item.nama_ruang}</div>
-</div>
-</a>
-`;
-});
-
-}
-
-/* KARYAWAN */
-
-if(data.karyawan && data.karyawan.length > 0){
-
-html += `<div class="search-category">Karyawan</div>`;
-
-data.karyawan.forEach(item=>{
-html += `
-<a href="/pic/${item.id}" class="search-item">
-<i class="fa-solid fa-user text-warning"></i>
-<div>
-<div class="search-title">${item.nama_pic}</div>
-</div>
-</a>
-`;
-});
-
-}
-
-/* GEDUNG */
-
-if(data.gedung && data.gedung.length > 0){
-
-html += `<div class="search-category">Gedung</div>`;
-
-data.gedung.forEach(item=>{
-html += `
-<a href="/gedung/${item.id}" class="search-item">
-<i class="fa-solid fa-building text-danger"></i>
-<div>
-<div class="search-title">${item.nama_gedung}</div>
-</div>
-</a>
-`;
-});
-
-}
-
-/* JIKA TIDAK ADA DATA */
-
-if(html === ''){
-html = `
-<div style="padding:12px;text-align:center;color:#888">
-Tidak ada hasil ditemukan
-</div>
-`;
-}
-
-resultsBox.innerHTML = html;
-resultsBox.style.display = 'block';
-
-});
-
-});
-
-
-/* ================= CLOSE RESULT ================= */
-
-document.addEventListener('click', function(e){
-
-if(!searchInput.contains(e.target) && !resultsBox.contains(e.target)){
-resultsBox.style.display='none';
-}
-
-});
-function showEditProfile(){
-document.getElementById("profileView").style.display="none";
-document.getElementById("profileEdit").style.display="block";
-}
-
-function cancelEditProfile(){
-document.getElementById("profileView").style.display="block";
-document.getElementById("profileEdit").style.display="none";
-}
-</script>
-
-<!-- ================= MODAL INFORMASI SISTEM ================= -->
-<div class="modal fade" id="infoModal" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered modal-lg">
-<div class="modal-content border-0 shadow-lg">
-
-<!-- HEADER -->
-<div class="modal-header text-white"
-     style="background: linear-gradient(135deg,#309FB0,#1F7A88);">
-
-<h5 class="modal-title fw-bold">
-<i class="fa-solid fa-circle-info me-2"></i>
-Informasi Sistem
-</h5>
-
-<button type="button"
-        class="btn-close btn-close-white"
-        data-bs-dismiss="modal">
-</button>
-
-</div>
-
-<div class="modal-body">
-
-<!-- LOGO + TITLE -->
-<div class="text-center mb-4">
-
-<img src="{{ asset('images/pln.jpeg') }}"
-     height="70"
-     class="mb-2">
-
-<h3 class="fw-bold mb-1">i - Noni</h3>
-
-<p class="text-muted mb-0">
-Sistem Inventarisasi UNIT MAINTENANCE REPAIR AND OVERHAUL
-</p>
-
-<span class="badge bg-secondary mt-2">
-Versi 1.0.0
-</span>
-
-</div>
-
-<hr>
-
-<!-- TENTANG SISTEM -->
-<div class="mb-4">
-
-<h6 class="fw-bold text-primary mb-2">
-<i class="fa-solid fa-circle-info me-2"></i>
-Tentang Sistem
-</h6>
-
-<p style="text-align: justify;">
-i-Noni merupakan sistem inventarisasi yang dirancang untuk membantu
-pengelolaan data aset dan barang secara terstruktur, terintegrasi,
-dan mudah diakses. Sistem ini mendukung pengelolaan data karyawan,
-lokasi (gedung, lantai, ruangan), serta data inventaris sehingga
-proses monitoring aset menjadi lebih efektif, akurat, dan transparan.
-</p>
-
-</div>
-
-<hr>
-
-<!-- FITUR UTAMA -->
+        <!-- FITUR UTAMA -->
 <div class="mb-4">
 
 <h6 class="fw-bold text-primary mb-3">
@@ -798,41 +730,89 @@ proses monitoring aset menjadi lebih efektif, akurat, dan transparan.
 Fitur Utama Sistem
 </h6>
 
-<div class="row text-center">
+<div class="row g-3 text-center">
 
-<div class="col-md-4 mb-3">
+<div class="col-md-4 col-6">
 
-<i class="fa-solid fa-users fa-2x text-info mb-2"></i>
+<div class="p-3 border rounded shadow-sm h-100">
+<i class="fa-solid fa-sitemap fa-2x text-info mb-2"></i>
 
-<h6 class="fw-bold mb-1">Manajemen Karyawan</h6>
+<h6 class="fw-bold mb-1">Manajemen Fungsi</h6>
 
 <small class="text-muted">
-Mengelola data bidang dan karyawan
+Mengelola data fungsi / divisi
 </small>
+</div>
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-4 col-6">
 
-<i class="fa-solid fa-building fa-2x text-success mb-2"></i>
+<div class="p-3 border rounded shadow-sm h-100">
+<i class="fa-solid fa-user-tie fa-2x text-success mb-2"></i>
+
+<h6 class="fw-bold mb-1">Manajemen PIC</h6>
+
+<small class="text-muted">
+Mengelola penanggung jawab barang
+</small>
+</div>
+
+</div>
+
+<div class="col-md-4 col-6">
+
+<div class="p-3 border rounded shadow-sm h-100">
+<i class="fa-solid fa-building fa-2x text-warning mb-2"></i>
 
 <h6 class="fw-bold mb-1">Manajemen Lokasi</h6>
 
 <small class="text-muted">
-Mengelola gedung, lantai, dan ruangan
+Mengelola gedung dan ruangan
 </small>
+</div>
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-4 col-6">
 
-<i class="fa-solid fa-box fa-2x text-warning mb-2"></i>
+<div class="p-3 border rounded shadow-sm h-100">
+<i class="fa-solid fa-box fa-2x text-danger mb-2"></i>
 
 <h6 class="fw-bold mb-1">Inventaris Barang</h6>
 
 <small class="text-muted">
-Pengelolaan data barang dan aset
+Pengelolaan data aset dan barang
 </small>
+</div>
+
+</div>
+
+<div class="col-md-4 col-6">
+
+<div class="p-3 border rounded shadow-sm h-100">
+<i class="fa-solid fa-qrcode fa-2x text-dark mb-2"></i>
+
+<h6 class="fw-bold mb-1">QR Code Inventaris</h6>
+
+<small class="text-muted">
+Scan dan identifikasi barang
+</small>
+</div>
+
+</div>
+
+<div class="col-md-4 col-6">
+
+<div class="p-3 border rounded shadow-sm h-100">
+<i class="fa-solid fa-file-export fa-2x text-primary mb-2"></i>
+
+<h6 class="fw-bold mb-1">Laporan & Export</h6>
+
+<small class="text-muted">
+Export data Excel dan PDF
+</small>
+</div>
 
 </div>
 
@@ -841,7 +821,6 @@ Pengelolaan data barang dan aset
 </div>
 
 <hr>
-
 <!-- PANDUAN -->
 <div>
 
@@ -884,6 +863,202 @@ Tutup
 </div>
 </div>
 </div>
+  </div>
+</div>
+
+<script>
+
+function toggleSidebar() {
+
+document.querySelector('.sidebar').classList.toggle('show');
+document.getElementById('overlay').classList.toggle('show');
+
+}
+/* ================= LIVE SEARCH ================= */
+
+const searchInput = document.getElementById('liveSearch');
+const resultsBox = document.getElementById('searchResults');
+
+searchInput.addEventListener('keyup', function(){
+
+let keyword = this.value.trim();
+
+if(keyword.length < 2){
+resultsBox.style.display='none';
+resultsBox.innerHTML='';
+return;
+}
+
+fetch(`/search?q=${keyword}`)
+.then(res => res.json())
+.then(data => {
+
+let html = '';
+
+/* BARANG */
+
+if(data.barang){
+data.barang.forEach(item => {
+html += `
+<div class="search-item">
+    <i class="fa fa-search text-muted me-2"></i>
+    <span>${item.nama_barang}</span>
+</div>`;
+});
+}
+
+/* RUANG */
+
+if(data.ruang){
+data.ruang.forEach(item => {
+html += `
+<div class="search-item">
+<i class="fa fa-search text-muted me-2"></i>
+<span>${item.nama_ruang}</span>
+</div>`;
+});
+}
+
+/* KARYAWAN */
+
+if(data.karyawan){
+data.karyawan.forEach(item=>{
+html += `
+<div class="search-item">
+<i class="fa fa-search text-muted me-2"></i>
+<span>${item.nama_pic}</span>
+</div>`;
+});
+}
+
+/* GEDUNG */
+
+if(data.gedung){
+data.gedung.forEach(item=>{
+html += `
+<div class="search-item">
+<i class="fa fa-search text-muted me-2"></i>
+<span>${item.nama_gedung}</span>
+</div>`;
+});
+}
+
+/* JIKA TIDAK ADA DATA */
+
+if(html === ''){
+html = `
+<div style="padding:12px;text-align:center;color:#888">
+Tidak ada hasil ditemukan
+</div>
+`;
+}
+
+resultsBox.innerHTML = html;
+resultsBox.style.display = 'block';
+
+});
+
+});
+
+
+/* ================= CLOSE RESULT ================= */
+
+document.addEventListener('click', function(e){
+
+if(!searchInput.contains(e.target) && !resultsBox.contains(e.target)){
+resultsBox.style.display='none';
+}
+
+});
+function showEditProfile(){
+document.getElementById("profileView").style.display="none";
+document.getElementById("profileEdit").style.display="block";
+}
+
+function cancelEditProfile(){
+document.getElementById("profileView").style.display="block";
+document.getElementById("profileEdit").style.display="none";
+}
+</script>
+<script>
+/* ================= GLOBAL LIVE SEARCH ================= */
+
+const searchInput = document.getElementById('liveSearch');
+const resultsBox = document.getElementById('searchResults');
+
+searchInput.addEventListener('keyup', function(){
+
+let keyword = this.value.trim();
+
+if(keyword.length < 2){
+resultsBox.style.display='none';
+resultsBox.innerHTML='';
+return;
+}
+
+fetch(`/search?q=${keyword}`)
+.then(res => res.json())
+.then(data => {
+
+let html = '';
+
+data.forEach(item => {
+
+let title = highlightKeyword(item.title, keyword);
+
+html += `
+<a href="${item.url}" class="search-item">
+<i class="fa-solid fa-magnifying-glass search-icon"></i>
+<span>${title}</span>
+</a>
+`;
+
+});
+
+if(html === ''){
+html = `<div class="search-empty">Tidak ada hasil ditemukan</div>`;
+}
+
+resultsBox.innerHTML = html;
+resultsBox.style.display = 'block';
+
+});
+
+});
+
+
+/* Highlight keyword */
+
+function highlightKeyword(text, keyword){
+
+let regex = new RegExp(`(${keyword})`, 'gi');
+
+return text.replace(regex,
+'<span class="search-highlight">$1</span>');
+
+}
+
+
+/* ================= CLOSE RESULT ================= */
+
+document.addEventListener('click', function(e){
+
+if(!searchInput.contains(e.target) && !resultsBox.contains(e.target)){
+resultsBox.style.display='none';
+}
+
+});
+
+function showEditProfile(){
+document.getElementById("profileView").style.display="none";
+document.getElementById("profileEdit").style.display="block";
+}
+
+function cancelEditProfile(){
+document.getElementById("profileView").style.display="block";
+document.getElementById("profileEdit").style.display="none";
+}
+</script>
 <!-- ================= MODAL NOTIFIKASI ================= -->
 <div class="modal fade" id="notifModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -996,7 +1171,7 @@ Edit Profil
 <input type="text"
        name="name"
        class="form-control"
-       value="{{ Auth::user()->getAuthPasswordName() }}"
+       value="{{ Auth::user()->name}}"
        required>
 </div>
 
@@ -1031,28 +1206,10 @@ Simpan
 
 </div>
 
-</form>
-
-</div>
-
-</div>
-
-<div class="text-center small text-muted pb-3">
-Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
-</div>
-
-</form>
-
-</div>
-
-</div>
-
 <div class="text-center small text-muted pb-3">
 Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
 </div>
 
 </div>
-</body>
-</html>
 </body>
 </html>

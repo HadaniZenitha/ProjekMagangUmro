@@ -22,13 +22,13 @@
 
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
-                <thead class="table-light">
+                <thead class="table-light text-center">
                     <tr>
                         <th>Nama</th>
-                        <th>Divisi</th>
+                        <th>Fungsi</th>
                         <th>Jabatan</th>
-                        <th>Status</th>
-                        <th width="220">Aksi</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center"width="220" class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
@@ -39,7 +39,7 @@
                         <td>{{ $p->divisi->nama_divisi ?? '-' }}</td>
                         <td>{{ $p->jabatan }}</td>
 
-                        <td>
+                        <td class="text-center">
                             @if($p->is_active)
                                 <span class="badge bg-success">Aktif</span>
                             @else
@@ -47,7 +47,7 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="text-center d-flex justify-content-center gap-2">
                             <a href="{{ route('pic.edit', $p->id) }}" class="btn btn-warning btn-sm">
                                 <i class="fa-solid fa-pen"></i>
                             </a>
@@ -77,19 +77,10 @@
         </div>
 
         {{-- Pagination --}}
-        @if(method_exists($pics,'hasPages') && $pics->hasPages())
-        <div class="mt-3 text-center">
-            <small class="text-muted d-block mb-2">
-                Menampilkan {{ $pics->firstItem() }} 
-                sampai {{ $pics->lastItem() }} 
-                dari {{ $pics->total() }} data
-            </small>
-
-            <div class="d-flex justify-content-center">
-                {{ $pics->links('pagination::bootstrap-5') }}
-            </div>
+        <div class="mt-3">
+            {{ $pics->links('pagination::bootstrap-5') }}
         </div>
-        @endif
+
 
     </div>
 </div>

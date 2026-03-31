@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Divisi')
+@section('title', 'Tambah Fungsi')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Tambah Divisi</h5>
+    <h5 class="fw-bold mb-0">Tambah Fungsi</h5>
     <a href="{{ route('divisi.index') }}">
     </a>
 </div>
@@ -17,7 +17,7 @@
             @csrf
 
             <div class="mb-3">
-                <label class="form-label">Kode Divisi</label>
+                <label class="form-label">Kode Fungsi</label>
                 <input type="text"
                        name="kode_divisi"
                        class="form-control"
@@ -25,7 +25,7 @@
             </div>
 
             <div class="mb-4">
-                <label class="form-label">Nama Divisi</label>
+                <label class="form-label">Nama Fungsi</label>
                 <input type="text"
                        name="nama_divisi"
                        class="form-control"

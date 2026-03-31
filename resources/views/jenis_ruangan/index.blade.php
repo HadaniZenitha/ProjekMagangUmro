@@ -22,7 +22,7 @@
 
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
-                <thead class="table-light">
+                <thead class="table-light text-center">
                     <tr>
                         <th>Kode</th>
                         <th>Nama Jenis Ruangan</th>
@@ -37,7 +37,7 @@
                         <td>{{ $j->kode_jenis_ruangan }}</td>
                         <td>{{ $j->nama_jenis_ruangan }}</td>
 
-                        <td>
+                        <td class="text-center">
                             @if($j->is_active)
                                 <span class="badge bg-success">Aktif</span>
                             @else
@@ -45,7 +45,7 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="text-center d-flex justify-content-center gap-2">
                             <a href="{{ route('jenis-ruangan.show', $j->id) }}" 
                                class="btn btn-info btn-sm">
                                 <i class="fa-solid fa-eye"></i>
@@ -82,21 +82,10 @@
         </div>
 
         {{-- Pagination --}}
-        @if(method_exists($jenisRuangans,'hasPages') && $jenisRuangans->hasPages())
-        <div class="mt-3 text-center">
-
-            <small class="text-muted d-block mb-2">
-                Menampilkan {{ $jenisRuangans->firstItem() }}
-                sampai {{ $jenisRuangans->lastItem() }}
-                dari {{ $jenisRuangans->total() }} data
-            </small>
-
-            <div class="d-flex justify-content-center">
-                {{ $jenisRuangans->links('pagination::bootstrap-5') }}
-            </div>
-
+        <div class="mt-3">
+            {{ $jenisRuangans->links('pagination::bootstrap-5') }}
         </div>
-        @endif
+
 
     </div>
 </div>

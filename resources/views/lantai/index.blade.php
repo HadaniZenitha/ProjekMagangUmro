@@ -22,7 +22,7 @@
 
         <div class="table-responsive">
             <table class="table align-middle table-bordered">
-                <thead class="table-light">
+                <thead class="table-light text-center">
                     <tr>
                         <th>Gedung</th>
                         <th>Kode Lantai</th>
@@ -39,7 +39,7 @@
                         <td>{{ $l->kode_lantai }}</td>
                         <td>{{ $l->nama_lantai ?? '-' }}</td>
 
-                        <td>
+                        <td class="text-center">
                             @if($l->is_active)
                                 <span class="badge bg-success">Aktif</span>
                             @else
@@ -47,7 +47,7 @@
                             @endif
                         </td>
 
-                        <td>
+                        <td class="text-center d-flex justify-content-center gap-2">
                             <a href="{{ route('lantai.show', $l->id) }}" class="btn btn-info btn-sm">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
@@ -82,19 +82,10 @@
         </div>
 
         {{-- Pagination --}}
-        @if(method_exists($lantais,'hasPages') && $lantais->hasPages())
-        <div class="mt-3 text-center">
-            <small class="text-muted d-block mb-2">
-                Menampilkan {{ $lantais->firstItem() }} 
-                sampai {{ $lantais->lastItem() }} 
-                dari {{ $lantais->total() }} data
-            </small>
-
-            <div class="d-flex justify-content-center">
-                {{ $lantais->links('pagination::bootstrap-5') }}
-            </div>
+        <div class="mt-3">
+            {{ $lantais->links('pagination::bootstrap-5') }}
         </div>
-        @endif
+
 
     </div>
 </div>

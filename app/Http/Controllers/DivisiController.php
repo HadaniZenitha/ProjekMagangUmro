@@ -12,9 +12,10 @@ class DivisiController extends Controller
      */
     public function index()
     {
-        $divisis = Divisi::orderBy('kode_divisi')->get();
+        $divisis = Divisi::orderBy('kode_divisi')
+                        ->paginate(10); // 10 data per halaman
+
         return view('divisi.index', compact('divisis'));
-        
     }
 
     /**

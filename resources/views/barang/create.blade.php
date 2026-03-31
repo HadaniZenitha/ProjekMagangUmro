@@ -6,10 +6,6 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Tambah Barang Inventaris</h5>
-
-    <a href="{{ route('barang.index') }}" class="btn btn-secondary">
-        Kembali
-    </a>
 </div>
 
 @if ($errors->any())
@@ -43,14 +39,14 @@ required>
 
 <!-- Divisi -->
 <div class="mb-3">
-<label class="form-label">Divisi</label>
+<label class="form-label">Fungsi</label>
 
 <select name="divisi_id"
 id="divisiSelect"
 class="form-select"
 required>
 
-<option value="">-- Pilih Divisi --</option>
+<option value="">-- Pilih Fungsi --</option>
 
 @foreach($divisis as $d)
 

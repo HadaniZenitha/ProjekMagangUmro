@@ -6,6 +6,9 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Edit Lantai</h5>
+    <a href="{{ route('lantai.index') }}" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    </a>
 </div>
 
 @if ($errors->any())

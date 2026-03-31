@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Divisi')
+@section('title', 'Edit Fungsi')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Edit Divisi</h5>
+    <h5 class="fw-bold mb-0">Edit Fungsi</h5>
     <a href="{{ route('divisi.index') }}">
     </a>
 </div>
@@ -18,7 +18,7 @@
             @method('PUT')
 
             <div class="mb-3">
-                <label class="form-label">Kode Divisi</label>
+                <label class="form-label">Kode Fungsi</label>
                 <input type="text"
                        name="kode_divisi"
                        value="{{ old('kode_divisi', $divisi->kode_divisi) }}"
@@ -27,7 +27,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Nama Divisi</label>
+                <label class="form-label">Nama Fungsi</label>
                 <input type="text"
                        name="nama_divisi"
                        value="{{ old('nama_divisi', $divisi->nama_divisi) }}"
