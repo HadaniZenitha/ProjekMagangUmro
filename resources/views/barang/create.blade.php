@@ -39,12 +39,12 @@
 
                 {{-- Divisi --}}
                 <div class="mb-3">
-                    <label class="form-label">Divisi</label>
+                    <label class="form-label">Fungsi</label>
                     <select name="divisi_id"
                             id="divisiSelect"
                             class="form-select"
                             required>
-                        <option value="">-- Pilih Divisi --</option>
+                        <option value="">-- Pilih Fungsi --</option>
                         @foreach($divisis as $d)
                             <option value="{{ $d->id }}">
                                 {{ $d->nama_divisi }}

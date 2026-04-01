@@ -217,58 +217,125 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* ================= RESPONSIVE ================= */
-        .mobile-toggle {
-            display: none;
-            cursor: pointer;
-            font-size: 20px;
-        }
+        /* ================= RESPONSIVE FIX ================= */
+@media (max-width: 991px) {
 
-        .overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 900;
-        }
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        z-index: 1000;
+        width: 260px;
+        height: 100%;
+        left: 0;
+        top: 0;
+        transform: translateX(-100%);
+        transition: 0.3s ease;
+    }
 
-        .overlay.show {
-            display: block;
-        }
+    .sidebar.show {
+        transform: translateX(0);
+    }
 
-        @media (max-width: 991px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
+    /* Overlay */
+    .overlay {
+        display: none;
+    }
 
-            .sidebar.show {
-                transform: translateX(0);
-            }
+    .overlay.show {
+        display: block;
+    }
 
-            .main-wrapper {
-                margin-left: 0;
-            }
+    /* Main content full */
+    .main-wrapper {
+        margin-left: 0 !important;
+        width: 100%;
+    }
 
-            .mobile-toggle {
-                display: inline-block;
-            }
+    /* Navbar */
+    .top-navbar {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px;
+    }
 
-            .search-box {
-                width: 180px;
-            }
+    /* Search */
+    .search-box {
+        width: 140px !important;
+        font-size: 12px;
+    }
 
-            .icon-top i {
-                font-size: 20px;
-                cursor: pointer;
-            }
+    /* Icon atas */
+    .icon-top {
+        gap: 12px !important;
+        font-size: 14px;
+    }
 
-            .icon-top i:hover {
-                color: #309FB0;
-                transform: scale(1.15);
-                transition: 0.2s;
-            }
-        }
-    </style>
+    .icon-top i {
+        font-size: 18px;
+    }
+
+    /* Banner */
+    .banner-header h2 {
+        font-size: 18px;
+    }
+
+    /* CONTENT */
+    .content-card {
+        padding: 15px;
+    }
+
+    /* CARD DASHBOARD FIX */
+    .stat-card {
+        padding: 15px !important;
+        border-radius: 12px;
+    }
+
+    /* GRID CARD BIAR GA KECIL */
+    .row {
+        margin: 0;
+    }
+
+    .row > div {
+        padding: 6px;
+    }
+
+    /* Card isi */
+    .stat-card h3,
+    .stat-card h4 {
+        font-size: 16px;
+    }
+
+    .stat-card p {
+        font-size: 12px;
+    }
+}
+
+/* EXTRA MOBILE (HP KECIL) */
+@media (max-width: 576px) {
+
+    .search-box {
+        display: none; /* biar ga sempit */
+    }
+
+    .top-navbar {
+        justify-content: space-between;
+    }
+
+    .icon-top {
+        gap: 10px;
+    }
+
+    /* Card full width */
+    .row > div {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .stat-card {
+        text-align: left;
+    }
+}
+</style>
 </head>
 
 <body>
