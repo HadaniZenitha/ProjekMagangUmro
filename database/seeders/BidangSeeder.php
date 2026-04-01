@@ -20,7 +20,7 @@ class BidangSeeder extends Seeder
             ['kode_divisi' => 'OPS', 'nama_divisi' => 'Operasional'],
             ['kode_divisi' => 'KEU', 'nama_divisi' => 'Keuangan'],
             ['kode_divisi' => 'SDM', 'nama_divisi' => 'SDM'],
-            ['kode_divisi' => 'UMM', 'nama_divisi' => 'Umum'],
+            ['kode_divisi' => 'UM', 'nama_divisi' => 'Umum'],
 
         ];  
 

@@ -18,8 +18,8 @@ class LantaiSeeder extends Seeder
 
             ['kode_lantai' => 'L1', 'gedung_id' => 1, 'nama_lantai' => 'Lantai 1'],
             ['kode_lantai' => 'L2', 'gedung_id' => 1, 'nama_lantai' => 'Lantai 2'],
-            ['kode_lantai' => 'L3', 'gedung_id' => 2, 'nama_lantai' => 'Lantai 1'],
-            ['kode_lantai' => 'L4', 'gedung_id' => 2, 'nama_lantai' => 'Lantai 2']
+            ['kode_lantai' => 'L1', 'gedung_id' => 2, 'nama_lantai' => 'Lantai 1'],
+            ['kode_lantai' => 'L2', 'gedung_id' => 2, 'nama_lantai' => 'Lantai 2']
 
         ];
 

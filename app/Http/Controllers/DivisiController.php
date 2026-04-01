@@ -43,7 +43,7 @@ class DivisiController extends Controller
         ]);
 
         return redirect()->route('divisi.index')
-            ->with('success', 'Divisi berhasil ditambahkan');
+            ->with('success', 'Fungsi berhasil ditambahkan');
     }
 
     /**
@@ -80,7 +80,7 @@ class DivisiController extends Controller
         ]);
 
         return redirect()->route('divisi.index')
-            ->with('success', 'Divisi berhasil diperbarui');
+            ->with('success', 'Fungsi berhasil diperbarui');
     }
 
     /**
@@ -91,6 +91,6 @@ class DivisiController extends Controller
         $divisi->delete();
 
         return redirect()->route('divisi.index')
-            ->with('success', 'Divisi berhasil dihapus');
+            ->with('success', 'Fungsi berhasil dihapus');
     }
 }

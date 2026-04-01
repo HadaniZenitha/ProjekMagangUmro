@@ -39,9 +39,13 @@
 
                         <td class="text-center">
                             @if($g->is_active)
-                                <span class="badge bg-success">Aktif</span>
+                                <span class="badge bg-success">
+                                    <i class="fa-solid fa-circle-check me-1"></i> Aktif
+                                </span>
                             @else
-                                <span class="badge bg-danger">Nonaktif</span>
+                                <span class="badge bg-danger">
+                                    <i class="fa-solid fa-circle-xmark me-1"></i> Nonaktif
+                                </span>
                             @endif
                         </td>
 
