@@ -243,17 +243,19 @@
 
         <!-- Tabel -->
         <div class="col-lg-8 col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Penambahan Terbaru</span>
-                    <a href="{{ route('barang.index') }}" class="btn btn-primary btn-sm btn-modern">
-                        Lihat Semua
-                    </a>
-                </div>
+            <div class="custom-card">
 
-                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-semibold">Penambahan Terbaru</h6>
+
+                        <a href="{{ route('barang.index') }}" 
+                        class="btn btn-primary btn-clean btn-sm">
+                            Lihat Semua
+                        </a>
+                    </div>
+
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover mb-0">
                             <thead>
                                 <tr>
                                     <th>Nama Barang</th>
@@ -278,7 +280,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
 
         <!-- AKSI CEPAT -->
         <div class="col-lg-4 col-12">

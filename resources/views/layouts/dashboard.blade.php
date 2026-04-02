@@ -218,123 +218,140 @@
         }
 
         /* ================= RESPONSIVE FIX ================= */
-@media (max-width: 991px) {
+    @media (max-width: 991px) {
 
-    /* Sidebar */
-    .sidebar {
-        position: fixed;
-        z-index: 1000;
-        width: 260px;
-        height: 100%;
-        left: 0;
-        top: 0;
-        transform: translateX(-100%);
-        transition: 0.3s ease;
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            z-index: 1000;
+            width: 260px;
+            height: 100%;
+            left: 0;
+            top: 0;
+            transform: translateX(-100%);
+            transition: 0.3s ease;
+        }
+
+        .sidebar.show {
+            transform: translateX(0);
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Main content full */
+        .main-wrapper {
+            margin-left: 0 !important;
+            width: 100%;
+        }
+
+        /* Navbar */
+        .top-navbar {
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px;
+        }
+
+        /* Search */
+        .search-box {
+            width: 140px !important;
+            font-size: 12px;
+        }
+
+        /* Icon atas */
+        .icon-top {
+            gap: 12px !important;
+            font-size: 14px;
+        }
+
+        .icon-top i {
+            font-size: 18px;
+        }
+
+        /* Banner */
+        .banner-header h2 {
+            font-size: 18px;
+        }
+
+        /* CONTENT */
+        .content-card {
+            padding: 15px;
+        }
+
+        /* CARD DASHBOARD FIX */
+        .stat-card {
+            padding: 15px !important;
+            border-radius: 12px;
+        }
+
+        /* GRID CARD BIAR GA KECIL */
+        .row {
+            margin: 0;
+        }
+
+        .row > div {
+            padding: 6px;
+        }
+
+        /* Card isi */
+        .stat-card h3,
+        .stat-card h4 {
+            font-size: 16px;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+        }
     }
 
-    .sidebar.show {
-        transform: translateX(0);
+    /* EXTRA MOBILE (HP KECIL) */
+    @media (max-width: 576px) {
+
+        .search-box {
+            display: none; /* biar ga sempit */
+        }
+
+        .top-navbar {
+            justify-content: space-between;
+        }
+
+        .icon-top {
+            gap: 10px;
+        }
+
+        /* Card full width */
+        .row > div {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        .stat-card {
+            text-align: left;
+        }
+    
+    /* ================= TEXT TABEL SAJA ================= */
+    @media (max-width: 991px) {
+
+        table th,
+        table td {
+            font-size: 13px !important;
+        }
+
     }
 
-    /* Overlay */
-    .overlay {
-        display: none;
-    }
+    @media (max-width: 576px) {
 
-    .overlay.show {
-        display: block;
+        table th,
+        table td {
+            font-size: 11px !important;
+        }
     }
-
-    /* Main content full */
-    .main-wrapper {
-        margin-left: 0 !important;
-        width: 100%;
-    }
-
-    /* Navbar */
-    .top-navbar {
-        flex-wrap: wrap;
-        gap: 10px;
-        padding: 12px;
-    }
-
-    /* Search */
-    .search-box {
-        width: 140px !important;
-        font-size: 12px;
-    }
-
-    /* Icon atas */
-    .icon-top {
-        gap: 12px !important;
-        font-size: 14px;
-    }
-
-    .icon-top i {
-        font-size: 18px;
-    }
-
-    /* Banner */
-    .banner-header h2 {
-        font-size: 18px;
-    }
-
-    /* CONTENT */
-    .content-card {
-        padding: 15px;
-    }
-
-    /* CARD DASHBOARD FIX */
-    .stat-card {
-        padding: 15px !important;
-        border-radius: 12px;
-    }
-
-    /* GRID CARD BIAR GA KECIL */
-    .row {
-        margin: 0;
-    }
-
-    .row > div {
-        padding: 6px;
-    }
-
-    /* Card isi */
-    .stat-card h3,
-    .stat-card h4 {
-        font-size: 16px;
-    }
-
-    .stat-card p {
-        font-size: 12px;
-    }
-}
-
-/* EXTRA MOBILE (HP KECIL) */
-@media (max-width: 576px) {
-
-    .search-box {
-        display: none; /* biar ga sempit */
-    }
-
-    .top-navbar {
-        justify-content: space-between;
-    }
-
-    .icon-top {
-        gap: 10px;
-    }
-
-    /* Card full width */
-    .row > div {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-
-    .stat-card {
-        text-align: left;
-    }
-}
 </style>
 </head>
 

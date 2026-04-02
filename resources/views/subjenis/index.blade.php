@@ -4,12 +4,62 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Master Sub Jenis Barang</h5>
-    <a href="{{ route('subjenis.create') }}" class="btn btn-warning">
-        <i class="fa-solid fa-plus"></i> Tambah Sub Jenis
+<style>
+/* ===== CARD CLEAN ===== */
+.custom-card{
+    border-radius:14px;
+    background:#ffffff;
+    padding:20px;
+    border:1px solid #eaeaea;
+    box-shadow:0 4px 12px rgba(0,0,0,0.04);
+}
+
+/* ===== BUTTON CLEAN ===== */
+.btn-clean{
+    border-radius:8px;
+    font-weight:500;
+    font-size:14px;
+    padding:6px 12px;
+    box-shadow:none;
+    transition:all 0.2s ease;
+}
+
+/* WARNA SOFT */
+.btn-warning.btn-clean{
+    background-color:#facc15;
+    border:none;
+    color:#000;
+}
+
+/* HOVER */
+.btn-clean:hover{
+    transform:translateY(-1px);
+    background-color:#fbbf24;
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+    .btn-mobile-full{
+        width:100%;
+        text-align:center;
+    }
+}
+</style>
+
+<!-- ===== BAGIAN YANG DIPERBAIKI ===== -->
+<div class="mb-3 d-flex flex-md-row flex-column align-items-md-center">
+    
+    <h5 class="fw-semibold mb-2 mb-md-0">
+        Master Sub Jenis Barang
+    </h5>
+
+    <a href="{{ route('subjenis.create') }}" 
+       class="btn btn-warning btn-clean btn-mobile-full ms-md-auto mt-2 mt-md-0">
+        <i class="fa-solid fa-plus me-1"></i> Tambah Sub Jenis
     </a>
+
 </div>
+<!-- ===== END PERBAIKAN ===== -->
 
 @if(session('success'))
 <div class="alert alert-success">
@@ -17,7 +67,7 @@
 </div>
 @endif
 
-<div class="card shadow-sm border-0">
+<div class="custom-card">
 
     <div class="table-responsive">
         <table class="table align-middle table-bordered mb-0">
@@ -29,38 +79,45 @@
                     <th width="220" class="text-center">Aksi</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach($subjenis as $s)
                 <tr>
                     <td>{{ $s->kode_subjenis }}</td>
                     <td>{{ $s->nama_subjenis }}</td>
                     <td class="text-center">{{ $s->jenis->nama_jenis }}</td>
-                    <td class="text-center d-flex justify-content-center gap-2">
-                        <div class="d-flex justify-content-center gap-2 flex-nowrap"></div>
-                        <a href="{{ route('subjenis.show', $s->id) }}"
-                           class="btn btn-info btn-sm">
-                            <i class="fa-solid fa-eye"></i>
-                        </a>
 
-                        <a href="{{ route('subjenis.edit', $s->id) }}"
-                           class="btn btn-warning btn-sm">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-2 flex-nowrap">
 
-                        <form action="{{ route('subjenis.destroy', $s->id) }}"
-                              method="POST"
-                              class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button onclick="return confirm('Hapus sub jenis ini?')"
-                                    class="btn btn-danger btn-sm">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </form>
+                            <a href="{{ route('subjenis.show', $s->id) }}"
+                               class="btn btn-info btn-sm">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+
+                            <a href="{{ route('subjenis.edit', $s->id) }}"
+                               class="btn btn-warning btn-sm">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+
+                            <form action="{{ route('subjenis.destroy', $s->id) }}"
+                                  method="POST"
+                                  class="d-inline">
+                                @csrf
+                                @method('DELETE')
+
+                                <button onclick="return confirm('Hapus sub jenis ini?')"
+                                        class="btn btn-danger btn-sm">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+
+                        </div>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
+
         </table>
     </div>
 
