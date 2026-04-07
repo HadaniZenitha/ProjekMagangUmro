@@ -4,12 +4,62 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Master Ruang</h5>
-    <a href="{{ route('ruangs.create') }}" class="btn btn-warning">
-        <i class="fa-solid fa-plus"></i> Tambah Ruang
+<style>
+/* ===== CARD CLEAN ===== */
+.custom-card{
+    border-radius:14px;
+    background:#ffffff;
+    padding:20px;
+    border:1px solid #eaeaea;
+    box-shadow:0 4px 12px rgba(0,0,0,0.04);
+}
+
+/* ===== BUTTON CLEAN ===== */
+.btn-clean{
+    border-radius:8px;
+    font-weight:500;
+    font-size:14px;
+    padding:6px 12px;
+    box-shadow:none;
+    transition:all 0.2s ease;
+}
+
+/* WARNA SOFT */
+.btn-warning.btn-clean{
+    background-color:#facc15;
+    border:none;
+    color:#000;
+}
+
+/* HOVER HALUS */
+.btn-clean:hover{
+    transform:translateY(-1px);
+    background-color:#fbbf24;
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+    .btn-mobile-full{
+        width:100%;
+        text-align:center;
+    }
+}
+</style>
+
+<!-- ===== BAGIAN YANG DIPERBAIKI ===== -->
+<div class="mb-3 d-flex flex-md-row flex-column align-items-md-center">
+    
+    <h5 class="fw-semibold mb-2 mb-md-0">
+        Master Ruang
+    </h5>
+
+    <a href="{{ route('ruangs.create') }}" 
+       class="btn btn-warning btn-clean btn-mobile-full ms-md-auto mt-2 mt-md-0">
+        <i class="fa-solid fa-plus me-1"></i> Tambah Ruang
     </a>
+
 </div>
+<!-- ===== END PERBAIKAN ===== -->
 
 @if(session('success'))
 <div class="alert alert-success">
@@ -17,47 +67,47 @@
 </div>
 @endif
 
-<div class="card shadow-sm border-0">
-    <div class="card-body">
+<div class="custom-card">
 
-        <div class="table-responsive">
-            <table class="table align-middle table-bordered">
+    <div class="table-responsive">
+        <table class="table align-middle table-bordered">
 
-                <thead class="table-light">
-                    <tr>
-                        <th>Kode</th>
-                        <th>Gedung</th>
-                        <th>Lantai</th>
-                        <th>Jenis</th>
-                        <th>Nama</th>
-                        <th>Status</th>
-                        <th width="220">Aksi</th>
-                    </tr>
-                </thead>
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Kode</th>
+                    <th>Gedung</th>
+                    <th>Lantai</th>
+                    <th>Jenis</th>
+                    <th>Nama</th>
+                    <th>Status</th>
+                    <th width="160">Aksi</th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    @forelse($ruangs as $r)
-                    <tr>
+            <tbody>
+                @forelse($ruangs as $r)
+                <tr>
 
-                        <td>{{ $r->kode_ruang }}</td>
+                    <td>{{ $r->kode_ruang }}</td>
 
-                        <td>{{ $r->lantai->gedung->nama_gedung ?? '-' }}</td>
+                    <td>{{ $r->lantai->gedung->nama_gedung ?? '-' }}</td>
 
-                        <td>{{ $r->lantai->kode_lantai ?? '-' }}</td>
+                    <td>{{ $r->lantai->kode_lantai ?? '-' }}</td>
 
-                        <td>{{ $r->jenisRuangan->nama_jenis_ruangan ?? '-' }}</td>
+                    <td>{{ $r->jenisRuangan->nama_jenis_ruangan ?? '-' }}</td>
 
-                        <td>{{ $r->nama_ruang }}</td>
+                    <td>{{ $r->nama_ruang }}</td>
 
-                        <td>
-                            @if($r->is_active)
-                                <span class="badge bg-success">Aktif</span>
-                            @else
-                                <span class="badge bg-danger">Nonaktif</span>
-                            @endif
-                        </td>
+                    <td class="text-center">
+                        @if($r->is_active)
+                            <span class="badge bg-success">Aktif</span>
+                        @else
+                            <span class="badge bg-danger">Nonaktif</span>
+                        @endif
+                    </td>
 
-                        <td>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-2 flex-nowrap">
 
                             <a href="{{ route('ruangs.show', $r->id) }}"
                                class="btn btn-info btn-sm">
@@ -71,52 +121,37 @@
 
                             <form action="{{ route('ruangs.destroy', $r->id) }}"
                                   method="POST"
-                                  class="d-inline">
+                                  onsubmit="return confirm('Hapus ruang ini?')">
                                 @csrf
                                 @method('DELETE')
 
-                                <button onclick="return confirm('Hapus ruang ini?')"
-                                        class="btn btn-danger btn-sm">
+                                <button class="btn btn-danger btn-sm">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
 
-                        </td>
+                        </div>
+                    </td>
 
-                    </tr>
+                </tr>
 
-                    @empty
-                    <tr>
-                        <td colspan="7" class="text-center text-muted py-3">
-                            Belum ada data ruang yang terdaftar.
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
+                @empty
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-3">
+                        Belum ada data ruang yang terdaftar.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
 
-            </table>
-        </div>
-
-        {{-- Pagination --}}
-        @if(method_exists($ruangs,'hasPages') && $ruangs->hasPages())
-
-        <div class="mt-3 text-center">
-
-            <small class="text-muted d-block mb-2">
-                Menampilkan {{ $ruangs->firstItem() }}
-                sampai {{ $ruangs->lastItem() }}
-                dari {{ $ruangs->total() }} data
-            </small>
-
-            <div class="d-flex justify-content-center">
-                {{ $ruangs->links('pagination::bootstrap-5') }}
-            </div>
-
-        </div>
-
-        @endif
-
+        </table>
     </div>
+
+    {{-- Pagination --}}
+    <div class="mt-3">
+        {{ $ruangs->links('pagination::bootstrap-5') }}
+    </div>
+
 </div>
 
 @endsection

@@ -14,20 +14,24 @@ class SearchController extends Controller
     {
         $keyword = $request->q;
 
-        $barang = Barang::where('nama_barang','like',"%$keyword%")
+        $barang = Barang::select('nama_barang')
+                ->where('nama_barang','like',"%$keyword%")
                 ->orWhere('kode_barang','like',"%$keyword%")
                 ->limit(5)
                 ->get();
 
-        $ruang = Ruang::where('nama_ruang','like',"%$keyword%")
+        $ruang = Ruang::select('nama_ruang')
+                ->where('nama_ruang','like',"%$keyword%")
                 ->limit(5)
                 ->get();
 
-        $karyawan = Pic::where('nama_pic','like',"%$keyword%")
+        $karyawan = Pic::select('nama_pic')
+                ->where('nama_pic','like',"%$keyword%")
                 ->limit(5)
                 ->get();
 
-        $gedung = Gedung::where('nama_gedung','like',"%$keyword%")
+        $gedung = Gedung::select('nama_gedung')
+                ->where('nama_gedung','like',"%$keyword%")
                 ->limit(5)
                 ->get();
 

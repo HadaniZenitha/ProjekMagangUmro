@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -426,7 +426,6 @@
                 </button>
             </form>
         </div>
-    </div>
 
     <!-- ================= MAIN ================= -->
     <div class="main-wrapper">

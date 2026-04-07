@@ -12,9 +12,10 @@ class DivisiController extends Controller
      */
     public function index()
     {
-        $divisis = Divisi::orderBy('kode_divisi')->get();
+        $divisis = Divisi::orderBy('kode_divisi')
+                        ->paginate(10); // 10 data per halaman
+
         return view('divisi.index', compact('divisis'));
-        
     }
 
     /**
@@ -42,7 +43,7 @@ class DivisiController extends Controller
         ]);
 
         return redirect()->route('divisi.index')
-            ->with('success', 'Divisi berhasil ditambahkan');
+            ->with('success', 'Fungsi berhasil ditambahkan');
     }
 
     /**
@@ -79,7 +80,7 @@ class DivisiController extends Controller
         ]);
 
         return redirect()->route('divisi.index')
-            ->with('success', 'Divisi berhasil diperbarui');
+            ->with('success', 'Fungsi berhasil diperbarui');
     }
 
     /**
@@ -90,6 +91,6 @@ class DivisiController extends Controller
         $divisi->delete();
 
         return redirect()->route('divisi.index')
-            ->with('success', 'Divisi berhasil dihapus');
+            ->with('success', 'Fungsi berhasil dihapus');
     }
 }

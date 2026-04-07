@@ -1,13 +1,50 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $pageTitle ?? 'i-Noni' }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ $pageTitle ?? 'i-Noni' }}</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+body{
+background: linear-gradient(120deg,#cbd5f5,#b6e3f4);
+}
+
+/* overlay agar teks tetap terbaca */
+.overlay{
+background:linear-gradient(
+to bottom,
+rgba(0,0,0,0.35),
+rgba(0,0,0,0.55)
+);
+}
+
+/* panel form premium */
+.glass{
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(12px);
+}
+
+/* animasi input */
+.input-style{
+transition:all .25s ease;
+}
+
+.input-style:focus{
+box-shadow:0 0 0 2px #14b8a6;
+background:#fff;
+}
+
+</style>
+
 </head>
+
 @php
-    $isLogin = ($mode ?? 'login') === 'login';
+$isLogin = ($mode ?? 'login') === 'login';
 @endphp
 <body class="min-h-screen bg-[linear-gradient(to_right,#e2e8f0,#bae6fd)] antialiased">
     <main class="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-8 sm:px-6 lg:px-8">

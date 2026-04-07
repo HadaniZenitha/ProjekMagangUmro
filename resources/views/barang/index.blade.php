@@ -187,9 +187,9 @@
 		<div class="card-body">
 			<div class="row g-2 align-items-end">
 				<div class="col-lg-3 col-md-6">
-					<label class="form-label small mb-1">Divisi</label>
+					<label class="form-label small mb-1">Fungsi</label>
 					<select name="divisi" class="form-select">
-						<option value="">Semua Divisi</option>
+						<option value="">Semua Fungsi</option>
 						@foreach($divisis as $d)
 						<option value="{{ $d->id }}" {{ request('divisi') == $d->id ? 'selected' : '' }}>
 							{{ $d->nama_divisi }}
@@ -315,7 +315,7 @@
 
 
 {{-- PAGINATION --}}
-<div class="pagination-wrapper mt-3">
+<div class="paginaton-wrapper mt-3">
 	{{ $barangs->links('pagination::bootstrap-5') }}
 </div>
 

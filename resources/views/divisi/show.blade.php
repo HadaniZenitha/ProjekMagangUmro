@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4">Detail Divisi</h2>
+    <h2 class="mb-4">Detail FUngsi</h2>
 
     <ul class="list-group shadow-sm">
         <li class="list-group-item">
