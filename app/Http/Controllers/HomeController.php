@@ -18,9 +18,9 @@ class HomeController extends Controller
         $totalBarang = Barang::count();
         $totalRuang = Ruang::count();
 
-        $barangBaik = Barang::where('kondisi','baik')->count();
+        $barangBaik = Barang::where('kondisi','Layak')->count();
 
-        $barangPerbaikan = Barang::where('kondisi','perlu_perbaikan')->count();
+        $barangPerbaikan = Barang::where('kondisi','perlu perbaikan')->count();
 
         $barangRusak = Barang::where('kondisi','rusak')->count();
 

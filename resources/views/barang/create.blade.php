@@ -14,249 +14,247 @@
 
 @if ($errors->any())
 <div class="alert alert-danger">
-<ul class="mb-0">
-@foreach ($errors->all() as $error)
-<li>{{ $error }}</li>
-@endforeach
-</ul>
+    <ul class="mb-0">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
 </div>
 @endif
 
 
 <div class="card shadow-sm border-0">
-<div class="card-body">
+    <div class="card-body">
 
-<form method="POST" action="{{ route('barang.store') }}">
-@csrf
-
-
-<!-- Nama Barang -->
-<div class="mb-3">
-<label class="form-label fw-semibold">Nama Barang</label>
-
-<input type="text"
-name="nama_barang"
-class="form-control"
-required>
-</div>
+        <form method="POST" action="{{ route('barang.store') }}">
+            @csrf
 
 
-<!-- Divisi -->
-<div class="mb-3">
-<label class="form-label">Divisi</label>
+            <!-- Nama Barang -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Nama Barang</label>
 
-<select name="divisi_id"
-id="divisiSelect"
-class="form-select"
-required>
-
-<option value="">-- Pilih Divisi --</option>
-
-@foreach($divisis as $d)
-
-<option value="{{ $d->id }}">
-{{ $d->nama_divisi }}
-</option>
-
-@endforeach
-
-</select>
-</div>
+                <input type="text"
+                    name="nama_barang"
+                    class="form-control"
+                    required>
+            </div>
 
 
-<!-- PIC -->
-<div class="mb-3">
-<label class="form-label">PIC (Penanggung Jawab)</label>
+            <!-- Divisi -->
+            <div class="mb-3">
+                <label class="form-label">Divisi</label>
 
-<select name="pic_id"
-id="picSelect"
-class="form-select"
-required>
+                <select name="divisi_id"
+                    id="divisiSelect"
+                    class="form-select"
+                    required>
 
-<option value="">-- Pilih PIC --</option>
+                    <option value="">-- Pilih Divisi --</option>
 
-</select>
-</div>
+                    @foreach($divisis as $d)
 
+                    <option value="{{ $d->id }}">
+                        {{ $d->nama_divisi }}
+                    </option>
 
-<!-- Sub Jenis -->
-<div class="mb-3">
-<label class="form-label">Sub Jenis Barang</label>
+                    @endforeach
 
-<select name="sub_jenis_barang_id"
-class="form-select"
-required>
-
-<option value="">-- Pilih Sub Jenis --</option>
-
-@foreach($subjenisList as $s)
-
-<option value="{{ $s->id }}">
-{{ $s->kode_subjenis }} - {{ $s->nama_subjenis }}
-</option>
-
-@endforeach
-
-</select>
-</div>
+                </select>
+            </div>
 
 
-<!-- Ruang -->
-<div class="mb-3">
-<label class="form-label">Lokasi Ruang</label>
+            <!-- PIC -->
+            <div class="mb-3">
+                <label class="form-label">PIC (Penanggung Jawab)</label>
 
-<select name="ruang_id"
-class="form-select"
-required>
+                <select name="pic_id"
+                    id="picSelect"
+                    class="form-select"
+                    required>
 
-<option value="">-- Pilih Ruang --</option>
+                    <option value="">-- Pilih PIC --</option>
 
-@foreach($ruangs as $r)
-
-<option value="{{ $r->id }}">
-{{ $r->nama_ruang }}
-</option>
-
-@endforeach
-
-</select>
-</div>
+                </select>
+            </div>
 
 
-<!-- Tahun Masuk -->
-<div class="mb-3">
+            <!-- Sub Jenis -->
+            <div class="mb-3">
+                <label class="form-label">Sub Jenis Barang</label>
 
-<label class="form-label fw-semibold">
-Tahun Masuk
-</label>
+                <select name="sub_jenis_barang_id"
+                    class="form-select"
+                    required>
 
-<input type="number"
-name="tahun_perolehan"
-class="form-control"
-value="{{ date('Y') }}"
-required>
+                    <option value="">-- Pilih Sub Jenis --</option>
 
-</div>
+                    @foreach($subjenisList as $s)
 
+                    <option value="{{ $s->id }}">
+                        {{ $s->kode_subjenis }} - {{ $s->nama_subjenis }}
+                    </option>
 
-<!-- KONDISI BARANG (SUDAH DIPERBAIKI) -->
+                    @endforeach
 
-<div class="mb-4">
-
-<label class="form-label">
-Kondisi Barang
-</label>
-
-<select name="kondisi"
-class="form-select"
-required>
-
-<option value="baik">
-Baik
-</option>
-
-<option value="perlu_perbaikan">
-Perlu Perbaikan
-</option>
-
-<option value="rusak">
-Rusak
-</option>
-
-</select>
-
-</div>
+                </select>
+            </div>
 
 
-<div class="d-flex gap-2">
+            <!-- Ruang -->
+            <div class="mb-3">
+                <label class="form-label">Lokasi Ruang</label>
 
-<button type="submit"
-class="btn btn-warning">
+                <select name="ruang_id"
+                    class="form-select"
+                    required>
 
-<i class="fa-solid fa-save me-1"></i>
-Simpan
+                    <option value="">-- Pilih Ruang --</option>
 
-</button>
+                    @foreach($ruangs as $r)
 
+                    <option value="{{ $r->id }}">
+                        {{ $r->nama_ruang }}
+                    </option>
 
-<a href="{{ route('barang.index') }}"
-class="btn btn-danger">
+                    @endforeach
 
-Batal
-
-</a>
-
-</div>
+                </select>
+            </div>
 
 
-</form>
+            <!-- Tahun Masuk -->
+            <div class="mb-3">
 
-</div>
+                <label class="form-label fw-semibold">
+                    Tahun Masuk
+                </label>
+
+                <input type="number"
+                    name="tahun_perolehan"
+                    class="form-control"
+                    value="{{ date('Y') }}"
+                    required>
+
+            </div>
+
+
+            <!-- KONDISI BARANG (SUDAH DIPERBAIKI) -->
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Kondisi Barang
+                </label>
+
+                <select name="kondisi"
+                    class="form-select"
+                    required>
+
+                    <option value="baik">
+                        Baik
+                    </option>
+
+                    <option value="perlu perbaikan">
+                        Perlu Perbaikan
+                    </option>
+
+                    <option value="rusak">
+                        Rusak
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                    class="btn btn-warning">
+
+                    <i class="fa-solid fa-save me-1"></i>
+                    Simpan
+
+                </button>
+
+
+                <a href="{{ route('barang.index') }}"
+                    class="btn btn-danger">
+
+                    Batal
+
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </div>
 </div>
 
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
 
-document.addEventListener('DOMContentLoaded', function(){
+        let divisiSelect = document.getElementById('divisiSelect');
 
-let divisiSelect = document.getElementById('divisiSelect');
-
-let picSelect = document.getElementById('picSelect');
+        let picSelect = document.getElementById('picSelect');
 
 
-function loadPicByDivisi(divisiId){
+        function loadPicByDivisi(divisiId) {
 
-picSelect.innerHTML = '<option value="">Loading...</option>';
+            picSelect.innerHTML = '<option value="">Loading...</option>';
 
-if(divisiId){
+            if (divisiId) {
 
-fetch('/get-pic-by-divisi/' + divisiId)
+                fetch('/get-pic-by-divisi/' + divisiId)
 
-.then(response => response.json())
+                    .then(response => response.json())
 
-.then(data => {
+                    .then(data => {
 
-picSelect.innerHTML =
-'<option value="">-- Pilih PIC --</option>';
+                        picSelect.innerHTML =
+                            '<option value="">-- Pilih PIC --</option>';
 
-data.forEach(function(pic){
+                        data.forEach(function(pic) {
 
-picSelect.innerHTML +=
+                            picSelect.innerHTML +=
 
-`<option value="${pic.id}">
+                                `<option value="${pic.id}">
 ${pic.nama_pic}
 </option>`;
 
-});
+                        });
 
-})
+                    })
 
-.catch(function(){
+                    .catch(function() {
 
-picSelect.innerHTML =
-'<option value="">-- Pilih PIC --</option>';
+                        picSelect.innerHTML =
+                            '<option value="">-- Pilih PIC --</option>';
 
-});
+                    });
 
-}else{
+            } else {
 
-picSelect.innerHTML =
-'<option value="">-- Pilih PIC --</option>';
+                picSelect.innerHTML =
+                    '<option value="">-- Pilih PIC --</option>';
 
-}
+            }
 
-}
-
-
-divisiSelect.addEventListener('change', function(){
-
-loadPicByDivisi(this.value);
-
-});
+        }
 
 
-});
+        divisiSelect.addEventListener('change', function() {
 
+            loadPicByDivisi(this.value);
+
+        });
+
+
+    });
 </script>
 
 @endsection
