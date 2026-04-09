@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
+
+        html, body {
+        height: 100%;
+    }
+
+.main-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
         :root {
             --bg-sidebar: #309FB0;
             --pln-yellow: #FACC15;
@@ -36,8 +46,9 @@
             display: flex;
             flex-direction: column;
             z-index: 1000;
-            overflow-x: hidden;
+            overflow: hidden;
             transition: transform 0.3s ease-in-out;
+            justify-content: space-between;
         }
 
         .sidebar.closed {
@@ -149,6 +160,7 @@
             padding: 20px;
             background: var(--bg-sidebar);
             border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: auto;
         }
 
         .btn-logout-pln {
@@ -238,6 +250,13 @@
 
         /* Overlay */
         .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
             display: none;
         }
 
@@ -334,6 +353,7 @@
         .stat-card {
             text-align: left;
         }
+    }
     
     /* ================= TEXT TABEL SAJA ================= */
     @media (max-width: 991px) {
@@ -462,9 +482,9 @@
             </div>
             <div class="collapse {{ request()->routeIs(['barang.*']) ? 'show' : '' }} sub-menu" id="menuInventaris">
                 <a href="{{ route('barang.index') }}" class="{{ request()->routeIs('barang.*') ? 'active-sub' : '' }}">
-                    DATA BARANG <i class="fa-solid fa-database"></i>
+                    BARANG INVENTARIS <i class="fa-solid fa-database"></i>
                 </a>
-                <a href="#">KEBUTUHAN <i class="fa-solid fa-list-check"></i></a>
+                <a href="{{ route('barang-sewa.index') }}">BARANG SEWA<i class="fa-solid fa-list-check"></i></a>
             </div>
         </div>
 

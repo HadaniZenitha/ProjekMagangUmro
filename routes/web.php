@@ -14,6 +14,7 @@ use App\Http\Controllers\JenisRuanganController;
 use App\Http\Controllers\PicController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SewaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -84,3 +85,7 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::post('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])
 ->name('profile.update');
+
+Route::resource('barang-sewa', SewaController::class)
+    ->parameters(['barang-sewa' => 'sewa']
+);
