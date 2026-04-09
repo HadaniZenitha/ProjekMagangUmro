@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
             MasterBarangPOBSeeder::class,
             DivisiSeeder::class,
             BidangSeeder::class,
-            PICSeeder::class,
             GedungSeeder::class,
             LantaiSeeder::class,
             JenisRuanganSeeder::class,
