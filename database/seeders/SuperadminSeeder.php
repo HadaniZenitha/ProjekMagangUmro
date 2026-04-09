@@ -13,7 +13,7 @@ class SuperadminSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::where('email', 'vrilla@gmail.com')->first();
+        $user = User::where('email', 'admin@gmail.com')->first();
         
         if ($user) {
             $user->update(['role' => 'superadmin']);

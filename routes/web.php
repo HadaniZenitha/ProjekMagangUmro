@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     Route::middleware(['auth'])->group(function () {
+        Route::post('/pic/import', [PicController::class, 'import'])->name('pic.import');
         Route::resource('pic', PicController::class);
         });
         
