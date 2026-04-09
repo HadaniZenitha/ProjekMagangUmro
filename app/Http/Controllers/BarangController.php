@@ -7,6 +7,7 @@ use App\Models\SubJenisBarang;
 use App\Models\Divisi;
 use App\Models\Ruang;
 use App\Models\Pic;
+use App\Models\BarangHistory;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BarangExport;
@@ -18,7 +19,7 @@ class BarangController extends Controller
 
     public function index(Request $request)
     {
-        $query = Barang::with(['divisi','ruang','pic']);
+        $query = Barang::with(['divisi','ruang','pic'])->latest('updated_at');
 
         // Filter Divisi
         if ($request->divisi) {
@@ -130,8 +131,8 @@ class BarangController extends Controller
             'pic_id' => $request->pic_id,
             'kode_barang' => $kodeBarang,
             'nama_barang' => $request->nama_barang,
-            'merk' => $request->merk,
-            'serial_number' => $request->serial_number,
+            // 'merk' => $request->merk,
+            // 'serial_number' => $request->serial_number,
             'tahun_perolehan' => $request->tahun_perolehan,
             'kondisi' => $request->kondisi,
             'urutan' => $urutanBaru,
@@ -178,8 +179,8 @@ class BarangController extends Controller
         $barang->update([
             'nama_barang' => $request->nama_barang,
             'pic_id' => $request->pic_id,
-            'merk' => $request->merk,
-            'serial_number' => $request->serial_number,
+            // 'merk' => $request->merk,
+            // 'serial_number' => $request->serial_number,
             'tahun_perolehan' => $request->tahun_perolehan,
             'kondisi' => $request->kondisi,
             'ruang_id' => $request->ruang_id,
@@ -215,10 +216,12 @@ class BarangController extends Controller
         $pics = Pic::where('divisi_id', $divisiId)
             ->where('is_active', true)
             ->orderBy('nama_pic')
+            ->select('id', 'nama_pic', 'jabatan')
             ->get();
 
         return response()->json($pics);
     }
+
 
 
     public function exportExcel(Request $request)
@@ -234,11 +237,64 @@ class BarangController extends Controller
 
     public function exportPdf(Request $request)
     {
-        $data = $this->buildFilterQuery($request)->get();
+        $query = $this->buildFilterQuery($request);
 
-        $pdf = Pdf::loadView('barang.export-pdf', compact('data'));
+        $barangs = $query->with([
+            'divisi',
+            'pic',
+            'ruang',
+            'barangHistories' => function ($q) {
+                $q->select('barang_id', 'kondisi', 'is_active', 'catatan', 'tanggal_perubahan')
+                  ->orderBy('tanggal_perubahan', 'desc');
+            }
+        ])->get();
 
-        return $pdf->stream('laporan_barang.pdf');
+        // Proses kondisi per tahun (5 tahun terakhir + tahun perolehan)
+        $tahunSekarang = (int) date('Y');
+        $tahunRange = range($tahunSekarang - 4, $tahunSekarang); // 5 tahun terakhir
+
+        $processedData = $barangs->map(function ($barang) use ($tahunRange, $tahunSekarang) {
+            $kondisiPerTahun = [];
+
+            // Kondisi terkini dari tabel barangs
+            if ($barang->kondisi) {
+                $kondisiPerTahun[$barang->tahun_perolehan ?? $tahunSekarang] = ucfirst($barang->kondisi); // tahun perolehan
+                $kondisiPerTahun[$tahunSekarang] = ucfirst($barang->kondisi); // kondisi sekarang
+            }
+
+            // Ambil dari history
+            foreach ($barang->barangHistories as $history) {
+                $tahun = (int) $history->tanggal_perubahan->format('Y');
+                if (!isset($kondisiPerTahun[$tahun])) {
+                    $kondisiPerTahun[$tahun] = ucfirst($history->kondisi ?? 'Baik');
+                }
+            }
+
+            // Gabungkan range yang diinginkan
+            $tahunList = collect($tahunRange)
+                ->merge([$barang->tahun_perolehan ?? $tahunSekarang])
+                ->unique()
+                ->sort()
+                ->values();
+
+            $barang->kondisi_per_tahun = $kondisiPerTahun;
+            $barang->tahun_list_for_this = $tahunList; // per barang
+
+            return $barang;
+        });
+
+        // Daftar tahun unik untuk header tabel (supaya semua baris sama)
+        $allTahun = $processedData->flatMap(fn($b) => $b->tahun_list_for_this)->unique()->sort()->values();
+
+        $pdf = Pdf::loadView('barang.export-pdf', [
+            'data'       => $processedData,
+            'tahun_list' => $allTahun,
+            'filter'     => $request->all()
+        ]);
+
+        $pdf->setPaper('A4', 'landscape');   // sangat direkomendasikan karena banyak kolom tahun
+
+        return $pdf->stream('laporan_inventaris_barang_' . date('Ymd') . '.pdf');
     }
 
 
@@ -304,6 +360,12 @@ class BarangController extends Controller
 
         if ($request->status !== null && $request->status !== '') {
             $query->where('is_active', $request->status);
+        }
+
+        if ($request->tahun_awal && $request->tahun_akhir) {
+            $query->whereBetween('tahun_perolehan', [$request->tahun_awal, $request->tahun_akhir]);
+        } elseif ($request->tahun) {
+            $query->where('tahun_perolehan', $request->tahun);
         }
 
         return $query;

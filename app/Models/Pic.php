@@ -20,6 +20,11 @@ class Pic extends Model
         return $this->belongsTo(Divisi::class);
     }
 
+    public function ruangans()
+    {
+        return $this->hasMany(Ruang::class); 
+    }
+
     public function barangs()
     {
         return $this->hasMany(Barang::class);

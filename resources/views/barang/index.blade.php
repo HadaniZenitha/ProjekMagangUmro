@@ -186,7 +186,7 @@
 	<div class="card mb-3">
 		<div class="card-body">
 			<div class="row g-2 align-items-end">
-				<div class="col-lg-3 col-md-6">
+				{{-- <div class="col-lg-3 col-md-6">
 					<label class="form-label small mb-1">Fungsi</label>
 					<select name="divisi" class="form-select">
 						<option value="">Semua Fungsi</option>
@@ -196,6 +196,18 @@
 						</option>
 						@endforeach
 					</select>
+				</div> --}}
+
+				<div class="col-lg-3 col-md-6">
+				    <label class="form-label small mb-1">Ruangan</label>
+				    <select name="ruang" class="form-select">
+				        <option value="">Semua Ruangan</option>
+				        @foreach($ruangs as $r)
+				            <option value="{{ $r->id }}" {{ request('ruang') == $r->id ? 'selected' : '' }}>
+				                {{ $r->nama_ruang }}
+				            </option>
+				        @endforeach
+				    </select>
 				</div>
 
 				<div class="col-lg-3 col-md-6">

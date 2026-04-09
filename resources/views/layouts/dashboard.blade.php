@@ -1145,6 +1145,7 @@
             Sistem Inventaris UMRO
         </div>
     </div>
+@yield('scripts')
 </body>
 
 </html>

@@ -72,39 +72,48 @@
     <div class="table-responsive">
         <table class="table align-middle table-bordered">
 
-            <thead class="table-light text-center">
-                <tr>
-                    <th>Kode</th>
-                    <th>Gedung</th>
-                    <th>Lantai</th>
-                    <th>Jenis</th>
-                    <th>Nama</th>
-                    <th>Status</th>
-                    <th width="160">Aksi</th>
-                </tr>
-            </thead>
+                <thead class="table-light text-center">
+                    <tr>
+                        <th width="5%">No</th>
+                        <th>Kode</th>
+                        <th>Gedung</th>
+                        <th>Lantai</th>
+                        <th>Jenis Ruangan</th>
+                        <th>Nama Ruangan</th>
+                        <th>Penanggung Jawab</th>
+                        <th>Status</th>
+                        <th width="15%">Aksi</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                @forelse($ruangs as $r)
-                <tr>
-
-                    <td>{{ $r->kode_ruang }}</td>
-
-                    <td>{{ $r->lantai->gedung->nama_gedung ?? '-' }}</td>
-
-                    <td>{{ $r->lantai->kode_lantai ?? '-' }}</td>
-
-                    <td>{{ $r->jenisRuangan->nama_jenis_ruangan ?? '-' }}</td>
-
-                    <td>{{ $r->nama_ruang }}</td>
-
-                    <td class="text-center">
-                        @if($r->is_active)
-                            <span class="badge bg-success">Aktif</span>
-                        @else
-                            <span class="badge bg-danger">Nonaktif</span>
-                        @endif
-                    </td>
+                <tbody>
+                    @forelse($ruangs as $r)
+                    <tr>
+                        <td>{{ $loop->iteration + ($ruangs->currentPage() - 1) * $ruangs->perPage() }}</td>
+                        <td>{{ $r->kode_ruang }}</td>
+                        <td>{{ $r->lantai->gedung->nama_gedung ?? '-' }}</td>
+                        <td>{{ $r->lantai->kode_lantai ?? '-' }}</td>
+                        <td>{{ $r->jenisRuangan->nama_jenis_ruangan ?? '-' }}</td>
+                        <td>{{ $r->nama_ruang }}</td>
+                        <td>
+                                @if($r->pic)
+                                    <span class="badge bg-primary">
+                                        {{ $r->pic->nama_pic }}
+                                    </span>
+                                    @if($r->pic->jabatan)
+                                        <br><small class="text-muted">{{ $r->pic->jabatan }}</small>
+                                    @endif
+                                @else
+                                    <span class="badge bg-secondary">Tidak Ada PIC Default</span>
+                                @endif
+                        </td>
+                        <td class="text-center">
+                            @if($r->is_active)
+                                <span class="badge bg-success">Aktif</span>
+                            @else
+                                <span class="badge bg-danger">Nonaktif</span>
+                            @endif
+                        </td>
 
                     <td class="text-center">
                         <div class="d-flex justify-content-center gap-2 flex-nowrap">
@@ -133,7 +142,23 @@
                         </div>
                     </td>
 
-                </tr>
+                    </tr>
+
+                    @empty
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-3">
+                            Belum ada data ruang yang terdaftar.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        {{-- Pagination --}}
+       <div class="mt-3">
+            {{ $ruangs->links('pagination::bootstrap-5') }}
+        </div>
 
                 @empty
                 <tr>

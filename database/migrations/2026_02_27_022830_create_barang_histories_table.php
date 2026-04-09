@@ -17,10 +17,11 @@ return new class extends Migration
             $table->foreignId('barang_id')
                   ->constrained('barangs')
                   ->onDelete('cascade');
-        
+
+            $table->string('kondisi');
             $table->boolean('is_active');
             $table->text('catatan')->nullable();
-            $table->timestamp('tanggal_perubahan');
+            $table->timestamp('tanggal_perubahan')->useCurrent();
         
             $table->timestamps();
         });
