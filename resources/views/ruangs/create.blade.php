@@ -5,8 +5,9 @@
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Tambah Ruang</h5>
-    <a href="{{ route('ruangs.index') }}">
+    <h5 class="fw-bold mb-0">Tambah Ruang Baru</h5>
+    <a href="{{ route('ruangs.index') }}" class="btn btn-secondary btn-sm">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
     </a>
 </div>
 
@@ -55,7 +56,22 @@
                 <input type="text"
                        name="nama_ruang"
                        class="form-control"
+                       placeholder="contoh: Ruang IT Support"
                        required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">PIC Default <small class="text-muted">(Opsional)</small></label>
+                <select name="pic_id" class="form-select">
+                    <option value="">-- Tidak ada PIC default (gunakan PIC individu nanti) --</option>
+                    @foreach($pics as $pic)
+                        <option value="{{ $pic->id }}">
+                            {{ $pic->nama_pic }} 
+                            @if($pic->jabatan) - {{ $pic->jabatan }} @endif
+                        </option>
+                    @endforeach
+                </select>
+                <small class="text-muted">PIC ini akan otomatis digunakan saat membuat barang di ruangan ini.</small>
             </div>
 
             <div class="d-flex gap-2">

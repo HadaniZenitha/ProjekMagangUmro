@@ -68,22 +68,22 @@
                 </div>
 
                 {{-- Merk --}}
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label class="form-label fw-semibold">Merk</label>
                     <input type="text"
                            name="merk"
                            class="form-control"
                            value="{{ old('merk', $barang->merk) }}">
-                </div>
+                </div> --}}
 
                 {{-- Serial Number --}}
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label class="form-label fw-semibold">Serial Number</label>
                     <input type="text"
                            name="serial_number"
                            class="form-control"
                            value="{{ old('serial_number', $barang->serial_number) }}">
-                </div>
+                </div> --}}
 
                 {{-- Tahun Perolehan --}}
                 <div class="mb-3">

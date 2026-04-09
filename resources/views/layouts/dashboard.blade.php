@@ -840,6 +840,6 @@
             Sistem Inventaris UNIT MAINTENANCE REPAIR AND OVERHAUL
         </div>
     </div>
-
+@yield('scripts')
 </body>
 </html>

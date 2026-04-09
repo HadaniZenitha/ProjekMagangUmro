@@ -11,12 +11,19 @@ class Pic extends Model
         'nama_pic',
         'nid_pic',
         'jabatan',
+        'no_hp',
+        'email',
         'is_active'
     ];
 
     public function divisi()
     {
         return $this->belongsTo(Divisi::class);
+    }
+
+    public function ruangans()
+    {
+        return $this->hasMany(Ruang::class); 
     }
 
     public function barangs()

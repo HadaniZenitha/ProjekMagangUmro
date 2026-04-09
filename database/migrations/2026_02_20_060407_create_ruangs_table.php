@@ -30,8 +30,11 @@ return new class extends Migration
             // Nama ruang
             $table->string('nama_ruang', 150);
 
-            // PIC opsional
-            $table->string('pic_nama')->nullable();
+            // PIC ID (nullable, karena mungkin belum ada PIC saat pembuatan ruang)
+            $table->foreignId('pic_id')
+              ->nullable()
+              ->constrained('pics')           // nama tabel PIC kamu
+              ->onDelete('set null');        // recommended, biar tidak cascade delete ruangan
 
             // Untuk generator kode otomatis
             $table->integer('urutan')->default(0);

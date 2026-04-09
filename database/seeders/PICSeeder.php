@@ -16,11 +16,11 @@ class PICSeeder extends Seeder
     {
         $data = [
 
-            ['nid_pic' => 'PIC001', 'divisi_id' => 1, 'nama_pic' => 'Andi Pratama', 'jabatan' => 'Manager'],
-            ['nid_pic' => 'PIC002', 'divisi_id' => 1, 'nama_pic' => 'Budi Santoso', 'jabatan' => 'Staff Magang'],
-            ['nid_pic' => 'PIC003', 'divisi_id' => 2, 'nama_pic' => 'Citra Lestari', 'jabatan' => 'Intern'],
-            ['nid_pic' => 'PIC004', 'divisi_id' => 3, 'nama_pic' => 'Dedi Kurniawan', 'jabatan' => 'Supervisor'],
-            ['nid_pic' => 'PIC005', 'divisi_id' => 4, 'nama_pic' => 'Eka Putri', 'jabatan' => 'Sekretaris'],
+            ['nid_pic' => 'PIC001', 'divisi_id' => 1, 'nama_pic' => 'Andi Pratama', 'jabatan' => 'Manager', 'no_hp' => '081234567890', 'email' => 'andi.pratama@example.com'],
+            ['nid_pic' => 'PIC002', 'divisi_id' => 1, 'nama_pic' => 'Budi Santoso', 'jabatan' => 'Staff Magang', 'no_hp' => '081234567891', 'email' => 'budi.santoso@example.com'],
+            ['nid_pic' => 'PIC003', 'divisi_id' => 2, 'nama_pic' => 'Citra Lestari', 'jabatan' => 'Intern', 'no_hp' => '081234567892', 'email' => 'citra.lestari@example.com'],
+            ['nid_pic' => 'PIC004', 'divisi_id' => 3, 'nama_pic' => 'Dedi Kurniawan', 'jabatan' => 'Supervisor', 'no_hp' => '081234567893', 'email' => 'dedi.kurniawan@example.com'],
+            ['nid_pic' => 'PIC005', 'divisi_id' => 4, 'nama_pic' => 'Eka Putri', 'jabatan' => 'Sekretaris', 'no_hp' => '081234567894', 'email' => 'eka.putri@example.com'],
 
         ];
 
@@ -31,7 +31,10 @@ class PICSeeder extends Seeder
             ['nid_pic' => $item['nid_pic']],
             [
                 'divisi_id' => $item['divisi_id'],
-                'nama_pic' => $item['nama_pic']
+                'nama_pic' => $item['nama_pic'],
+                'jabatan' => $item['jabatan'],
+                'no_hp' => $item['no_hp'],
+                'email' => $item['email']
             ]
         );
 

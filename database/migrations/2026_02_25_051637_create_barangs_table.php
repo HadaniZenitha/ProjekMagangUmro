@@ -33,8 +33,8 @@ return new class extends Migration
     $table->string('kode_barang', 50)->unique();
 
     $table->string('nama_barang');
-    $table->string('merk')->nullable();
-    $table->string('serial_number')->nullable();
+    // $table->string('merk')->nullable();
+    // $table->string('serial_number')->nullable();
     $table->integer('tahun_perolehan')->nullable();
     $table->string('kondisi')->default('baik');
     

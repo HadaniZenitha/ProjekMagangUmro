@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pic;
 use App\Models\Divisi;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PicController extends Controller
 {
@@ -15,7 +16,7 @@ class PicController extends Controller
     {
         $pics = Pic::with('divisi')
                 ->orderBy('nama_pic')
-                ->paginate(10);
+                ->paginate(15);
 
         return view('pic.index', compact('pics'));
     }
@@ -34,22 +35,27 @@ class PicController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'divisi_id' => 'required|exists:divisis,id',
-            'nama_pic' => 'required',
+            'nama_pic' => 'required|string|max:255',
             'nid_pic' => [
                 'required',
+                'string',
+                'size:10',
                 'unique:pics,nid_pic',
             ],
-            'jabatan' => 'nullable',
-            'is_active' => 'required|boolean'
+            'jabatan' => 'required|string|max:255',
+            'no_hp' => 'nullable|string|max:15',
+            'email' => 'nullable|email|max:255',
+            'is_active' => 'required|boolean',
+        ], [
+            'nid_pic.regex' => 'Pastikan NID PIC sudah sesuai dan tidak lebih dari 10 karakter.',
         ]);
 
-        $request->merge([
-            'nid_pic' => strtoupper($request->nid_pic)
-        ]);
+        $validated['nid_pic'] = strtoupper($validated['nid_pic']);
+        $validated['jabatan'] = strtoupper($validated['jabatan']);
 
-        Pic::create($request->all());
+        Pic::create($validated);
 
         return redirect()->route('pic.index')
             ->with('success', 'PIC berhasil ditambahkan');
@@ -77,19 +83,25 @@ class PicController extends Controller
      */
     public function update(Request $request, Pic $pic)
     {
-        $request->validate([
+        $validated = $request->validate([
             'divisi_id' => 'required|exists:divisis,id',
-            'nama_pic' => 'required',
-            'jabatan' => 'nullable',
+            'nama_pic' => 'required|string|max:255',
+            'nid_pic'   => [
+                'required',
+                'string',
+                'max:10',
+                \Illuminate\Validation\Rule::unique('pics')->ignore($pic->id),
+            ],
+            'jabatan' => 'required|string|max:255',
+            'no_hp' => 'nullable|string|max:15',
+            'email' => 'nullable|email|max:255',
             'is_active' => 'required|boolean'
         ]);
 
-        $pic->update([
-            'divisi_id' => $request->divisi_id,
-            'nama_pic' => $request->nama_pic,
-            'jabatan' => $request->jabatan,
-            'is_active' => $request->is_active,
-        ]);
+        $validated['nid_pic'] = strtoupper($validated['nid_pic']);
+        $validated['jabatan'] = strtoupper($validated['jabatan']);
+        
+        $pic->update($validated);
 
         return redirect()->route('pic.index')
             ->with('success', 'PIC berhasil diperbarui');
@@ -100,10 +112,16 @@ class PicController extends Controller
      */
     public function destroy(Pic $pic)
     {
+        // Cek apakah PIC masih digunakan
+        if ($pic->barangs()->exists() || $pic->ruangans()->exists()) {
+            return redirect()->route('pic.index')
+                ->with('error', 'PIC tidak dapat dihapus karena masih digunakan di ruangan atau barang.');
+        }
+
         $pic->delete();
 
         return redirect()->route('pic.index')
-            ->with('success', 'PIC berhasil dihapus');
+            ->with('success', 'PIC berhasil dihapus.');
     }
 
     public function getByDivisi($divisiId)
@@ -111,6 +129,7 @@ class PicController extends Controller
         $pics = Pic::where('divisi_id', $divisiId)
                 ->where('is_active', true)
                 ->orderBy('nama_pic')
+                ->select('id', 'nama_pic', 'jabatan')
                 ->get();
 
         return response()->json($pics);

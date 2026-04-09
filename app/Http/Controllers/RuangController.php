@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Ruang;
 use App\Models\Lantai;
 use App\Models\JenisRuangan;
+use App\Models\Pic;
 use Illuminate\Http\Request;
+// use Illuminate\Validation\Rule;
 
 class RuangController extends Controller
 {
@@ -14,9 +16,9 @@ class RuangController extends Controller
      */
     public function index()
     {
-        $ruangs = Ruang::with('lantai.gedung', 'jenisRuangan')
+        $ruangs = Ruang::with('lantai.gedung', 'jenisRuangan', 'pic')
             ->orderBy('kode_ruang')
-            ->paginate(10);
+            ->paginate(15);
 
         return view('ruangs.index', compact('ruangs'));
     }
@@ -28,8 +30,9 @@ class RuangController extends Controller
     {
         $lantais = Lantai::with('gedung')->get();
         $jenisRuangans = JenisRuangan::where('is_active', true)->get();
+        $pics = Pic::where('is_active', true)->orderBy('nama_pic')->get();
 
-        return view('ruangs.create', compact('lantais', 'jenisRuangans'));
+        return view('ruangs.create', compact('lantais', 'jenisRuangans', 'pics'));
     }
 
     /**
@@ -37,21 +40,27 @@ class RuangController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'lantai_id' => 'required|exists:lantais,id',
+        $validated = $request->validate([
+            'lantai_id'        => 'required|exists:lantais,id',
             'jenis_ruangan_id' => 'required|exists:jenis_ruangans,id',
-            'nama_ruang' => 'required'
+            'nama_ruang'       => 'required|string|max:255',
+            'pic_id'           => 'nullable|exists:pics,id',
+            'is_active'        => 'boolean',
+        ], [
+            'lantai_id.required'        => 'Lantai wajib dipilih.',
+            'jenis_ruangan_id.required' => 'Jenis ruangan wajib dipilih.',
+            'nama_ruang.required'       => 'Nama ruangan wajib diisi.',
+            'pic_id.exists'             => 'PIC yang dipilih tidak valid.'
         ]);
 
-        $lantai = Lantai::with('gedung')->findOrFail($request->lantai_id);
-        $jenis = JenisRuangan::findOrFail($request->jenis_ruangan_id);
+        $lantai = Lantai::with('gedung')->findOrFail($validated['lantai_id']);
+        $jenis = JenisRuangan::findOrFail($validated['jenis_ruangan_id']);
 
         $lastUrutan = Ruang::where('lantai_id', $lantai->id)
             ->where('jenis_ruangan_id', $jenis->id)
             ->max('urutan');
 
         $urutanBaru = $lastUrutan ? $lastUrutan + 1 : 1;
-
         $formatUrutan = str_pad($urutanBaru, 2, '0', STR_PAD_LEFT);
 
         $kodeRuang =
@@ -61,12 +70,13 @@ class RuangController extends Controller
             $formatUrutan;
 
         Ruang::create([
-            'lantai_id' => $lantai->id,
+            'lantai_id'        => $lantai->id,
             'jenis_ruangan_id' => $jenis->id,
-            'nama_ruang' => $request->nama_ruang,
-            'kode_ruang' => $kodeRuang,
-            'urutan' => $urutanBaru,
-            'is_active' => true,
+            'nama_ruang'       => $validated['nama_ruang'],
+            'kode_ruang'       => $kodeRuang,
+            'pic_id'           => $validated['pic_id'],
+            'urutan'           => $urutanBaru,
+            'is_active'        => $validated['is_active'] ?? true,
         ]);
 
         return redirect()->route('ruangs.index')
@@ -88,8 +98,9 @@ class RuangController extends Controller
     {
         $lantais = Lantai::with('gedung')->get();
         $jenisRuangans = JenisRuangan::all();
+        $pics = Pic::where('is_active', true)->orderBy('nama_pic')->get();
 
-        return view('ruangs.edit', compact('ruang', 'lantais', 'jenisRuangans'));
+        return view('ruangs.edit', compact('ruang', 'lantais', 'jenisRuangans', 'pics'));
     }
 
     /**
@@ -97,14 +108,16 @@ class RuangController extends Controller
      */
     public function update(Request $request, Ruang $ruang)
     {
-        $request->validate([
-            'nama_ruang' => 'required',
-            'is_active' => 'required|boolean'
+        $validated = $request->validate([
+            'nama_ruang' => 'required|string|max:255',
+            'pic_id'     => 'nullable|exists:pics,id',
+            'is_active'  => 'required|boolean'
         ]);
 
         $ruang->update([
-            'nama_ruang' => $request->nama_ruang,
-            'is_active' => $request->is_active,
+            'nama_ruang' => $validated['nama_ruang'],
+            'pic_id'     => $validated['pic_id'],
+            'is_active'  => $validated['is_active'],
         ]);
 
         return redirect()->route('ruangs.index')
@@ -116,6 +129,12 @@ class RuangController extends Controller
      */
     public function destroy(Ruang $ruang)
     {
+        // Optional: cek apakah ruangan masih dipakai di Barang
+        if ($ruang->barangs()->exists()) {
+            return redirect()->route('ruangs.index')
+                ->with('error', 'Ruangan tidak dapat dihapus karena masih memiliki barang inventaris.');
+        }
+    
         $ruang->delete();
 
         return redirect()->route('ruangs.index')

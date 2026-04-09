@@ -29,23 +29,24 @@
                     @endforeach
                 </select>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">NID Pegawai</label>
-                <input type="text"
-                       class="form-control"
-                       value="{{ old('nid_pic', $pic->nid_pic) }}"
-                       readonly>
-            </div>
-
+            
             {{-- Nama PIC --}}
             <div class="mb-3">
-                <label class="form-label">Nama PIC</label>
+                <label class="form-label">Nama PIC <span class="text-danger">*</span></label>
                 <input type="text"
                        name="nama_pic"
                        class="form-control"
                        value="{{ old('nama_pic', $pic->nama_pic) }}"
                        required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">NID Pegawai <span class="text-danger">*</span></label>
+                <input type="text"
+                       name="nid_pic"
+                       class="form-control"
+                       value="{{ old('nid_pic', $pic->nid_pic) }}"
+                       readonly>
             </div>
 
             {{-- Jabatan --}}
@@ -55,6 +56,17 @@
                        name="jabatan"
                        class="form-control"
                        value="{{ old('jabatan', $pic->jabatan) }}">
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">No. HP</label>
+                    <input type="text" name="no_hp" value="{{ old('no_hp', $pic->no_hp) }}" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" name="email" value="{{ old('email', $pic->email) }}" class="form-control">
+                </div>
             </div>
 
             <div class="mb-4">
@@ -70,7 +82,7 @@
             </div>
 
             <div class="d-flex gap-2">
-                <button class="btn btn-warning">
+                <button type="submit" class="btn btn-warning">
                     <i class="fa-solid fa-save"></i> Update
                 </button>
                 <a href="{{ route('pic.index') }}" class="btn btn-danger">

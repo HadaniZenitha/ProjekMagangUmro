@@ -73,7 +73,11 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::resource('pic', PicController::class);
         });
-        
+   
+// // Route AJAX untuk ambil PIC berdasarkan Divisi
+// Route::get('/pic/get-by-divisi/{divisiId}', 
+//     [PicController::class, 'getByDivisi'])
+//     ->name('pic.getByDivisi');
 Route::get('/get-pic-by-divisi/{divisi}', 
     [PicController::class, 'getByDivisi']);
 

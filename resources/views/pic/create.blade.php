@@ -5,10 +5,21 @@
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Tambah PIC</h5>
+    <h5 class="fw-bold mb-0">Tambah PIC Baru</h5>
     <a href="{{ route('pic.index') }}">
+        <i class="fa-solid fa-arrow-left"></i> Kembali
     </a>
 </div>
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 <div class="card shadow-sm border-0">
     <div class="card-body">
@@ -36,7 +47,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">NID Pegawai</label>
+                <label class="form-label">NID PIC <span class="text-danger">*</span></label>
                 <input type="text"
                        name="nid_pic"
                        class="form-control"
@@ -53,6 +64,17 @@
                 <input type="text"
                        name="jabatan"
                        class="form-control">
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">No. HP</label>
+                    <input type="text" name="no_hp" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" name="email" class="form-control">
+                </div>
             </div>
 
             <div class="mb-4">

@@ -21,6 +21,8 @@ return new class extends Migration
         $table->string('nama_pic');
         $table->string('nid_pic', 10)->unique();
         $table->string('jabatan');
+        $table->string('no_hp')->nullable();
+        $table->string('email')->nullable();
         $table->boolean('is_active')->default(true);
 
         $table->timestamps();

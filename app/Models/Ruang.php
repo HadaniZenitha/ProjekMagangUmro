@@ -14,7 +14,7 @@ class Ruang extends Model
         'jenis_ruangan_id',
         'kode_ruang',
         'nama_ruang',
-        'pic_nama',
+        'pic_id',
         'urutan',
         'is_active'
     ];
@@ -33,5 +33,10 @@ class Ruang extends Model
     public function barangs()
     {
         return $this->hasMany(Barang::class);
+    }
+
+    public function pic()
+    {
+        return $this->belongsTo(Pic::class);
     }
 }
