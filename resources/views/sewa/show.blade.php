@@ -1,0 +1,48 @@
+@extends('layouts.dashboard')
+
+@section('content')
+<div class="container">
+    <h2>Detail Barang</h2>
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <b>Nama Barang :</b> {{ $sewa->nama_barang }}
+        </li>
+
+        <li class="list-group-item">
+            <b>Kode Inventaris :</b>
+            <span class="badge bg-dark">{{ $sewa->kode_barang }}</span>
+        </li>
+
+        <li class="list-group-item">
+            <b>Lokasi :</b> {{ $sewa->ruang->nama_ruang ?? '-' }}
+        </li>
+
+        <li class="list-group-item">
+            <b>Tahun Masuk :</b> {{ $sewa->tahun }}
+        </li>
+
+        <li class="list-group-item">
+            <b>Kondisi :</b> {{ $sewa->kondisi ?? '-' }}
+        </li>
+    </ul>
+
+    <div class="mt-4">
+        <h5>QR Code Barang</h5>
+
+        <div class="p-3 bg-light d-inline-block rounded">
+            {!! QrCode::size(150)->generate($sewa->kode_barang) !!}
+        </div>
+
+        <p class="mt-2 text-muted">
+            Scan QR Code untuk melihat informasi barang.
+        </p>
+    </div>
+
+    <div class="mt-3">
+        <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left me-1"></i>Kembali
+        </a>
+    </div>
+</div>
+@endsection
