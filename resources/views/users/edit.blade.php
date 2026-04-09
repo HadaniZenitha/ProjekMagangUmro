@@ -25,12 +25,13 @@
                         @enderror
                     </div>
 
-                    <!-- EMAIL -->
+                    <!-- NID -->
                     <div class="mb-3">
-                        <label for="email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                            id="email" name="email" value="{{ old('email', $user->email) }}" required>
-                        @error('email')
+                        <label for="nid" class="form-label fw-bold">NID Karyawan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('nid') is-invalid @enderror" 
+                            id="nid" name="nid" value="{{ old('nid', $user->nid) }}" required 
+                            placeholder="Contoh: 7503018JA">
+                        @error('nid')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -39,7 +40,11 @@
                     <div class="mb-3">
                         <label for="password" class="form-label fw-bold">Password</label>
                         <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                            id="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah">
+                            id="password" name="password" placeholder="Kosongkan untuk generate ulang dari NID">
+                        <small class="text-muted d-block mt-2">
+                            <i class="fa-solid fa-info-circle me-1"></i>
+                            Jika dikosongkan, password akan di-generate dari NID
+                        </small>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

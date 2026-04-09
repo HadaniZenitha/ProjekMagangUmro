@@ -10,16 +10,16 @@
         @csrf
 
         <div>
-            <label for="email" class="sr-only">Email</label>
+            <label for="nid" class="sr-only">NID Karyawan</label>
             <div class="relative">
                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-5m-4-6l4 4m0 0l4-4m-4 4v12" />
                     </svg>
                 </span>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email" class="h-12 w-full rounded-lg border bg-slate-100 pl-11 pr-4 text-sm text-slate-800 placeholder:text-slate-400 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-200 {{ $errors->has('email') ? 'border-red-400 ring-2 ring-red-300' : 'border-transparent' }}">
+                <input id="nid" type="text" name="nid" value="{{ old('nid') }}" required autocomplete="off" autofocus placeholder="NID Karyawan" class="h-12 w-full rounded-lg border bg-slate-100 pl-11 pr-4 text-sm text-slate-800 placeholder:text-slate-400 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-200 {{ $errors->has('nid') ? 'border-red-400 ring-2 ring-red-300' : 'border-transparent' }}">
             </div>
-            @error('email')
+            @error('nid')
                 <p class="mt-1 text-xs font-medium text-red-500">{{ $message }}</p>
             @enderror
         </div>

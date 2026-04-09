@@ -31,7 +31,7 @@
             <tr>
                 <th width="5%">No</th>
                 <th>Nama</th>
-                <th>Email</th>
+                <th>NID</th>
                 <th>Role</th>
                 <th width="15%">Aksi</th>
             </tr>
@@ -41,7 +41,7 @@
                 <tr>
                     <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
                     <td><strong>{{ $user->name }}</strong></td>
-                    <td>{{ $user->email }}</td>
+                    <td>{{ $user->nid }}</td>
                     <td>
                         @if ($user->role)
                             <span class="badge bg-primary">{{ ucfirst($user->role) }}</span>

@@ -28,6 +28,27 @@ class LoginController extends Controller
     protected $redirectTo = '/dashboard';
 
     /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return 'nid';
+    }
+
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(\Illuminate\Http\Request $request)
+    {
+        return $request->only($this->username(), 'password');
+    }
+
+    /**
      * Create a new controller instance.
      *
      * @return void

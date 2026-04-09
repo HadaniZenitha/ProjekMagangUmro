@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class SuperadminSeeder extends Seeder
 {
@@ -13,11 +14,29 @@ class SuperadminSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::where('email', 'admin@gmail.com')->first();
+        $nid = '8913061ZJY';
+        $password = '8913061ZJY';
+
+        // Cek apakah user dengan NID sudah ada
+        $user = User::where('nid', $nid)->first();
         
         if ($user) {
-            $user->update(['role' => 'superadmin']);
+            // Jika ada, update passwordnya
+            $user->update([
+                'password' => Hash::make($password),
+                'role' => 'superadmin'
+            ]);
             $user->syncRoles(['superadmin']);
+        } else {
+            // Jika tidak ada, buat user baru
+            $user = User::create([
+                'name' => 'Super Admin',
+                'nid' => $nid,
+                'password' => Hash::make($password),
+                'role' => 'superadmin'
+            ]);
+            $user->assignRole('superadmin');
         }
     }
 }
+
