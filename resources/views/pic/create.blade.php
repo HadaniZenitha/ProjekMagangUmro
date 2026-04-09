@@ -66,15 +66,12 @@
                        class="form-control">
             </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold">No. HP</label>
-                    <input type="text" name="no_hp" class="form-control">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold">Email</label>
-                    <input type="email" name="email" class="form-control">
-                </div>
+            <div class="mb-3">
+                <label class="form-label">Jabatan Lengkap</label>
+                <input type="text"
+                       name="jabatan_lengkap"
+                       class="form-control"
+                       value="{{ old('jabatan_lengkap') }}">
             </div>
 
             <div class="mb-4">

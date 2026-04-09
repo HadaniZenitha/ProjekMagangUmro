@@ -6,24 +6,24 @@
 
     <ul class="list-group">
         <li class="list-group-item">
-            <b>Nama Barang:</b> {{ $barang->nama_barang }}
+            <b>Nama Barang :</b> {{ $barang->nama_barang }}
         </li>
 
         <li class="list-group-item">
-            <b>Kode Inventaris:</b> 
+            <b>Kode Inventaris :</b> 
             <span class="badge bg-dark">{{ $barang->kode_barang }}</span>
         </li>
 
         <li class="list-group-item">
-            <b>Lokasi:</b> {{ $barang->ruang->nama_ruang }}
+            <b>Lokasi :</b> {{ $barang->ruang->nama_ruang }}
         </li>
 
         <li class="list-group-item">
-            <b>Tahun Masuk:</b> {{ $barang->tahun_perolehan }}
+            <b>Tahun Masuk :</b> {{ $barang->tahun_perolehan }}
         </li>
 
         <li class="list-group-item">
-            <b>Kondisi:</b> {{ $barang->keterangan ?? '-' }}
+            <b>Kondisi :</b> {{ $barang->kondisi ?? '-' }}
         </li>
     </ul>
 

@@ -14,6 +14,8 @@ use App\Http\Controllers\JenisRuanganController;
 use App\Http\Controllers\PicController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SewaController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     Route::middleware(['auth'])->group(function () {
+        Route::post('/pic/import', [PicController::class, 'import'])->name('pic.import');
         Route::resource('pic', PicController::class);
         });
    
@@ -88,3 +91,10 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::post('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])
 ->name('profile.update');
+
+Route::resource('barang-sewa', SewaController::class)
+    ->parameters(['barang-sewa' => 'sewa']
+);
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    Route::resource('users', UserController::class);
+});

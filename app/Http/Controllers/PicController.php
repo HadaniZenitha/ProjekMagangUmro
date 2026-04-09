@@ -2,21 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\PicImport;
 use App\Models\Pic;
 use App\Models\Divisi;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PicController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->query('search', ''));
+
         $pics = Pic::with('divisi')
+                ->when($search !== '', function ($query) use ($search) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('nama_pic', 'like', "%{$search}%")
+                            ->orWhere('nid_pic', 'like', "%{$search}%")
+                            ->orWhere('jabatan_lengkap', 'like', "%{$search}%")
+                            ->orWhereHas('divisi', function ($divisiQuery) use ($search) {
+                                $divisiQuery->where('nama_divisi', 'like', "%{$search}%");
+                            });
+                    });
+                })
                 ->orderBy('nama_pic')
-                ->paginate(15);
+                ->paginate(15)
+                ->withQueryString();
 
         return view('pic.index', compact('pics'));
     }
@@ -44,12 +59,9 @@ class PicController extends Controller
                 'size:10',
                 'unique:pics,nid_pic',
             ],
-            'jabatan' => 'required|string|max:255',
-            'no_hp' => 'nullable|string|max:15',
-            'email' => 'nullable|email|max:255',
-            'is_active' => 'required|boolean',
-        ], [
-            'nid_pic.regex' => 'Pastikan NID PIC sudah sesuai dan tidak lebih dari 10 karakter.',
+            'jabatan' => 'nullable',
+            'jabatan_lengkap' => 'nullable|string|max:255',
+            'is_active' => 'required|boolean'
         ]);
 
         $validated['nid_pic'] = strtoupper($validated['nid_pic']);
@@ -93,8 +105,7 @@ class PicController extends Controller
                 \Illuminate\Validation\Rule::unique('pics')->ignore($pic->id),
             ],
             'jabatan' => 'required|string|max:255',
-            'no_hp' => 'nullable|string|max:15',
-            'email' => 'nullable|email|max:255',
+            'jabatan_lengkap' => 'nullable|string|max:255',
             'is_active' => 'required|boolean'
         ]);
 
@@ -133,5 +144,32 @@ class PicController extends Controller
                 ->get();
 
         return response()->json($pics);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        $import = new PicImport;
+        Excel::import($import, $request->file('file_excel'));
+
+        $createdCount = $import->getCreatedCount();
+        $updatedCount = $import->getUpdatedCount();
+        $failedCount = $import->getFailedCount();
+        $failedRows = $import->getFailedRows();
+
+        $message = "Import selesai: {$createdCount} PIC ditambahkan, {$updatedCount} PIC diperbarui";
+
+        if ($failedCount > 0) {
+            $message .= ", {$failedCount} baris gagal.";
+            session()->flash('import_errors', $failedRows);
+            session()->flash('warning', $message);
+        } else {
+            session()->flash('success', $message);
+        }
+
+        return redirect()->route('pic.index');
     }
 }

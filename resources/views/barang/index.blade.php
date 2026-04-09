@@ -6,6 +6,21 @@
 @section('content')
 
 <style>
+.btn-icon {
+	align-items: center;
+	justify-content: center;
+	display: inline-flex;
+	padding: 0px;
+	width: 38px;
+	height: 38px;
+	flex-shrink: 0;
+}
+
+.btn-icon i {
+	margin-right: 0 !important;
+	line-height: 1;
+}
+
 .btn-pro {
 	border-radius: 8px;
 	font-weight: 500;
@@ -41,8 +56,11 @@
 
 .action-btn {
 	display: flex;
-	gap: 5px;
+	gap: 8px;
 	flex-wrap: wrap;
+	flex-wrap: nowrap;
+	justify-content: center;
+	/* align-items: center; */
 }
 
 .qr-box svg {
@@ -275,18 +293,18 @@
 					</td>
 					<td>
 						<div class="action-btn">
-							<a href="{{ route('barang.show', $b->id) }}" class="btn btn-info btn-sm btn-pro">
+							<a href="{{ route('barang.show', $b->id) }}" class="btn btn-info btn-sm btn-pro btn-icon" title="Lihat Detail">
 								<i class="fa-solid fa-eye"></i>
 							</a>
 
-							<a href="{{ route('barang.edit', $b->id) }}" class="btn btn-warning btn-sm btn-pro">
+							<a href="{{ route('barang.edit', $b->id) }}" class="btn btn-warning btn-sm btn-pro btn-icon" title="Edit">
 								<i class="fa-solid fa-pen"></i>
 							</a>
 
 							<form action="{{ route('barang.destroy', $b->id) }}" method="POST" class="d-inline">
 								@csrf
 								@method('DELETE')
-								<button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm btn-pro">
+								<button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm btn-pro btn-icon" title="Hapus">
 									<i class="fa-solid fa-trash"></i>
 								</button>
 							</form>
