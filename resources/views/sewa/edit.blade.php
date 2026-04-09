@@ -1,188 +1,165 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Barang Inventaris')
+@section('title', 'Edit Barang Sewa')
 
 @section('content')
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-bold mb-0">Edit Barang Inventaris</h5>
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Edit Barang Sewa</h5>
+</div>
 
-    {{-- Error Validasi --}}
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul class="mb-0">
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
+<div class="card shadow-sm border-0">
+    <div class="card-body">
 
-            <form method="POST" action="{{ route('barang.update', $barang->id) }}">
-                @csrf
-                @method('PUT')
+        <form method="POST" action="{{ route('barang-sewa.update', $data->id) }}">
+            @csrf
+            @method('PUT')
 
-                {{-- Kode Barang --}}
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Kode Barang</label>
-                    <input type="text"
-                           class="form-control bg-light"
-                           value="{{ $barang->kode_barang }}"
-                           readonly>
-                </div>
+            {{-- KODE --}}
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Kode Barang <span class="text-danger">*</span></label>
+                <input type="text" name="kode_barang" class="form-control" 
+                       value="{{ $data->kode_barang }}" required>
+            </div>
 
-                {{-- Sub Jenis --}}
-                <div class="mb-3">
-                    <label class="form-label">Sub Jenis</label>
-                    <input type="text"
-                           class="form-control"
-                           value="{{ $barang->subjenis->nama_subjenis }}"
-                           readonly>
-                </div>
+            {{-- NAMA --}}
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Nama Barang</label>
+                <input type="text" name="nama_barang" class="form-control" 
+                       value="{{ $data->nama_barang }}" required>
+            </div>
 
-                {{-- Nama Barang --}}
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Nama Barang</label>
-                    <input type="text"
-                           name="nama_barang"
-                           class="form-control"
-                           value="{{ old('nama_barang', $barang->nama_barang) }}"
-                           required>
-                </div>
-
-                {{-- PIC --}}
-                <div class="mb-3">
-                    <label class="form-label">PIC (Penanggung Jawab)</label>
-                    <select name="pic_id" class="form-select" required>
-                        @foreach($pics as $p)
-                            <option value="{{ $p->id }}"
-                                    {{ $barang->pic_id == $p->id ? 'selected' : '' }}>
-                                {{ $p->nama_pic }} ({{ $p->divisi->nama_divisi }})
+            {{-- ROW 1 --}}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Fungsi <span class="text-danger">*</span></label>
+                    <select name="fungsi_id" id="divisiSelect" class="form-select" required>
+                        <option value="">-- Pilih Fungsi --</option>
+                        @foreach($divisis as $d)
+                            <option value="{{ $d->id }}" 
+                                {{ $data->fungsi_id == $d->id ? 'selected' : '' }}>
+                                {{ $d->nama_divisi }}
                             </option>
                         @endforeach
                     </select>
                 </div>
 
-                {{-- Merk --}}
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Merk</label>
-                    <input type="text"
-                           name="merk"
-                           class="form-control"
-                           value="{{ old('merk', $barang->merk) }}">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">PIC <span class="text-danger">*</span></label>
+                    <select name="pic_id" id="picSelect" class="form-select" required>
+                        <option value="">-- Pilih PIC --</option>
+                        {{-- akan diisi via JS --}}
+                    </select>
                 </div>
+            </div>
 
-                {{-- Serial Number --}}
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Serial Number</label>
-                    <input type="text"
-                           name="serial_number"
-                           class="form-control"
-                           value="{{ old('serial_number', $barang->serial_number) }}">
-                </div>
-
-                {{-- Tahun Perolehan --}}
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Tahun Perolehan</label>
-                    <input type="number"
-                           name="tahun_perolehan"
-                           class="form-control"
-                           value="{{ old('tahun_perolehan', $barang->tahun_perolehan) }}">
-                </div>
-
-                {{-- Lokasi Ruang --}}
-                <div class="mb-3">
-                    <label class="form-label">Lokasi Ruang</label>
-                    <select name="ruang_id" class="form-select">
+            {{-- ROW 2 --}}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Lokasi</label>
+                    <select name="ruang_id" class="form-select" required>
                         @foreach($ruangs as $r)
-                            <option value="{{ $r->id }}"
-                                    {{ $barang->ruang_id == $r->id ? 'selected' : '' }}>
+                            <option value="{{ $r->id }}" 
+                                {{ $data->ruang_id == $r->id ? 'selected' : '' }}>
                                 {{ $r->nama_ruang }}
                             </option>
                         @endforeach
                     </select>
                 </div>
 
-                {{-- Kondisi Barang --}}
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Kondisi Barang</label>
-                    <select name="kondisi" class="form-select">
-                        <option value="baik"
-                                {{ $barang->kondisi == 'baik' ? 'selected' : '' }}>
-                            Baik
-                        </option>
-                        <option value="perlu_perbaikan"
-                                {{ $barang->kondisi == 'perlu_perbaikan' ? 'selected' : '' }}>
-                            Perlu Perbaikan
-                        </option>
-                        <option value="rusak"
-                                {{ $barang->kondisi == 'rusak' ? 'selected' : '' }}>
-                            Rusak
-                        </option>
-                    </select>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Tahun</label>
+                    <input type="number" name="tahun" class="form-control" 
+                           value="{{ $data->tahun }}" required>
                 </div>
+            </div>
 
-                {{-- Status --}}
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Status</label>
-                    <select name="is_active"
-                            id="statusSelect"
-                            class="form-select"
-                            required>
-                        <option value="1"
-                                {{ $barang->is_active ? 'selected' : '' }}>
-                            Aktif
-                        </option>
-                        <option value="0"
-                                {{ !$barang->is_active ? 'selected' : '' }}>
-                            Tidak Aktif
-                        </option>
-                    </select>
-                </div>
+            {{-- KONDISI --}}
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Kondisi</label>
+                <select name="kondisi" class="form-select" required>
+                    <option value="Baik" {{ $data->kondisi == 'Baik' ? 'selected' : '' }}>Baik</option>
+                    <option value="Perlu Perbaikan" {{ $data->kondisi == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>
+                    <option value="Rusak" {{ $data->kondisi == 'Rusak' ? 'selected' : '' }}>Rusak</option>
+                </select>
+            </div>
 
-                {{-- Catatan Nonaktif --}}
-                <div class="mb-3"
-                     id="catatanWrapper"
-                     style="{{ $barang->is_active ? 'display:none;' : '' }}">
-                    <label class="form-label">Catatan Nonaktif</label>
-                    <textarea name="catatan_nonaktif"
-                              class="form-control"
-                              rows="3">{{ old('catatan_nonaktif', $barang->catatan_nonaktif) }}</textarea>
-                </div>
+            {{-- BUTTON --}}
+            <div class="d-flex gap-2 border-top pt-3">
+                <button type="submit" class="btn btn-warning px-4">
+                    <i class="fa-solid fa-save me-1"></i> Update
+                </button>
 
-                {{-- Tombol Aksi --}}
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-warning">
-                        <i class="fa-solid fa-pen me-1 text-dark"></i>
-                        <span class="text-dark">Update</span>
-                    </button>
+                <a href="{{ route('barang-sewa.index') }}" class="btn btn-danger px-4">
+                    <i class="fa-solid fa-xmark me-1"></i> Batal
+                </a>
+            </div>
 
-                    <a href="{{ route('barang.index') }}" class="btn btn-danger">
-                        <i class="fa-solid fa-xmark me-1"></i>
-                        Batal
-                    </a>
-                </div>
+        </form>
 
-            </form>
-
-        </div>
     </div>
+</div>
 
-    <script>
-        const statusSelect = document.getElementById('statusSelect');
-        const catatanWrapper = document.getElementById('catatanWrapper');
+@endsection
 
-        statusSelect.addEventListener('change', function() {
-            if (this.value == "0") {
-                catatanWrapper.style.display = 'block';
-            } else {
-                catatanWrapper.style.display = 'none';
-            }
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const divisiSelect = document.getElementById('divisiSelect');
+    const picSelect = document.getElementById('picSelect');
+
+    function loadPic(divisiId, selectedPic = null) {
+        picSelect.innerHTML = '<option value="">Memuat...</option>';
+
+        fetch('/get-pic-by-divisi/' + divisiId, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(res => res.json())
+        .then(data => {
+            picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
+
+            data.forEach(pic => {
+                const option = document.createElement('option');
+                option.value = pic.id;
+                option.textContent = pic.nama_pic;
+
+                if (selectedPic && selectedPic == pic.id) {
+                    option.selected = true;
+                }
+
+                picSelect.appendChild(option);
+            });
+        })
+        .catch(() => {
+            picSelect.innerHTML = '<option value="">Gagal memuat PIC</option>';
         });
-    </script>
+    }
 
+    // 🔥 LOAD AWAL (UNTUK EDIT)
+    const initialDivisi = "{{ $data->fungsi_id }}";
+    const initialPic = "{{ $data->pic_id }}";
+
+    if (initialDivisi) {
+        loadPic(initialDivisi, initialPic);
+    }
+
+    // 🔄 CHANGE EVENT
+    divisiSelect.addEventListener('change', function() {
+        loadPic(this.value);
+    });
+
+});
+</script>
 @endsection

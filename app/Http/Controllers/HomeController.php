@@ -15,16 +15,19 @@ class HomeController extends Controller
 
     public function index()
     {
+        // TOTAL DATA
         $totalBarang = Barang::count();
         $totalRuang = Ruang::count();
 
-        $barangBaik = Barang::where('kondisi','Layak')->count();
+        // AMBIL DATA BERDASARKAN KONDISI (AMAN & CLEAN)
+        $barangBaik = Barang::where('kondisi', 'baik')->count();
 
-        $barangPerbaikan = Barang::where('kondisi','perlu perbaikan')->count();
+        $barangPerbaikan = Barang::where('kondisi', 'perlu perbaikan')->count();
 
-        $barangRusak = Barang::where('kondisi','rusak')->count();
+        $barangRusak = Barang::where('kondisi', 'rusak')->count();
 
-        $barangTerbaru = Barang::with(['subjenis','ruang'])
+        // DATA TERBARU
+        $barangTerbaru = Barang::with(['subjenis', 'ruang'])
             ->latest()
             ->take(5)
             ->get();

@@ -19,7 +19,7 @@ class BarangController extends Controller
 
     public function index(Request $request)
     {
-        $query = Barang::with(['divisi','ruang','pic'])->latest('updated_at');
+        $query = Barang::with(['divisi', 'ruang', 'pic'])->latest('updated_at');
 
         // Filter Divisi
         if ($request->divisi) {
@@ -153,44 +153,54 @@ class BarangController extends Controller
     public function edit(Barang $barang)
     {
         $divisis = Divisi::all();
+
         $ruangs = Ruang::all();
 
         $pics = Pic::with('divisi')
             ->where('is_active', true)
             ->get();
 
+        // 🔥 TAMBAHKAN INI
+        $subjenisList = SubJenisBarang::with('jenis')
+            ->where('is_active', true)
+            ->orderBy('kode_subjenis')
+            ->get();
+
         return view('barang.edit', compact(
             'barang',
             'divisis',
             'ruangs',
-            'pics'
+            'pics',
+            'subjenisList' // 🔥 WAJIB
         ));
     }
 
-
     public function update(Request $request, Barang $barang)
     {
+        // VALIDASI (TANPA is_active BIAR TIDAK ERROR)
         $request->validate([
             'nama_barang' => 'required',
             'pic_id' => 'required|exists:pics,id',
-            'is_active' => 'required|boolean'
+            'ruang_id' => 'required|exists:ruangs,id',
+            'kondisi' => 'required',
+            'tahun_perolehan' => 'required',
         ]);
 
+        // UPDATE DATA
         $barang->update([
             'nama_barang' => $request->nama_barang,
             'pic_id' => $request->pic_id,
-            // 'merk' => $request->merk,
-            // 'serial_number' => $request->serial_number,
+            'ruang_id' => $request->ruang_id,
             'tahun_perolehan' => $request->tahun_perolehan,
             'kondisi' => $request->kondisi,
-            'ruang_id' => $request->ruang_id,
-            'is_active' => $request->is_active,
+
+            // AMAN: kalau tidak ada input, tetap pakai data lama
+            'is_active' => $barang->is_active,
         ]);
 
         return redirect()->route('barang.index')
             ->with('success', 'Barang berhasil diperbarui');
     }
-
 
     public function destroy(Barang $barang)
     {
@@ -245,7 +255,7 @@ class BarangController extends Controller
             'ruang',
             'barangHistories' => function ($q) {
                 $q->select('barang_id', 'kondisi', 'is_active', 'catatan', 'tanggal_perubahan')
-                  ->orderBy('tanggal_perubahan', 'desc');
+                    ->orderBy('tanggal_perubahan', 'desc');
             }
         ])->get();
 
@@ -287,9 +297,9 @@ class BarangController extends Controller
         $allTahun = $processedData->flatMap(fn($b) => $b->tahun_list_for_this)->unique()->sort()->values();
 
         $pdf = Pdf::loadView('barang.export-pdf', [
-            'data'       => $processedData,
+            'data' => $processedData,
             'tahun_list' => $allTahun,
-            'filter'     => $request->all()
+            'filter' => $request->all()
         ]);
 
         $pdf->setPaper('A4', 'landscape');   // sangat direkomendasikan karena banyak kolom tahun
@@ -340,7 +350,7 @@ class BarangController extends Controller
 
     private function buildFilterQuery($request)
     {
-        $query = Barang::with(['divisi','pic','ruang']);
+        $query = Barang::with(['divisi', 'pic', 'ruang']);
 
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
@@ -369,6 +379,14 @@ class BarangController extends Controller
         }
 
         return $query;
+    }
+    public function cetak(Barang $barang)
+    {
+        return view('barang.cetak', compact('barang'));
+    }
+    public function barcode($kode)
+    {
+        return view('barang.barcode', compact('kode'));
     }
 
 }
