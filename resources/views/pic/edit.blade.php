@@ -17,18 +17,6 @@
             @csrf
             @method('PUT')
 
-            {{-- Divisi --}}
-            <div class="mb-3">
-                <label class="form-label">Fungsi</label>
-                <select name="divisi_id" class="form-control" required>
-                    @foreach($divisis as $d)
-                        <option value="{{ $d->id }}"
-                            {{ $pic->divisi_id == $d->id ? 'selected' : '' }}>
-                            {{ $d->nama_divisi }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
             
             {{-- Nama PIC --}}
             <div class="mb-3">
@@ -49,15 +37,19 @@
                        readonly>
             </div>
 
-            {{-- Jabatan --}}
+            {{-- Divisi --}}
             <div class="mb-3">
-                <label class="form-label">Jabatan</label>
-                <input type="text"
-                       name="jabatan"
-                       class="form-control"
-                       value="{{ old('jabatan', $pic->jabatan) }}">
+                <label class="form-label">Fungsi</label>
+                <select name="divisi_id" class="form-control" required>
+                    @foreach($divisis as $d)
+                        <option value="{{ $d->id }}"
+                            {{ $pic->divisi_id == $d->id ? 'selected' : '' }}>
+                            {{ $d->nama_divisi }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-
+            
             <div class="mb-3">
                 <label class="form-label">Jabatan Lengkap</label>
                 <input type="text"

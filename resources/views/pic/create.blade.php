@@ -28,17 +28,6 @@
             @csrf
 
             <div class="mb-3">
-                <label class="form-label">Fungsi</label>
-                <select name="divisi_id" class="form-control" required>
-                    @foreach($divisis as $d)
-                        <option value="{{ $d->id }}">
-                            {{ $d->nama_divisi }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="mb-3">
                 <label class="form-label">Nama PIC</label>
                 <input type="text"
                        name="nama_pic"
@@ -55,17 +44,20 @@
                        placeholder="12345678AB"
                        required>
                 <small class="text-muted">
-                    Format: 8 angka + 2 huruf
+                    Format: 7 angka + 3 huruf
                 </small>
             </div>
-
             <div class="mb-3">
-                <label class="form-label">Jabatan</label>
-                <input type="text"
-                       name="jabatan"
-                       class="form-control">
+                <label class="form-label">Fungsi</label>
+                <select name="divisi_id" class="form-control" required>
+                    @foreach($divisis as $d)
+                        <option value="{{ $d->id }}">
+                            {{ $d->nama_divisi }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-
+            
             <div class="mb-3">
                 <label class="form-label">Jabatan Lengkap</label>
                 <input type="text"
