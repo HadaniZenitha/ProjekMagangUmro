@@ -63,8 +63,9 @@ class PicController extends Controller
             'jabatan_lengkap' => 'nullable|string|max:255',
             'is_active' => 'required|boolean'
         ]);
-
+        
         $validated['nid_pic'] = strtoupper($validated['nid_pic']);
+        $validated['nama_pic'] = strtoupper($validated['nama_pic']);
         $validated['jabatan'] = strtoupper($validated['jabatan']);
 
         Pic::create($validated);
@@ -110,6 +111,7 @@ class PicController extends Controller
         ]);
 
         $validated['nid_pic'] = strtoupper($validated['nid_pic']);
+        $validated['nama_pic'] = strtoupper($validated['nama_pic']);
         $validated['jabatan'] = strtoupper($validated['jabatan']);
         
         $pic->update($validated);
