@@ -427,6 +427,8 @@
             </form>
         </div>
 
+    </div>
+
     <!-- ================= MAIN ================= -->
     <div class="main-wrapper">
 
@@ -449,17 +451,17 @@
 
                         <div id="searchResults"
                             style="
-     position:absolute;
-     top:35px;
-     left:0;
-     width:300px;
-     background:white;
-     border-radius:6px;
-     box-shadow:0 5px 15px rgba(0,0,0,0.15);
-     display:none;
-     max-height:300px;
-     overflow:auto;
-     z-index:999;">
+                                position:absolute;
+                                top:35px;
+                                left:0;
+                                width:300px;
+                                background:white;
+                                border-radius:6px;
+                                box-shadow:0 5px 15px rgba(0,0,0,0.15);
+                                display:none;
+                                max-height:300px;
+                                overflow:auto;
+                                z-index:999;">
                         </div>
 
                     </div>
@@ -646,14 +648,14 @@
 
                         data.barang.forEach(item => {
                             html += `
-<a href="/barang/${item.id}" class="search-item">
-<i class="fa-solid fa-box text-primary"></i>
-<div>
-<div class="search-title">${item.nama_barang}</div>
-<small class="text-muted">${item.kode_barang}</small>
-</div>
-</a>
-`;
+                            <a href="/barang/${item.id}" class="search-item">
+                            <i class="fa-solid fa-box text-primary"></i>
+                            <div>
+                            <div class="search-title">${item.nama_barang}</div>
+                            <small class="text-muted">${item.kode_barang}</small>
+                            </div>
+                            </a>
+                            `;
                         });
 
                     }
@@ -666,13 +668,13 @@
 
                         data.ruang.forEach(item => {
                             html += `
-<a href="/ruangs/${item.id}" class="search-item">
-<i class="fa-solid fa-door-open text-success"></i>
-<div>
-<div class="search-title">${item.nama_ruang}</div>
-</div>
-</a>
-`;
+                            <a href="/ruangs/${item.id}" class="search-item">
+                            <i class="fa-solid fa-door-open text-success"></i>
+                            <div>
+                            <div class="search-title">${item.nama_ruang}</div>
+                            </div>
+                            </a>
+                            `;
                         });
 
                     }
@@ -685,13 +687,13 @@
 
                         data.karyawan.forEach(item => {
                             html += `
-<a href="/pic/${item.id}" class="search-item">
-<i class="fa-solid fa-user text-warning"></i>
-<div>
-<div class="search-title">${item.nama_pic}</div>
-</div>
-</a>
-`;
+                            <a href="/pic/${item.id}" class="search-item">
+                            <i class="fa-solid fa-user text-warning"></i>
+                            <div>
+                            <div class="search-title">${item.nama_pic}</div>
+                            </div>
+                            </a>
+                            `;
                         });
 
                     }
@@ -704,13 +706,13 @@
 
                         data.gedung.forEach(item => {
                             html += `
-<a href="/gedung/${item.id}" class="search-item">
-<i class="fa-solid fa-building text-danger"></i>
-<div>
-<div class="search-title">${item.nama_gedung}</div>
-</div>
-</a>
-`;
+                            <a href="/gedung/${item.id}" class="search-item">
+                            <i class="fa-solid fa-building text-danger"></i>
+                            <div>
+                            <div class="search-title">${item.nama_gedung}</div>
+                            </div>
+                            </a>
+                            `;
                         });
 
                     }
@@ -719,10 +721,10 @@
 
                     if (html === '') {
                         html = `
-<div style="padding:12px;text-align:center;color:#888">
-Tidak ada hasil ditemukan
-</div>
-`;
+                    <div style="padding:12px;text-align:center;color:#888">
+                    Tidak ada hasil ditemukan
+                    </div>
+                    `;
                     }
 
                     resultsBox.innerHTML = html;
@@ -1121,21 +1123,7 @@ Tidak ada hasil ditemukan
             <i class="fa-solid fa-shield-alt me-1"></i>
             Sistem Inventaris UMRO
         </div>
-
-        </form>
-
     </div>
-
-    </div>
-
-    <div class="text-center small text-muted pb-3">
-        Sistem Inventaris UNIT UNIT MAINTENANCE REPAIR AND OVERHAUL
-    </div>
-
-    </div>
-</body>
-
-</html>
 </body>
 
 </html>

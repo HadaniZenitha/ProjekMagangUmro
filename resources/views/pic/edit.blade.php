@@ -57,6 +57,14 @@
                        value="{{ old('jabatan', $pic->jabatan) }}">
             </div>
 
+            <div class="mb-3">
+                <label class="form-label">Jabatan Lengkap</label>
+                <input type="text"
+                       name="jabatan_lengkap"
+                       class="form-control"
+                       value="{{ old('jabatan_lengkap', $pic->jabatan_lengkap) }}">
+            </div>
+
             <div class="mb-4">
                 <label class="form-label">Status</label>
                 <select name="is_active" class="form-control">
