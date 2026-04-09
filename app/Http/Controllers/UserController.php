@@ -34,16 +34,18 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'nid' => 'required|string|max:20|unique:users,nid|regex:/^[a-zA-Z0-9]+$/',
             'roles' => 'array',
             'roles.*' => 'string|exists:roles,name',
         ]);
 
+        // Password di-generate dari NID
+        $password = $request->nid;
+
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'nid' => $request->nid,
+            'password' => Hash::make($password),
             'role' => $request->roles[0] ?? null,
         ]);
 
@@ -53,7 +55,7 @@ class UserController extends Controller
             $user->syncRoles($roleNames);
         }
 
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan');
+        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan. Password: ' . $password);
     }
 
     /**
@@ -80,7 +82,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'nid' => 'required|string|max:20|regex:/^[a-zA-Z0-9]+$/|unique:users,nid,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'roles' => 'array',
             'roles.*' => 'string|exists:roles,name',
@@ -88,11 +90,16 @@ class UserController extends Controller
 
         $updateData = [
             'name' => $request->name,
-            'email' => $request->email,
+            'nid' => $request->nid,
         ];
 
         if ($request->roles) {
             $updateData['role'] = $request->roles[0];
+        }
+
+        // Jika password dikosongkan, generate dari NID
+        if (!$request->password) {
+            $updateData['password'] = Hash::make($request->nid);
         }
 
         $user->update($updateData);

@@ -24,31 +24,19 @@
                         @enderror
                     </div>
 
-                    <!-- EMAIL -->
+                    <!-- NID -->
                     <div class="mb-3">
-                        <label for="email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                            id="email" name="email" value="{{ old('email') }}" required>
-                        @error('email')
+                        <label for="nid" class="form-label fw-bold">NID Karyawan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('nid') is-invalid @enderror" 
+                            id="nid" name="nid" value="{{ old('nid') }}" required 
+                            placeholder="Contoh: 7503018JA">
+                        <small class="text-muted d-block mt-2">
+                            <i class="fa-solid fa-info-circle me-1"></i>
+                            Password akan otomatis di-generate dari NID yang Anda input
+                        </small>
+                        @error('nid')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>
-
-                    <!-- PASSWORD -->
-                    <div class="mb-3">
-                        <label for="password" class="form-label fw-bold">Password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                            id="password" name="password" required>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- CONFIRM PASSWORD -->
-                    <div class="mb-3">
-                        <label for="password_confirmation" class="form-label fw-bold">Konfirmasi Password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" 
-                            id="password_confirmation" name="password_confirmation" required>
                     </div>
 
                     <!-- ROLES -->
