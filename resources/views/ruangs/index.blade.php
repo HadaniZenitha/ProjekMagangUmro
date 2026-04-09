@@ -160,23 +160,6 @@
             {{ $ruangs->links('pagination::bootstrap-5') }}
         </div>
 
-                @empty
-                <tr>
-                    <td colspan="7" class="text-center text-muted py-3">
-                        Belum ada data ruang yang terdaftar.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-
-        </table>
-    </div>
-
-    {{-- Pagination --}}
-    <div class="mt-3">
-        {{ $ruangs->links('pagination::bootstrap-5') }}
-    </div>
-
 </div>
 
 @endsection
