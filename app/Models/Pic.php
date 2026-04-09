@@ -11,6 +11,7 @@ class Pic extends Model
         'nama_pic',
         'nid_pic',
         'jabatan',
+        'jabatan_lengkap',
         'is_active'
     ];
 

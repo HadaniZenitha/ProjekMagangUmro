@@ -7,7 +7,7 @@ use App\Models\Ruang;
 use App\Models\Lantai;
 use App\Models\JenisRuangan;
 
-class RuangSeeder extends Seeder
+class RuanganSeeder extends Seeder
 {
     public function run(): void
     {
