@@ -137,9 +137,9 @@
 
                 <select name="kondisi" class="form-select">
 
-                    <option value="Layak"
-                        {{ $barang->kondisi == 'Layak' ? 'selected' : '' }}>
-                        Layak
+                    <option value="baik"
+                        {{ $barang->kondisi == 'Baik' ? 'selected' : '' }}>
+                        Baik
                     </option>
 
                     <option value="perlu perbaikan"

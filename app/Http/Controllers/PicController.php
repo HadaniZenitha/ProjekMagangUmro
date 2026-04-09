@@ -59,7 +59,6 @@ class PicController extends Controller
                 'size:10',
                 'unique:pics,nid_pic',
             ],
-            'jabatan' => 'nullable',
             'jabatan_lengkap' => 'nullable|string|max:255',
             'is_active' => 'required|boolean'
         ]);
@@ -67,6 +66,7 @@ class PicController extends Controller
         $validated['nid_pic'] = strtoupper($validated['nid_pic']);
         $validated['nama_pic'] = strtoupper($validated['nama_pic']);
         $validated['jabatan'] = strtoupper($validated['jabatan']);
+        $validated['jabatan'] = Divisi::where('id', $validated['divisi_id'])->value('nama_divisi');
 
         Pic::create($validated);
 
@@ -105,7 +105,6 @@ class PicController extends Controller
                 'max:10',
                 \Illuminate\Validation\Rule::unique('pics')->ignore($pic->id),
             ],
-            'jabatan' => 'required|string|max:255',
             'jabatan_lengkap' => 'nullable|string|max:255',
             'is_active' => 'required|boolean'
         ]);
@@ -113,6 +112,7 @@ class PicController extends Controller
         $validated['nid_pic'] = strtoupper($validated['nid_pic']);
         $validated['nama_pic'] = strtoupper($validated['nama_pic']);
         $validated['jabatan'] = strtoupper($validated['jabatan']);
+        $validated['jabatan'] = Divisi::where('id', $validated['divisi_id'])->value('nama_divisi');
         
         $pic->update($validated);
 
