@@ -36,8 +36,11 @@ class BarangController extends Controller
         }
 
         // Filter Tahun
-        if ($request->tahun) {
-            $query->where('tahun_perolehan', $request->tahun);
+        if ($request->tahun_awal && $request->tahun_akhir) {
+            $query->whereBetween('tahun_perolehan', [
+                $request->tahun_awal,
+                $request->tahun_akhir
+            ]);
         }
 
         // Filter Status
@@ -301,8 +304,7 @@ class BarangController extends Controller
             'ruang',
             'barangHistories' => function ($q) use ($tahunMulai, $tahunSelesai) {
                 $q->select('barang_id', 'kondisi', 'tahun_perolehan', 'tanggal_perubahan')
-                  ->whereYear('tanggal_perubahan', '>=', $tahunMulai)
-                  ->whereYear('tanggal_perubahan', '<=', $tahunSelesai)
+                  ->whereBetween('tahun_perolehan', [$tahunMulai, $tahunSelesai])
                   ->orderBy('tanggal_perubahan', 'asc');
             }
         ])->get();
@@ -312,16 +314,25 @@ class BarangController extends Controller
             $kondisiPerTahun = array_fill_keys($tahunRange, '-');
 
             // Isi dari history (prioritas utama)
+            // foreach ($barang->barangHistories as $history) {
+            //     $tahunHistory = (int) $history->tanggal_perubahan->format('Y');
+
+            //     if (isset($kondisiPerTahun[$tahunHistory])) {
+            //         $kondisiPerTahun[$tahunHistory] = ucfirst($history->kondisi);
+            //     }
+
+            //     // Jika history menyimpan tahun_perolehan yang berbeda, gunakan juga
+            //     if ($history->tahun_perolehan && isset($kondisiPerTahun[$history->tahun_perolehan])) {
+            //         $kondisiPerTahun[$history->tahun_perolehan] = ucfirst($history->kondisi);
+            //     }
+            // }
+
             foreach ($barang->barangHistories as $history) {
-                $tahunHistory = (int) $history->tanggal_perubahan->format('Y');
+                $tahun = (int) $history->tahun_perolehan;
 
-                if (isset($kondisiPerTahun[$tahunHistory])) {
-                    $kondisiPerTahun[$tahunHistory] = ucfirst($history->kondisi);
-                }
-
-                // Jika history menyimpan tahun_perolehan yang berbeda, gunakan juga
-                if ($history->tahun_perolehan && isset($kondisiPerTahun[$history->tahun_perolehan])) {
-                    $kondisiPerTahun[$history->tahun_perolehan] = ucfirst($history->kondisi);
+                if (isset($kondisiPerTahun[$tahun])) {
+                    // overwrite → ambil kondisi terbaru
+                    $kondisiPerTahun[$tahun] = ucfirst($history->kondisi);
                 }
             }
 
