@@ -4,171 +4,194 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SMART-UMRO | PLN Nusantara Power</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
     <style>
         body { font-family: 'Inter', sans-serif; }
-        
+
+        /* ===== PALET KAMU ===== */
+        :root {
+            --bg-sidebar: #309FB0;
+            --pln-yellow: #FACC15;
+            --pln-red: #E57373;
+            --menu-bg: #B2D8DB;
+            --menu-active: #D1E9EB;
+            --text-dark: #1F3A56;
+        }
+
+        /* ICON */
+        .icon-blue { background: var(--bg-sidebar); }
+        .icon-yellow { background: var(--pln-yellow); }
+        .icon-red { background: var(--pln-red); }
+        .icon-dark { background: var(--text-dark); }
+
+        /* HERO */
         .hero-bg {
-            background: linear-gradient(135deg, #1F3A56 0%, #2C6E7F 100%);
+            background: linear-gradient(135deg, #1F3A56 0%, #309FB0 100%);
             position: relative;
             overflow: hidden;
         }
-        
+
         .hero-bg::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: url('https://images.unsplash.com/photo-1581091226825-a6a9e8c8e0c3?ixlib=rb-4.0.3&auto=format&fit=crop&q=80') center/cover;
-            opacity: 0.12;
-            z-index: 0;
+            background: url('https://images.unsplash.com/photo-1581091226825-a6a9e8c8e0c3?auto=format&fit=crop&q=80') center/cover;
+            opacity: 0.07;
         }
 
         .fade-in {
-            animation: fadeIn 1s ease forwards;
+            animation: fadeIn 0.7s ease forwards;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* BUTTON */
         .btn-main {
-            background: #FACC15;
-            color: #1F3A56;
-            transition: all 0.4s ease;
-        }
-        .btn-main:hover {
-            background: #eab308;
-            transform: translateY(-4px);
-            box-shadow: 0 15px 25px -5px rgba(250, 204, 21, 0.4);
+            background: var(--pln-yellow);
+            color: var(--text-dark);
+            font-weight: 600;
+            transition: all 0.25s ease;
         }
 
+        .btn-main:hover {
+            transform: translateY(-2px);
+            filter: brightness(0.95);
+        }
+
+        /* PRELOADER (FIX WARNA + CLEAN) */
         #preloader {
             position: fixed;
             inset: 0;
-            background: #1F3A56;
+            background: linear-gradient(135deg, #1F3A56, #309FB0);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader {
+            width: 52px;
+            height: 52px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-top: 4px solid var(--pln-yellow);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 
 <body class="antialiased">
 
-    <!-- PRELOADER -->
-    <div id="preloader">
-        <div class="text-center">
-            <div class="w-16 h-16 border-4 border-white/30 border-t-[#FACC15] rounded-full animate-spin mx-auto mb-6"></div>
-            <p class="text-white/80 text-sm tracking-[2px] font-medium">MEMUAT SISTEM...</p>
-        </div>
+<!-- PRELOADER -->
+<div id="preloader">
+    <div class="text-center">
+        <div class="loader mx-auto mb-4"></div>
+        <p class="text-white/70 text-sm tracking-widest">MEMUAT SISTEM...</p>
     </div>
+</div>
 
-    <!-- NAVBAR -->
-    <nav class="fixed top-0 w-full bg-white/5 backdrop-blur-md border-b border-white/10 z-50">
-        <div class="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('images/icon.png') }}" class="w-8 h-8">   <!-- Logo navbar dikecilkan -->
-                <div class="font-bold text-2xl tracking-tighter">
-                    SMART<span class="text-yellow-400">UMRO</span>
-                </div>
-            </div>
-            <div class="text-white/70 text-sm font-medium">
-                PT PLN Nusantara Power
+<!-- NAVBAR -->
+<nav class="fixed top-0 w-full bg-white/10 backdrop-blur-md border-b border-white/10 z-50">
+    <div class="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
+
+        <div class="flex items-center gap-3">
+            <img src="{{ asset('images/icon.png') }}" class="w-8 h-8">
+            <div class="font-bold text-xl text-white">
+                SMART<span style="color:var(--pln-yellow)">UMRO</span>
             </div>
         </div>
-    </nav>
 
-    <!-- HERO -->
-    <div class="hero-bg min-h-screen flex items-center">
-        <div class="max-w-7xl mx-auto px-8 pt-20">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-
-                <!-- LEFT SIDE -->
-                <div class="fade-in space-y-8">
-                    <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 rounded-full text-sm backdrop-blur-md">
-                        <i class="fas fa-circle text-emerald-400 animate-pulse"></i>
-                        <span class="font-medium">Sistem Internal Resmi</span>
-                    </div>
-
-                    <h1 class="text-5xl md:text-6xl font-bold leading-tight text-white">
-                        Selamat Datang di<br>
-                        <span class="text-yellow-400">SMART-UMRO</span>
-                    </h1>
-
-                    <p class="text-lg text-white/80 max-w-lg leading-relaxed">
-                        Platform terintegrasi untuk pengelolaan aset, sumber daya, dan operasional 
-                        PLN Nusantara Power yang lebih efisien, transparan, dan modern.
-                    </p>
-
-                    <div class="pt-4">
-                        <button onclick="goToLogin()" 
-                                class="btn-main px-10 py-5 rounded-2xl font-semibold text-lg flex items-center gap-3 group">
-                            MASUK KE SISTEM
-                            <i class="fas fa-arrow-right transition group-active:translate-x-2"></i>
-                        </button>
-                    </div>
-
-                    <div class="flex gap-8 text-sm pt-6">
-                        <div class="flex items-center gap-2 text-white/70">
-                            <i class="fas fa-lock"></i>
-                            <span>Keamanan Tinggi</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-white/70">
-                            <i class="fas fa-clock"></i>
-                            <span>Real-Time</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-white/70">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Berbasis Data</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RIGHT SIDE (Logo kecil) -->
-                <div class="fade-in relative hidden md:flex justify-center items-center">
-                    <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
-                        <img src="{{ asset('images/icon.png') }}" 
-                             class="w-48 h-48 mx-auto opacity-90">   <!-- Logo utama dikecilkan jadi 48 (sebelumnya full) -->
-                    </div>
-                </div>
-
-            </div>
+        <div class="text-white/70 text-sm">
+            PT PLN Nusantara Power
         </div>
+
     </div>
+</nav>
 
-    <!-- FOOTER -->
-    <footer class="bg-[#1F3A56]/90 py-8 text-center text-white/60 text-sm">
-        <div class="max-w-7xl mx-auto px-8">
-            © 2026 PT PLN Nusantara Power • SMART-UMRO System<br>
-            <span class="text-xs">Confidential • Internal Use Only</span>
+<!-- HERO -->
+<div class="hero-bg min-h-screen flex items-center">
+    <div class="max-w-7xl mx-auto px-8 pt-24 grid md:grid-cols-2 gap-12 items-center">
+
+        <!-- LEFT -->
+        <div class="fade-in space-y-6">
+
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm text-white/80">
+                <i class="fas fa-circle text-green-400"></i>
+                Sistem Internal Resmi
+            </div>
+
+            <h1 class="text-5xl font-bold text-white leading-tight">
+                Selamat Datang di<br>
+                <span style="color:var(--pln-yellow)">SMART-UMRO</span>
+            </h1>
+
+            <p class="text-white/80 max-w-lg">
+                Platform terintegrasi untuk pengelolaan aset, sumber daya, dan operasional PLN Nusantara Power secara efisien dan modern.
+            </p>
+
+            <button onclick="goToLogin()" class="btn-main px-8 py-4 rounded-xl flex items-center gap-2">
+                MASUK SISTEM
+                <i class="fas fa-arrow-right"></i>
+            </button>
+
+            <div class="flex gap-6 text-sm text-white/70 pt-4">
+                <span><i class="fas fa-lock"></i> Aman</span>
+                <span><i class="fas fa-clock"></i> Real-time</span>
+                <span><i class="fas fa-chart-line"></i> Data</span>
+            </div>
+
         </div>
-    </footer>
 
-    <script>
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById("preloader").style.opacity = "0";
-                setTimeout(() => {
-                    document.getElementById("preloader").style.display = "none";
-                }, 800);
-            }, 600);
-        };
+        <!-- RIGHT -->
+        <div class="fade-in hidden md:flex justify-center">
+            <div class="bg-white/10 border border-white/20 p-10 rounded-2xl backdrop-blur-md">
+                <img src="{{ asset('images/icon.png') }}" class="w-52 opacity-90">
+            </div>
+        </div>
 
-        function goToLogin() {
-            const preloader = document.getElementById('preloader');
-            preloader.style.display = 'flex';
-            preloader.style.opacity = '1';
-            
-            setTimeout(() => {
-                window.location.href = "{{ route('login') }}";
-            }, 1100);
-        }
-    </script>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-[var(--text-dark)] py-6 text-center text-white/60 text-sm">
+    © 2026 PT PLN Nusantara Power • SMART-UMRO System
+</footer>
+
+<script>
+window.onload = () => {
+    setTimeout(() => {
+        const loader = document.getElementById("preloader");
+        loader.style.opacity = "0";
+
+        setTimeout(() => {
+            loader.style.display = "none";
+        }, 300);
+    }, 300);
+};
+
+function goToLogin() {
+    const loader = document.getElementById('preloader');
+    loader.style.display = 'flex';
+    loader.style.opacity = '1';
+
+    setTimeout(() => {
+        window.location.href = "{{ route('login') }}";
+    }, 500);
+}
+</script>
+
 </body>
 </html>
