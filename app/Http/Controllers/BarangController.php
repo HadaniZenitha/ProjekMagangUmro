@@ -285,88 +285,75 @@ class BarangController extends Controller
     }
 
 
-    public function exportPdf(Request $request)
-{
-    $query = $this->buildFilterQuery($request);
+        public function exportPdf(Request $request)
+    {
+        $query = $this->buildFilterQuery($request);
 
-    $tahunSekarang = (int) date('Y');
-    // Ambil input atau default
-    $tahunMulai = $request->input('tahun_awal', $tahunSekarang - 4);
-    $tahunSelesai = $request->input('tahun_akhir', $tahunSekarang);
+        $tahunSekarang = (int) date('Y');
+        $tahunMulai    = (int) $request->input('tahun_awal', $tahunSekarang - 4);
+        $tahunSelesai  = (int) $request->input('tahun_akhir', $tahunSekarang);
 
-    // Buat range tahun untuk header tabel
-    $tahunRange = range($tahunMulai, $tahunSelesai);
+        $tahunRange = range($tahunMulai, $tahunSelesai);
 
-    $barangs = $query->with([
-        'divisi', 'pic', 'ruang',
-        'barangHistories' => function ($q) {
-            // JANGAN filter tahun di sini agar data history lama/baru tetap ikut terambil untuk diproses
-            $q->select('barang_id', 'kondisi', 'tahun_perolehan', 'tanggal_perubahan')
-              ->orderBy('tanggal_perubahan', 'asc'); 
-        }
-    ])->get();
-
-    $processedData = $barangs->map(function ($barang) use ($tahunRange) {
-        $kondisiPerTahun = [];
-
-        // 1. Set default "-" untuk semua tahun dalam range
-        foreach ($tahunRange as $t) {
-            $kondisiPerTahun[$t] = '-';
-        }
-
-        // 2. Masukkan data dari History jika tahunnya cocok dengan range
-        foreach ($barang->barangHistories as $history) {
-            $thnHistory = (int) $history->tanggal_perubahan->format('Y');
-            if (in_array($thnHistory, $tahunRange)) {
-                $kondisiPerTahun[$thnHistory] = ucfirst($history->kondisi);
+        $barangs = $query->with([
+            'divisi', 
+            'pic', 
+            'ruang',
+            'barangHistories' => function ($q) use ($tahunMulai, $tahunSelesai) {
+                $q->select('barang_id', 'kondisi', 'tahun_perolehan', 'tanggal_perubahan')
+                  ->whereYear('tanggal_perubahan', '>=', $tahunMulai)
+                  ->whereYear('tanggal_perubahan', '<=', $tahunSelesai)
+                  ->orderBy('tanggal_perubahan', 'asc');
             }
-        }
+        ])->get();
 
-            // Gabungkan range yang diinginkan
-            $tahunList = collect($tahunRange)
-                ->merge([$barang->tahun_perolehan ?? $tahunSekarang])
-                ->unique()
-                ->sort()
-                ->values();
+        // Proses mapping kondisi per tahun
+        $processedData = $barangs->map(function ($barang) use ($tahunRange, $tahunSekarang) {
+            $kondisiPerTahun = array_fill_keys($tahunRange, '-');
+
+            // Isi dari history (prioritas utama)
+            foreach ($barang->barangHistories as $history) {
+                $tahunHistory = (int) $history->tanggal_perubahan->format('Y');
+
+                if (isset($kondisiPerTahun[$tahunHistory])) {
+                    $kondisiPerTahun[$tahunHistory] = ucfirst($history->kondisi);
+                }
+
+                // Jika history menyimpan tahun_perolehan yang berbeda, gunakan juga
+                if ($history->tahun_perolehan && isset($kondisiPerTahun[$history->tahun_perolehan])) {
+                    $kondisiPerTahun[$history->tahun_perolehan] = ucfirst($history->kondisi);
+                }
+            }
+
+            // Pastikan tahun perolehan asli selalu terisi (jika masih kosong)
+            $tahunPerolehan = (int) $barang->tahun_perolehan;
+            if (isset($kondisiPerTahun[$tahunPerolehan]) && $kondisiPerTahun[$tahunPerolehan] === '-') {
+                $kondisiPerTahun[$tahunPerolehan] = ucfirst($barang->kondisi);
+            }
+
+            // Tahun sekarang selalu menggunakan kondisi terkini
+            if (isset($kondisiPerTahun[$tahunSekarang])) {
+                $kondisiPerTahun[$tahunSekarang] = ucfirst($barang->kondisi);
+            }
 
             $barang->kondisi_per_tahun = $kondisiPerTahun;
-            $barang->tahun_list_for_this = $tahunList; // per barang
 
             return $barang;
         });
 
-        // Daftar tahun unik untuk header tabel (supaya semua baris sama)
-        $allTahun = $processedData->flatMap(fn($b) => $b->tahun_list_for_this)->unique()->sort()->values();
-
-        $pdf = Pdf::loadView('barang.export-pdf', [
-            'data' => $processedData,
-            'tahun_list' => $allTahun,
-            'filter' => $request->all()
+        // Render PDF
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('barang.export-pdf', [
+            'data'        => $processedData,
+            'tahun_list'  => $tahunRange,
+            'tahun_awal'  => $tahunMulai,
+            'tahun_akhir' => $tahunSelesai,
+            'filter'      => $request->all(),
         ]);
 
-        // 4. Masukkan kondisi saat ini ke tahun berjalan jika masuk range
-        $thnSekarang = (int) date('Y');
-        if (in_array($thnSekarang, $tahunRange)) {
-            $kondisiPerTahun[$thnSekarang] = ucfirst($barang->kondisi);
-        }
+        $pdf->setPaper('A4', 'landscape');
 
-        $barang->kondisi_per_tahun = $kondisiPerTahun;
-        return $barang;
-    });
-
-    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('barang.export-pdf', [
-        'data'         => $processedData,
-        'tahun_list'   => $tahunRange,
-        'tahun_awal'   => $tahunMulai,   // Kirim ke view
-        'tahun_akhir'  => $tahunSelesai, // Kirim ke view
-        'filter'       => $request->all(),
-        'ruang'        => \App\Models\Ruang::find($request->ruang_id) // Untuk label filter di header
-    ]);
-
-    $pdf->setPaper('A4', 'landscape');
-    return $pdf->stream('laporan_inventaris_' . date('Ymd_His') . '.pdf');
-}
-
+        return $pdf->stream('laporan_inventaris_' . date('Ymd_His') . '.pdf');
+    }
 
     public function exportPreview(Request $request)
     {
