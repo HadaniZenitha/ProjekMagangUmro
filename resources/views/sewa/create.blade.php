@@ -8,6 +8,7 @@
     <h5 class="fw-bold mb-0">Tambah Barang Sewa</h5>
 </div>
 
+{{-- ERROR VALIDASI --}}
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
@@ -95,13 +96,14 @@
             </div>
 
             {{-- BUTTON --}}
-            <div class="d-flex gap-2 border-top pt-3">
-                <button type="submit" class="btn btn-warning px-4">
-                    <i class="fa-solid fa-save me-1"></i> Simpan
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fa-solid fa-save me-1"></i>
+                    Simpan
                 </button>
 
-                <a href="{{ route('barang-sewa.index') }}" class="btn btn-danger px-4">
-                    <i class="fa-solid fa-xmark me-1"></i> Batal
+                <a href="{{ route('barang-sewa.index') }}" class="btn btn-danger">
+                    Batal
                 </a>
             </div>
 

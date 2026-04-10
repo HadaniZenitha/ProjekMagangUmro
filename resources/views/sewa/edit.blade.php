@@ -8,6 +8,7 @@
     <h5 class="fw-bold mb-0">Edit Barang Sewa</h5>
 </div>
 
+{{-- ERROR VALIDASI --}}
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
@@ -28,7 +29,7 @@
             @csrf
             @method('PUT')
 
-            {{-- KODE --}}
+            {{-- Kode Barang --}}
             <div class="mb-3">
                 <label class="form-label fw-semibold">Kode Barang</label>
                 <input type="text"
@@ -37,7 +38,7 @@
                        readonly>
             </div>
 
-            {{-- NAMA --}}
+            {{-- Nama Barang --}}
             <div class="mb-3">
                 <label class="form-label fw-semibold">Nama Barang <span class="text-danger">*</span></label>
                 <input type="text"
@@ -114,13 +115,14 @@
             </div>
 
             {{-- BUTTON --}}
-            <div class="d-flex gap-2 border-top pt-3">
-                <button type="submit" class="btn btn-warning px-4">
-                    <i class="fa-solid fa-save me-1"></i> Update
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fa-solid fa-save me-1"></i>
+                    Update
                 </button>
 
-                <a href="{{ route('barang-sewa.index') }}" class="btn btn-danger px-4">
-                    <i class="fa-solid fa-xmark me-1"></i> Batal
+                <a href="{{ route('barang-sewa.index') }}" class="btn btn-danger">
+                    Batal
                 </a>
             </div>
 
@@ -164,7 +166,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (keepSelectedPicId && String(keepSelectedPicId) === String(pic.id)) {
                     option.selected = true;
                 }
-
                 picSelect.appendChild(option);
             });
 
