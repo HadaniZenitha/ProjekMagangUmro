@@ -11,16 +11,14 @@ class BarangSewa extends Model
     protected $fillable = [
         'kode_barang',
         'nama_barang',
-        'fungsi_id', // ✅ UBAH dari fungsi
+        'fungsi',
         'pic_id',
         'ruang_id',
         'tahun',
         'kondisi',
     ];
 
-    // =====================
     // RELASI
-    // =====================
 
     public function pic()
     {
@@ -30,11 +28,5 @@ class BarangSewa extends Model
     public function ruang()
     {
         return $this->belongsTo(Ruang::class);
-    }
-
-    // ✅ RELASI FUNGSI (DIVISI/BIDANG)
-    public function divisi()
-    {
-        return $this->belongsTo(Divisi::class, 'fungsi_id');
     }
 }

@@ -101,3 +101,5 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
 Route::get('/barang/{barang}/cetak', [BarangController::class, 'cetak'])
     ->name('barang.cetak');
 Route::get('/barang/{kode}/barcode', [BarangController::class, 'barcode'])->name('barang.barcode');
+Route::get('/barang-sewa/{sewa}/cetak', [SewaController::class, 'cetak'])
+    ->name('barang-sewa.cetak');
