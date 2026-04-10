@@ -5,9 +5,6 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0">Tambah Barang Inventaris</h5>
-    <a href="{{ route('barang.index') }}" class="btn btn-secondary">
-        <i class="fa-solid fa-arrow-left"></i> Kembali
-    </a>
 </div>
 
 @if ($errors->any())
@@ -101,8 +98,13 @@
                 <button type="submit" class="btn btn-warning px-4">
                     <i class="fa-solid fa-save me-1"></i> Simpan
                 </button>
-                <a href="{{ route('barang.index') }}" class="btn btn-light px-4">Batal</a>
+
+                {{-- 🔴 TOMBOL BATAL (SUDAH DIPERBAIKI) --}}
+                <a href="{{ route('barang.index') }}" class="btn btn-danger px-4">
+                    <i class="fa-solid fa-xmark me-1"></i> Batal
+                </a>
             </div>
+
         </form>
     </div>
 </div>
@@ -117,18 +119,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const subjenisHidden = document.getElementById('subjenis-hidden');
     const subjenisOptions = document.getElementById('subjenisOptions');
 
-    // 1. Logika Load PIC Berdasarkan Divisi
     divisiSelect.addEventListener('change', function() {
         const divisiId = this.value;
         
-        // Reset dropdown PIC
         picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
 
         if (!divisiId) return;
 
         picSelect.innerHTML = '<option value="">Memuat...</option>';
 
-        // Fetch data dari server
         fetch('/get-pic-by-divisi/' + divisiId, {
             headers: {
                 "X-Requested-With": "XMLHttpRequest"
@@ -157,12 +156,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 2. Logika Pencarian Sub Jenis (Mapping Datalist ke Hidden Input)
     subjenisInput.addEventListener('input', function() {
         const val = this.value;
         const options = subjenisOptions.querySelectorAll('option');
         
-        // Kosongkan hidden input dulu
         subjenisHidden.value = "";
 
         options.forEach(option => {
@@ -172,7 +169,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Validasi tambahan sebelum submit: pastikan ID subjenis terisi
     document.querySelector('form').addEventListener('submit', function(e) {
         if (!subjenisHidden.value) {
             e.preventDefault();
