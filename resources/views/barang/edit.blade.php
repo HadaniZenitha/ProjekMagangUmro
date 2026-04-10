@@ -5,8 +5,8 @@
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0 text-primary">
-        <i class="fa-solid fa-pen-to-square me-2"></i>Edit Barang Inventaris
+    <h5 class="fw-bold mb-0 text-dark">
+        Edit Barang Inventaris
     </h5>
 </div>
 
@@ -146,7 +146,7 @@
             <hr class="my-4 opacity-50">
 
             <div class="d-flex justify-content-end gap-2">
-                <a href="{{ route('barang.index') }}" class="btn btn-light px-4">Batal</a>
+                <a href="{{ route('barang.index') }}" class="btn btn-danger px-4">Batal</a>
                 <button type="submit" class="btn btn-warning px-4 fw-bold">
                     <i class="fa-solid fa-save me-1"></i> Simpan Perubahan
                 </button>

@@ -131,6 +131,10 @@
 		<button class="btn btn-success btn-pro" data-bs-toggle="modal" data-bs-target="#modalImport">
 			<i class="fas fa-file-excel"></i> Import Excel
 		</button>
+
+		<a href="{{ route('barang.scan') }}" class="btn btn-dark btn-pro">
+        	<i class="fa-solid fa-qrcode"></i> Scan QR
+    	</a>
 	</div>
 </div>
 
@@ -293,7 +297,7 @@
 					<td>{{ $b->tahun_perolehan }}</td>
 					<td>{{ $b->kondisi ?? '-' }}</td>
 					<td class="qr-box">
-						{!! QrCode::size(60)->generate($b->kode_barang) !!}
+						{!! QrCode::size(60)->generate(route('barang.show', $b->id)) !!}
 					</td>
 					<td>
 						<div class="action-btn">
