@@ -251,13 +251,18 @@ class BarangController extends Controller
     }
 
 
+    public function scanPage()
+    {
+        return view('barang.scan');
+    }
+
     public function scan($kode)
     {
         $barang = Barang::where('kode_barang', $kode)
             ->where('is_active', true)
             ->firstOrFail();
 
-        return view('barang.scan', compact('barang'));
+        return redirect()->route('barang.show', $barang->id);
     }
 
 
@@ -352,7 +357,6 @@ class BarangController extends Controller
 
         $barang->kondisi_per_tahun = $kondisiPerTahun;
         return $barang;
-    });
 
     $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('barang.export-pdf', [
         'data'         => $processedData,

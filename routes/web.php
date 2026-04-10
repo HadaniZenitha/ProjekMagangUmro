@@ -70,14 +70,17 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('barang', BarangController::class);
     });
 
+    Route::get('/scan', [BarangController::class, 'scanPage'])
+        ->name('barang.scan');
+
     Route::get('/scan/{kode}', [BarangController::class, 'scan'])
-    ->name('barang.scan')
-    ->where('kode', '.*'); // Terima semua karakter setelah /scan/ sebagai kode
-    
+        ->where('kode', '.*')
+        ->name('barang.scan.process');
+
     Route::middleware(['auth'])->group(function () {
         Route::post('/pic/import', [PicController::class, 'import'])->name('pic.import');
         Route::resource('pic', PicController::class);
-        });
+    });
   
 Route::get('/get-pic-by-divisi/{divisi}', 
     [PicController::class, 'getByDivisi']);
