@@ -38,7 +38,7 @@ class DivisiController extends Controller
 
         Divisi::create([
             'kode_divisi' => strtoupper($request->kode_divisi),
-            'nama_divisi' => $request->nama_divisi,
+            'nama_divisi' => ucwords($request->nama_divisi),
             'is_active' => true,
         ]);
 
@@ -75,7 +75,7 @@ class DivisiController extends Controller
 
         $divisi->update([
             'kode_divisi' => strtoupper($request->kode_divisi),
-            'nama_divisi' => $request->nama_divisi,
+            'nama_divisi' => ucwords($request->nama_divisi),
             'is_active' => $request->is_active,
         ]);
 

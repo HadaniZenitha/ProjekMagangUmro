@@ -7,7 +7,6 @@ use App\Models\SubJenisBarang;
 use App\Models\Divisi;
 use App\Models\Ruang;
 use App\Models\Pic;
-use App\Models\BarangHistory;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BarangExport;
@@ -95,11 +94,14 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'divisi_id' => 'required|exists:divisis,id',
-            'ruang_id' => 'required|exists:ruangs,id',
+            'divisi_id'           => 'required|exists:divisis,id',
+            'ruang_id'            => 'required|exists:ruangs,id',
             'sub_jenis_barang_id' => 'required|exists:sub_jenis_barangs,id',
-            'pic_id' => 'required|exists:pics,id',
-            'nama_barang' => 'required'
+            'pic_id'              => 'required|exists:pics,id',
+            'nama_barang'         => 'required|string|max:255',
+            'tahun_perolehan'     => 'required|integer',
+            'kondisi'             => 'required|in:baik,perlu perbaikan,rusak',
+            'foto'                 => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $divisi = Divisi::findOrFail($request->divisi_id);
@@ -124,19 +126,30 @@ class BarangController extends Controller
             $tahun . '/' .
             $ruang->nama_ruang;
 
+        // Handle upload foto dengan nama sesuai kode barang
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $extension = $file->getClientOriginalExtension();
+            
+            // Nama file: kode_barang + timestamp + extension
+            $fileName = str_replace('/', '-', $kodeBarang) . '_' . now()->format('Ymd_His') . '.' . $extension;
+            
+            $fotoPath = $file->storeAs('barang_foto', $fileName, 'public');
+        }
+
         Barang::create([
-            'divisi_id' => $divisi->id,
-            'ruang_id' => $request->ruang_id,
+            'divisi_id'           => $divisi->id,
+            'ruang_id'            => $request->ruang_id,
             'sub_jenis_barang_id' => $request->sub_jenis_barang_id,
-            'pic_id' => $request->pic_id,
-            'kode_barang' => $kodeBarang,
-            'nama_barang' => $request->nama_barang,
-            // 'merk' => $request->merk,
-            // 'serial_number' => $request->serial_number,
-            'tahun_perolehan' => $request->tahun_perolehan,
-            'kondisi' => $request->kondisi,
-            'urutan' => $urutanBaru,
-            'is_active' => true,
+            'pic_id'              => $request->pic_id,
+            'kode_barang'         => $kodeBarang,
+            'nama_barang'         => $request->nama_barang,
+            'tahun_perolehan'     => $request->tahun_perolehan,
+            'kondisi'             => $request->kondisi,
+            'urutan'              => $urutanBaru,
+            'is_active'           => true,
+            'foto'                => $fotoPath,
         ]);
 
         return redirect()->route('barang.index')
@@ -171,20 +184,43 @@ class BarangController extends Controller
     public function update(Request $request, Barang $barang)
     {
         $request->validate([
-            'nama_barang' => 'required',
-            'pic_id' => 'required|exists:pics,id',
-            'is_active' => 'required|boolean'
+            'nama_barang'     => 'required|string|max:255',
+            'pic_id'          => 'required|exists:pics,id',
+            'ruang_id'        => 'required|exists:ruangs,id',
+            'kondisi'         => 'required|in:baik,perlu perbaikan,rusak',
+            'is_active'       => 'required|boolean',
+            'tahun_perolehan' => 'required|integer',
+            'foto'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'catatan_nonaktif' => 'nullable|string',
         ]);
 
+        $fotoPath = $barang->foto;
+
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($barang->foto) {
+                \Storage::disk('public')->delete($barang->foto);
+            }
+
+            $file = $request->file('foto');
+            $extension = $file->getClientOriginalExtension();
+            
+            // Nama file tetap pakai kode barang yang sudah ada
+            $fileName = str_replace('/', '-', $barang->kode_barang) . '_' . now()->format('Ymd_His') . '.' . $extension;
+            
+            $fotoPath = $file->storeAs('barang_foto', $fileName, 'public');
+        }
+
         $barang->update([
-            'nama_barang' => $request->nama_barang,
-            'pic_id' => $request->pic_id,
-            // 'merk' => $request->merk,
-            // 'serial_number' => $request->serial_number,
-            'tahun_perolehan' => $request->tahun_perolehan,
-            'kondisi' => $request->kondisi,
-            'ruang_id' => $request->ruang_id,
-            'is_active' => $request->is_active,
+            'nama_barang'         => $request->nama_barang,
+            'pic_id'              => $request->pic_id,
+            'tahun_perolehan'     => $request->tahun_perolehan,
+            'kondisi'             => $request->kondisi,
+            'ruang_id'            => $request->ruang_id,
+            'is_active'           => $request->is_active,
+            'foto'                => $fotoPath,
+            'catatan_nonaktif'    => $request->is_active == 1 ? null : $request->catatan_nonaktif,
+            'tahun_perolehan'     => $request->tahun_perolehan,
         ]);
 
         return redirect()->route('barang.index')
@@ -194,6 +230,13 @@ class BarangController extends Controller
 
     public function destroy(Barang $barang)
     {
+        // 1. Cek apakah barang memiliki foto
+        if ($barang->foto) {
+            // 2. Hapus file foto dari storage public
+            if (\Storage::disk('public')->exists($barang->foto)) {
+                \Storage::disk('public')->delete($barang->foto);
+            }
+        }
         $barang->delete();
 
         return redirect()->route('barang.index')
@@ -236,66 +279,70 @@ class BarangController extends Controller
 
 
     public function exportPdf(Request $request)
-    {
-        $query = $this->buildFilterQuery($request);
+{
+    $query = $this->buildFilterQuery($request);
 
-        $barangs = $query->with([
-            'divisi',
-            'pic',
-            'ruang',
-            'barangHistories' => function ($q) {
-                $q->select('barang_id', 'kondisi', 'is_active', 'catatan', 'tanggal_perubahan')
-                  ->orderBy('tanggal_perubahan', 'desc');
+    $tahunSekarang = (int) date('Y');
+    // Ambil input atau default
+    $tahunMulai = $request->input('tahun_awal', $tahunSekarang - 4);
+    $tahunSelesai = $request->input('tahun_akhir', $tahunSekarang);
+
+    // Buat range tahun untuk header tabel
+    $tahunRange = range($tahunMulai, $tahunSelesai);
+
+    $barangs = $query->with([
+        'divisi', 'pic', 'ruang',
+        'barangHistories' => function ($q) {
+            // JANGAN filter tahun di sini agar data history lama/baru tetap ikut terambil untuk diproses
+            $q->select('barang_id', 'kondisi', 'tahun_perolehan', 'tanggal_perubahan')
+              ->orderBy('tanggal_perubahan', 'asc'); 
+        }
+    ])->get();
+
+    $processedData = $barangs->map(function ($barang) use ($tahunRange) {
+        $kondisiPerTahun = [];
+
+        // 1. Set default "-" untuk semua tahun dalam range
+        foreach ($tahunRange as $t) {
+            $kondisiPerTahun[$t] = '-';
+        }
+
+        // 2. Masukkan data dari History jika tahunnya cocok dengan range
+        foreach ($barang->barangHistories as $history) {
+            $thnHistory = (int) $history->tanggal_perubahan->format('Y');
+            if (in_array($thnHistory, $tahunRange)) {
+                $kondisiPerTahun[$thnHistory] = ucfirst($history->kondisi);
             }
-        ])->get();
+        }
 
-        // Proses kondisi per tahun (5 tahun terakhir + tahun perolehan)
-        $tahunSekarang = (int) date('Y');
-        $tahunRange = range($tahunSekarang - 4, $tahunSekarang); // 5 tahun terakhir
+        // 3. Masukkan kondisi saat ini ke tahun perolehan jika masuk range
+        $thnPerolehan = (int) $barang->tahun_perolehan;
+        if (in_array($thnPerolehan, $tahunRange)) {
+            $kondisiPerTahun[$thnPerolehan] = ucfirst($barang->kondisi);
+        }
 
-        $processedData = $barangs->map(function ($barang) use ($tahunRange, $tahunSekarang) {
-            $kondisiPerTahun = [];
+        // 4. Masukkan kondisi saat ini ke tahun berjalan jika masuk range
+        $thnSekarang = (int) date('Y');
+        if (in_array($thnSekarang, $tahunRange)) {
+            $kondisiPerTahun[$thnSekarang] = ucfirst($barang->kondisi);
+        }
 
-            // Kondisi terkini dari tabel barangs
-            if ($barang->kondisi) {
-                $kondisiPerTahun[$barang->tahun_perolehan ?? $tahunSekarang] = ucfirst($barang->kondisi); // tahun perolehan
-                $kondisiPerTahun[$tahunSekarang] = ucfirst($barang->kondisi); // kondisi sekarang
-            }
+        $barang->kondisi_per_tahun = $kondisiPerTahun;
+        return $barang;
+    });
 
-            // Ambil dari history
-            foreach ($barang->barangHistories as $history) {
-                $tahun = (int) $history->tanggal_perubahan->format('Y');
-                if (!isset($kondisiPerTahun[$tahun])) {
-                    $kondisiPerTahun[$tahun] = ucfirst($history->kondisi ?? 'Baik');
-                }
-            }
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('barang.export-pdf', [
+        'data'         => $processedData,
+        'tahun_list'   => $tahunRange,
+        'tahun_awal'   => $tahunMulai,   // Kirim ke view
+        'tahun_akhir'  => $tahunSelesai, // Kirim ke view
+        'filter'       => $request->all(),
+        'ruang'        => \App\Models\Ruang::find($request->ruang_id) // Untuk label filter di header
+    ]);
 
-            // Gabungkan range yang diinginkan
-            $tahunList = collect($tahunRange)
-                ->merge([$barang->tahun_perolehan ?? $tahunSekarang])
-                ->unique()
-                ->sort()
-                ->values();
-
-            $barang->kondisi_per_tahun = $kondisiPerTahun;
-            $barang->tahun_list_for_this = $tahunList; // per barang
-
-            return $barang;
-        });
-
-        // Daftar tahun unik untuk header tabel (supaya semua baris sama)
-        $allTahun = $processedData->flatMap(fn($b) => $b->tahun_list_for_this)->unique()->sort()->values();
-
-        $pdf = Pdf::loadView('barang.export-pdf', [
-            'data'       => $processedData,
-            'tahun_list' => $allTahun,
-            'filter'     => $request->all()
-        ]);
-
-        $pdf->setPaper('A4', 'landscape');   // sangat direkomendasikan karena banyak kolom tahun
-
-        return $pdf->stream('laporan_inventaris_barang_' . date('Ymd') . '.pdf');
-    }
+    $pdf->setPaper('A4', 'landscape');
+    return $pdf->stream('laporan_inventaris_' . date('Ymd_His') . '.pdf');
+}
 
 
     public function exportPreview(Request $request)
