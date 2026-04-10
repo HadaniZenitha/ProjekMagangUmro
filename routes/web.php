@@ -96,3 +96,6 @@ Route::resource('barang-sewa', SewaController::class)
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('users', UserController::class);
 });
+Route::get('/barang/{barang}/cetak', [BarangController::class, 'cetak'])
+    ->name('barang.cetak');
+Route::get('/barang/{kode}/barcode', [BarangController::class, 'barcode'])->name('barang.barcode');

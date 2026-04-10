@@ -18,7 +18,7 @@ class BarangController extends Controller
 
     public function index(Request $request)
     {
-        $query = Barang::with(['divisi','ruang','pic'])->latest('updated_at');
+        $query = Barang::with(['divisi', 'ruang', 'pic'])->latest('updated_at');
 
         // Filter Divisi
         if ($request->divisi) {
@@ -166,23 +166,31 @@ class BarangController extends Controller
     public function edit(Barang $barang)
     {
         $divisis = Divisi::all();
+
         $ruangs = Ruang::all();
 
         $pics = Pic::with('divisi')
             ->where('is_active', true)
             ->get();
 
+        // 🔥 TAMBAHKAN INI
+        $subjenisList = SubJenisBarang::with('jenis')
+            ->where('is_active', true)
+            ->orderBy('kode_subjenis')
+            ->get();
+
         return view('barang.edit', compact(
             'barang',
             'divisis',
             'ruangs',
-            'pics'
+            'pics',
+            'subjenisList' // 🔥 WAJIB
         ));
     }
 
-
     public function update(Request $request, Barang $barang)
     {
+        // VALIDASI (TANPA is_active BIAR TIDAK ERROR)
         $request->validate([
             'nama_barang'     => 'required|string|max:255',
             'pic_id'          => 'required|exists:pics,id',
@@ -226,7 +234,6 @@ class BarangController extends Controller
         return redirect()->route('barang.index')
             ->with('success', 'Barang berhasil diperbarui');
     }
-
 
     public function destroy(Barang $barang)
     {
@@ -315,11 +322,27 @@ class BarangController extends Controller
             }
         }
 
-        // 3. Masukkan kondisi saat ini ke tahun perolehan jika masuk range
-        $thnPerolehan = (int) $barang->tahun_perolehan;
-        if (in_array($thnPerolehan, $tahunRange)) {
-            $kondisiPerTahun[$thnPerolehan] = ucfirst($barang->kondisi);
-        }
+            // Gabungkan range yang diinginkan
+            $tahunList = collect($tahunRange)
+                ->merge([$barang->tahun_perolehan ?? $tahunSekarang])
+                ->unique()
+                ->sort()
+                ->values();
+
+            $barang->kondisi_per_tahun = $kondisiPerTahun;
+            $barang->tahun_list_for_this = $tahunList; // per barang
+
+            return $barang;
+        });
+
+        // Daftar tahun unik untuk header tabel (supaya semua baris sama)
+        $allTahun = $processedData->flatMap(fn($b) => $b->tahun_list_for_this)->unique()->sort()->values();
+
+        $pdf = Pdf::loadView('barang.export-pdf', [
+            'data' => $processedData,
+            'tahun_list' => $allTahun,
+            'filter' => $request->all()
+        ]);
 
         // 4. Masukkan kondisi saat ini ke tahun berjalan jika masuk range
         $thnSekarang = (int) date('Y');
@@ -387,7 +410,7 @@ class BarangController extends Controller
 
     private function buildFilterQuery($request)
     {
-        $query = Barang::with(['divisi','pic','ruang']);
+        $query = Barang::with(['divisi', 'pic', 'ruang']);
 
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
@@ -416,6 +439,14 @@ class BarangController extends Controller
         }
 
         return $query;
+    }
+    public function cetak(Barang $barang)
+    {
+        return view('barang.cetak', compact('barang'));
+    }
+    public function barcode($kode)
+    {
+        return view('barang.barcode', compact('kode'));
     }
 
 }

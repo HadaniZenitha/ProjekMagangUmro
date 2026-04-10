@@ -10,12 +10,11 @@
     </h5>
 </div>
 
-{{-- Error Validasi --}}
 @if ($errors->any())
 <div class="alert alert-danger shadow-sm border-start border-5">
     <ul class="mb-0">
         @foreach ($errors->all() as $error)
-        <li><small>{{ $error }}</small></li>
+            <li>{{ $error }}</li>
         @endforeach
     </ul>
 </div>
@@ -142,7 +141,74 @@
     </div>
 </div>
 
+@endsection
+
+
+@section('scripts')
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const divisiSelect = document.getElementById('divisiSelect');
+    const picSelect = document.getElementById('picSelect');
+    const subjenisInput = document.getElementById('subjenis-input');
+    const subjenisHidden = document.getElementById('subjenis-hidden');
+    const subjenisOptions = document.getElementById('subjenisOptions');
+
+    // 🔥 FUNCTION LOAD PIC
+    function loadPic(divisiId, selectedPic = null) {
+        picSelect.innerHTML = '<option value="">Memuat...</option>';
+
+        fetch('/get-pic-by-divisi/' + divisiId, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(res => res.json())
+        .then(data => {
+            picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
+
+            data.forEach(pic => {
+                const option = document.createElement('option');
+                option.value = pic.id;
+                option.textContent = pic.nama_pic;
+
+                if (selectedPic && selectedPic == pic.id) {
+                    option.selected = true;
+                }
+
+                picSelect.appendChild(option);
+            });
+        })
+        .catch(() => {
+            picSelect.innerHTML = '<option value="">Gagal memuat data</option>';
+        });
+    }
+
+    // 🔥 LOAD AWAL (EDIT)
+    const initialDivisi = "{{ $barang->divisi_id }}";
+    const initialPic = "{{ $barang->pic_id }}";
+
+    if (initialDivisi) {
+        loadPic(initialDivisi, initialPic);
+    }
+
+    // 🔄 CHANGE DIVISI
+    divisiSelect.addEventListener('change', function() {
+        loadPic(this.value);
+    });
+
+    // 🔍 SUBJENIS SELECT
+    subjenisInput.addEventListener('input', function() {
+        const val = this.value;
+        const options = subjenisOptions.querySelectorAll('option');
+
+        subjenisHidden.value = "";
+
+        options.forEach(option => {
+            if (option.value === val) {
+                subjenisHidden.value = option.getAttribute('data-id');
+            }
+        });
+    });
+
     // Logika Show/Hide Catatan Nonaktif
     const statusSelect = document.getElementById('statusSelect');
     const catatanWrapper = document.getElementById('catatanWrapper');
@@ -163,6 +229,17 @@
             if(noPhoto) noPhoto.classList.add('d-none');
         }
     }
-</script>
 
+
+    // 🚨 VALIDASI
+    document.querySelector('form').addEventListener('submit', function(e) {
+        if (!subjenisHidden.value) {
+            e.preventDefault();
+            alert('Silakan pilih Sub Jenis Barang dari daftar yang tersedia.');
+            subjenisInput.focus();
+        }
+    });
+
+});
+</script>
 @endsection
