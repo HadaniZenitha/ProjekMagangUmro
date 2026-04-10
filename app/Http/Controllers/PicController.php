@@ -6,7 +6,6 @@ use App\Imports\PicImport;
 use App\Models\Pic;
 use App\Models\Divisi;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PicController extends Controller
@@ -65,7 +64,7 @@ class PicController extends Controller
         
         $validated['nid_pic'] = strtoupper($validated['nid_pic']);
         $validated['nama_pic'] = strtoupper($validated['nama_pic']);
-        $validated['jabatan'] = strtoupper($validated['jabatan']);
+        $validated['jabatan_lengkap'] = strtoupper($validated['jabatan_lengkap']);
         $validated['jabatan'] = Divisi::where('id', $validated['divisi_id'])->value('nama_divisi');
 
         Pic::create($validated);
@@ -111,7 +110,7 @@ class PicController extends Controller
 
         $validated['nid_pic'] = strtoupper($validated['nid_pic']);
         $validated['nama_pic'] = strtoupper($validated['nama_pic']);
-        $validated['jabatan'] = strtoupper($validated['jabatan']);
+        $validated['jabatan_lengkap'] = strtoupper($validated['jabatan_lengkap']);
         $validated['jabatan'] = Divisi::where('id', $validated['divisi_id'])->value('nama_divisi');
         
         $pic->update($validated);

@@ -21,7 +21,7 @@
 <div class="card shadow-sm border-0">
     <div class="card-body">
 
-        <form method="POST" action="{{ route('barang-sewa.store') }}">
+        <form method="POST" action="{{ route('barang-sewa.store') }}" id="barangSewaForm" data-old-pic-id="{{ old('pic_id') }}">
             @csrf
 
             {{-- KODE BARANG (BARU) --}}
@@ -34,7 +34,7 @@
             {{-- NAMA --}}
             <div class="mb-3">
                 <label class="form-label fw-semibold">Nama Barang</label>
-                <input type="text" name="nama_barang" class="form-control" required>
+                <input type="text" name="nama_barang" class="form-control" value="{{ old('nama_barang') }}" required>
             </div>
 
             {{-- ROW 1 --}}
@@ -80,9 +80,9 @@
             <div class="mb-4">
                 <label class="form-label fw-semibold">Kondisi</label>
                 <select name="kondisi" class="form-select" required>
-                    <option value="Baik">Baik</option>
-                    <option value="Perlu Perbaikan">Perlu Perbaikan</option>
-                    <option value="Rusak">Rusak</option>
+                    <option value="Baik" {{ old('kondisi') == 'Baik' ? 'selected' : '' }}>Baik</option>
+                    <option value="Perlu Perbaikan" {{ old('kondisi') == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>
+                    <option value="Rusak" {{ old('kondisi') == 'Rusak' ? 'selected' : '' }}>Rusak</option>
                 </select>
             </div>
 

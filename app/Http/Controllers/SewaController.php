@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BarangSewa;
+use App\Models\Divisi;
 use App\Models\Ruang;
 use App\Models\Pic;
 use App\Models\Divisi;
@@ -46,7 +47,7 @@ class SewaController extends Controller
 
     public function create()
     {
-        $pics = Pic::where('is_active', true)->get();
+        $divisis = Divisi::where('is_active', true)->orderBy('nama_divisi')->get();
         $ruangs = Ruang::where('is_active', true)->get();
         $divisis = Divisi::all(); // ✅ TAMBAH INI
 
@@ -59,12 +60,15 @@ class SewaController extends Controller
         $request->validate([
             'kode_barang' => 'required|unique:barang_sewas,kode_barang',
             'nama_barang' => 'required',
+            'divisi_id' => 'required|exists:divisis,id',
             'pic_id' => 'required|exists:pics,id',
             'ruang_id' => 'required|exists:ruangs,id',
             'fungsi_id' => 'required|exists:divisis,id', // ✅ UBAH
             'tahun' => 'required|numeric',
             'kondisi' => 'required'
         ]);
+
+        $divisi = Divisi::findOrFail($request->divisi_id);
 
         BarangSewa::create([
             'kode_barang' => $request->kode_barang,
@@ -106,12 +110,15 @@ class SewaController extends Controller
         $request->validate([
             'kode_barang' => 'required|unique:barang_sewas,kode_barang,' . $sewa->id,
             'nama_barang' => 'required',
+            'divisi_id' => 'required|exists:divisis,id',
             'pic_id' => 'required|exists:pics,id',
             'ruang_id' => 'required|exists:ruangs,id',
             'fungsi_id' => 'required|exists:divisis,id', // ✅ UBAH
             'tahun' => 'required|numeric',
             'kondisi' => 'required'
         ]);
+
+        $divisi = Divisi::findOrFail($request->divisi_id);
 
         $sewa->update([
             'kode_barang' => $request->kode_barang,
