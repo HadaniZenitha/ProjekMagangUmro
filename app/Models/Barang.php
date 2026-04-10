@@ -3,7 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
+/**
+ * @property int $id
+ * @method static static create(array $attributes = [])
+ */
 class Barang extends Model
 {
     protected $fillable = [
@@ -13,14 +18,20 @@ class Barang extends Model
         'pic_id',
         'kode_barang',
         'nama_barang',
-        // 'merk',
-        // 'serial_number',
         'tahun_perolehan',
         'kondisi',
+        'foto',
         'urutan',
         'is_active',
+        'catatan_nonaktif',
     ];
 
+    protected $casts = [
+        'is_active'       => 'boolean',
+        'tahun_perolehan' => 'integer',
+    ];
+
+    // ====================== RELASI ======================
     public function divisi()
     {
         return $this->belongsTo(Divisi::class);
@@ -30,41 +41,89 @@ class Barang extends Model
     {
         return $this->belongsTo(Ruang::class);
     }
-    public function subjenis()
-    {
-        return $this->belongsTo(SubJenisBarang::class, 'sub_jenis_barang_id');
-    }
+
     public function pic()
     {
         return $this->belongsTo(Pic::class);
     }
+
+    public function subjenis()
+    {
+        return $this->belongsTo(SubJenisBarang::class, 'sub_jenis_barang_id');
+    }
+
     public function barangHistories()
     {
         return $this->hasMany(BarangHistory::class, 'barang_id')
                     ->orderBy('tanggal_perubahan', 'desc');
     }
-    // Di dalam class Barang
-    protected static function booted()
-    {
-        static::created(function (Barang $barang) {
+
+protected static function booted()
+{
+    // Saat barang baru dibuat
+    static::created(function (Barang $barang) {
+        $barang->barangHistories()->create([
+            'kondisi'           => $barang->kondisi,
+            'tahun_perolehan'   => $barang->tahun_perolehan,
+            'is_active'         => $barang->is_active,
+            'ruang_id'          => $barang->ruang_id,
+            'user_id'           => Auth::id(),
+            'catatan'           => 'Barang baru ditambahkan ke sistem',
+            'tanggal_perubahan' => now(),
+        ]);
+    });
+
+    // Saat barang diupdate
+    static::updated(function (Barang $barang) {
+
+        // Hanya jalan kalau ada perubahan penting
+        if ($barang->wasChanged(['kondisi', 'is_active', 'ruang_id', 'tahun_perolehan'])) {
+
+            $changes = [];
+
+            if ($barang->wasChanged('kondisi')) {
+                $changes[] = "Kondisi: " 
+                    . ($barang->getOriginal('kondisi') ?? '-') 
+                    . " → " 
+                    . $barang->kondisi;
+            }
+
+            if ($barang->wasChanged('tahun_perolehan')) {
+                $changes[] = "Tahun: " 
+                    . ($barang->getOriginal('tahun_perolehan') ?? '-') 
+                    . " → " 
+                    . $barang->tahun_perolehan;
+            }
+
+            if ($barang->wasChanged('is_active')) {
+                $changes[] = "Status Aktif: " 
+                    . ($barang->getOriginal('is_active') ? 'Aktif' : 'Nonaktif') 
+                    . " → " 
+                    . ($barang->is_active ? 'Aktif' : 'Nonaktif');
+            }
+
+            if ($barang->wasChanged('ruang_id')) {
+                $changes[] = "Lokasi Ruang berubah";
+            }
+
+            // ✅ SIMPAN DATA TERBARU (SETELAH UPDATE)
             $barang->barangHistories()->create([
                 'kondisi'           => $barang->kondisi,
+                'tahun_perolehan'   => $barang->tahun_perolehan,
                 'is_active'         => $barang->is_active,
-                'catatan'           => 'Barang baru ditambahkan',
+                'ruang_id'          => $barang->ruang_id,
+                'user_id'           => Auth::id(),
+                'catatan'           => 'Perubahan: ' . implode(', ', $changes),
                 'tanggal_perubahan' => now(),
             ]);
-        });
+        }
+    });
+}
 
-        static::updated(function (Barang $barang) {
-            // Hanya simpan history jika kondisi atau status aktif berubah
-            if ($barang->isDirty('kondisi') || $barang->isDirty('is_active')) {
-                $barang->barangHistories()->create([
-                    'kondisi'           => $barang->kondisi,
-                    'is_active'         => $barang->is_active,
-                    'catatan'           => 'Perubahan data barang',
-                    'tanggal_perubahan' => now(),
-                ]);
-            }
-        });
+    public function getFotoUrlAttribute()
+    {
+        return $this->foto 
+            ? asset('storage/' . $this->foto) 
+            : asset('images/no-image.png'); // fallback image
     }
 }

@@ -223,8 +223,12 @@
 				</div>
 
 				<div class="col-lg-2 col-md-6">
-					<label class="form-label small mb-1">Tahun</label>
-					<input type="number" name="tahun" value="{{ request('tahun') }}" class="form-control" placeholder="Tahun">
+				    <label class="form-label small mb-1">Range Tahun</label>
+				    <div class="d-flex gap-2">
+				        <input type="number" name="tahun_awal" class="form-control" value="{{ date('Y') - 4 }}" title="Dari Tahun">
+				        <span class="align-self-center">-</span>
+				        <input type="number" name="tahun_akhir" class="form-control" value="{{ date('Y') }}" title="Sampai Tahun">
+				    </div>
 				</div>
 
 				<div class="col-lg-2 col-md-6">

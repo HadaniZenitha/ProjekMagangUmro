@@ -32,8 +32,8 @@
 
             {{-- Nama Barang --}}
             <div class="mb-3">
-                <label class="form-label fw-semibold">Nama Barang <span class="text-danger">*</span></label>
-                <input type="text" name="nama_barang" class="form-control" placeholder="Masukkan nama barang" value="{{ old('nama_barang') }}" required>
+                <label class="form-label fw-semibold">Nama Barang</label>
+                <input type="text" name="nama_barang" class="form-control" value="{{ old('nama_barang') }}" required>
             </div>
 
             <div class="row">

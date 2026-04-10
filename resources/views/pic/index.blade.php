@@ -162,8 +162,8 @@
                     <td class="text-center">{{ $pics->firstItem() + $loop->index }}</td>
                     <td>{{ $p->nid_pic }}</td>
                     <td>{{ $p->nama_pic }}</td>
-                    <!-- <td>{{ $p->divisi->nama_divisi ?? '-' }}</td> -->
-                    <td>{{ $p->jabatan }}</td>
+                    <td>{{ $p->divisi->nama_divisi ?? '-' }}</td>
+                    {{-- <td>{{ $p->jabatan }}</td> --}}
                     <td>{{ $p->jabatan_lengkap ?? '-' }}</td>
 
                     <td class="text-center">

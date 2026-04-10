@@ -19,7 +19,7 @@
 
 <div class="card shadow-sm border-0">
     <div class="card-body">
-        <form method="POST" action="{{ route('barang.store') }}">
+        <form method="POST" action="{{ route('barang.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-3">
@@ -85,6 +85,13 @@
                         <option value="rusak">Rusak</option>
                     </select>
                 </div>
+            </div>
+
+            <!-- Upload Foto -->
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Foto Barang (Opsional)</label>
+                <input type="file" name="foto" class="form-control" accept="image/*">
+                <small class="text-muted">Format: jpg, jpeg, png. Maksimal 2MB</small>
             </div>
 
             <div class="d-flex gap-2 border-top pt-3">

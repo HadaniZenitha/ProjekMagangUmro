@@ -1,146 +1,141 @@
 @extends('layouts.dashboard')
 
+@section('title', 'Detail Barang')
+
 @section('content')
-<div class="container">
-
-    <h2 class="mb-4">Detail Barang</h2>
-
-    {{-- INFORMASI --}}
-    <ul class="list-group mb-4">
-
-        <li class="list-group-item">
-            <b>Nama Barang :</b> {{ $barang->nama_barang }}
-        </li>
-
-        <li class="list-group-item">
-            <b>Kode Inventaris :</b>
-            <span class="badge bg-dark">{{ $barang->kode_barang }}</span>
-        </li>
-
-        <li class="list-group-item">
-            <b>Lokasi :</b> {{ $barang->ruang->nama_ruang ?? '-' }}
-        </li>
-
-        <li class="list-group-item">
-            <b>Tahun Masuk :</b> {{ $barang->tahun_perolehan }}
-        </li>
-
-        <li class="list-group-item">
-            <b>Kondisi :</b> {{ $barang->kondisi ?? '-' }}
-        </li>
-
-    </ul>
-
-    {{-- QR CODE --}}
-    <div class="mb-4">
-        <h5>QR Code Barang</h5>
-
-        <div class="p-3 bg-light d-inline-block rounded shadow-sm">
-            {!! QrCode::size(150)->generate(route('barang.scan', $barang->kode_barang)) !!}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">Detail Inventaris</h4>
+        <div class="d-flex gap-2">
+            <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-warning text-white shadow-sm">
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+            </a>
+            <a href="{{ route('barang.index') }}" class="btn btn-secondary shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
         </div>
-
-        <p class="mt-2 text-muted">
-            Scan QR Code untuk melihat informasi barang.
-        </p>
     </div>
 
-    {{-- BUTTON --}}
-    <div class="d-flex left-content-end gap-2">
-
-        <a href="{{ route('barang.index') }}" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-        </a>
-
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCetak">
-            <i class="fa-solid fa-print me-1"></i> Cetak Stiker
-        </button>
-
-    </div>
-
-</div>
-
-{{-- ================= MODAL CETAK STIKER ================= --}}
-<div class="modal fade" id="modalCetak" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Preview Stiker Inventaris</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body text-center">
-
-                {{-- STIKER --}}
-                <div id="stikerPreview" class="border p-3 rounded shadow-sm d-inline-block bg-white">
-
-                    <h6 class="mb-2 fw-bold">{{ $barang->nama_barang }}</h6>
-
-                    <p class="mb-1">
-                        <b>Kode:</b> {{ $barang->kode_barang }}
-                    </p>
-
-                    <p class="mb-2">
-                        <b>Lokasi:</b> {{ $barang->ruang->nama_ruang ?? '-' }}
-                    </p>
-
-                    {{-- QR CODE --}}
-                    <div>
-                        {!! QrCode::size(120)->generate(route('barang.scan', $barang->kode_barang)) !!}
-                    </div>
-
+    <div class="row">
+        <div class="col-lg-4 col-md-5">
+            <div class="card border-0 shadow-sm mb-4 text-center">
+                <div class="card-header bg-white py-3 text-start">
+                    <h6 class="fw-bold mb-0">Foto Barang</h6>
                 </div>
-
+                <div class="card-body">
+                    @if ($barang->foto)
+                        <img src="{{ asset('storage/' . $barang->foto) }}" 
+                             class="img-fluid rounded shadow-sm" 
+                             style="max-height: 300px; width: 100%; object-fit: cover;">
+                    @else
+                        <div class="bg-light border rounded d-flex flex-column align-items-center justify-content-center" style="height: 250px;">
+                            <i class="fa-solid fa-image fa-3x text-muted mb-2"></i>
+                            <p class="text-muted small">Foto tidak tersedia</p>
+                        </div>
+                    @endif
+                </div>
             </div>
 
-            <div class="modal-footer d-flex justify-content-between">
+            <div class="card border-0 shadow-sm mb-4 py-4 text-center">
+                <h6 class="fw-bold mb-3">QR Code Identifikasi</h6>
+                <div class="p-3 bg-white d-inline-block rounded border shadow-sm mb-2 mx-auto">
+                    {!! QrCode::size(150)->generate(route('barang.scan', $barang->kode_barang)) !!}
+                </div>
+                <p class="text-muted small mb-0 px-3">Gunakan untuk tracking aset secara cepat.</p>
+            </div>
+        </div>
 
-                <button onclick="cetakStiker()" class="btn btn-primary">
-                    <i class="fa-solid fa-print me-1"></i> Cetak Stiker
-                </button>
+        <div class="col-lg-8 col-md-7">
+            @if(!$barang->is_active)
+            <div class="alert alert-danger border-0 shadow-sm mb-4">
+                <h6 class="fw-bold"><i class="fa-solid fa-circle-exclamation me-2"></i>Barang Nonaktif</h6>
+                <p class="mb-0 small italic">"{{ $barang->catatan_nonaktif ?? 'Tidak ada catatan alasan penonaktifan.' }}"</p>
+            </div>
+            @endif
 
-                <a href="{{ route('barang.barcode', $barang->kode_barang) }}" target="_blank" class="btn btn-dark">
-                    <i class="fa-solid fa-barcode me-1"></i> Cetak Barcode
-                </a>
-
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
-                    Tutup
-                </button>
-
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold mb-0">Informasi Teknis</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Kode Barang</label>
+                        <div class="col-sm-8 text-dark fw-bold text-primary">{{ $barang->kode_barang }}</div>
+                    </div>
+                    <hr class="opacity-50">
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Nama Barang</label>
+                        <div class="col-sm-8 text-dark">{{ $barang->nama_barang }}</div>
+                    </div>
+                    <hr class="opacity-50">
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Lokasi & PIC</label>
+                        <div class="col-sm-8 text-dark">
+                            <span class="d-block text-capitalize">{{ $barang->ruang->nama_ruang ?? '-' }}</span>
+                            <span class="small text-muted">Oleh: {{ $barang->pic->nama_pic ?? '-' }}</span>
+                        </div>
+                    </div>
+                    <hr class="opacity-50">
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Status Kondisi</label>
+                        <div class="col-sm-8">
+                            <span class="badge rounded-pill bg-{{ $barang->kondisi == 'baik' ? 'success' : ($barang->kondisi == 'perlu perbaikan' ? 'warning' : 'danger') }} px-3">
+                                {{ ucfirst($barang->kondisi) }}
+                            </span>
+                            <span class="badge rounded-pill bg-{{ $barang->is_active ? 'info' : 'secondary' }} text-white px-3">
+                                {{ $barang->is_active ? 'Aktif' : 'Nonaktif' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold mb-0"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Riwayat Perubahan</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover align-middle">
+                            <thead class="table-light">
+                                <tr class="small text-uppercase text-muted">
+                                    <th style="width: 180px;">Tanggal</th>
+                                    <th>Kondisi</th>
+                                    <th>Tahun</th>
+                                    <th>Catatan Perubahan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($barang->barangHistories->sortByDesc('tanggal_perubahan') as $history)
+                                <tr>
+                                    <td class="small text-dark">
+                                        {{ $history->tanggal_perubahan->format('d/m/Y H:i') }} WIB
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ $history->kondisi == 'baik' ? 'success' : ($history->kondisi == 'perlu perbaikan' ? 'warning' : 'danger') }} py-1 px-2" style="font-size: 0.7rem;">
+                                            {{ strtoupper($history->kondisi) }}
+                                        </span>
+                                    </td>
+                                    <td class="fw-bold text-dark small">
+                                        {{ $history->tahun_perolehan ?? '-' }}
+                                    </td>
+                                    <td class="small">
+                                        {{ $history->catatan ?? '-' }}
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted small py-4">
+                                        Belum ada riwayat perubahan.
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-{{-- ================= SCRIPT CETAK ================= --}}
-<script>
-function cetakStiker() {
-    var printContents = document.getElementById('stikerPreview').innerHTML;
-    var originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = `
-        <html>
-        <head>
-            <title>Cetak Stiker</title>
-            <style>
-                body {
-                    text-align: center;
-                    font-family: Arial;
-                    margin: 20px;
-                }
-            </style>
-        </head>
-        <body>
-            ${printContents}
-        </body>
-        </html>
-    `;
-
-    window.print();
-    document.body.innerHTML = originalContents;
-    location.reload();
-}
-</script>
-
 @endsection

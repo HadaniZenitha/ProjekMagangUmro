@@ -73,6 +73,7 @@
 <!-- BUTTONS OUTSIDE BORDER -->
 <div class="mt-3 d-flex justify-content-between align-items-center gap-2">
 
+<<<<<<< HEAD
     <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary px-3">
         <i class="fa-solid fa-arrow-left me-1"></i> Kembali
     </a>
@@ -84,3 +85,6 @@
 </div>
 </div>
 @endsection
+=======
+@endsection
+>>>>>>> 5d05cde20f8c7f3115e77382eb579865f4ebd2ef
