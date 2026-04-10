@@ -18,12 +18,27 @@ return new class extends Migration
                   ->constrained('barangs')
                   ->onDelete('cascade');
 
+            $table->foreignId('ruang_id')
+                  ->nullable()
+                  ->constrained('ruangs')
+                  ->onDelete('set null');
+
+            $table->foreignId('user_id')
+                  ->nullable()
+                  ->constrained('users')
+                  ->onDelete('set null');
+
             $table->string('kondisi');
+            $table->integer('tahun_perolehan')->nullable();
             $table->boolean('is_active');
             $table->text('catatan')->nullable();
             $table->timestamp('tanggal_perubahan')->useCurrent();
         
             $table->timestamps();
+
+            // Index untuk mempercepat query history per barang dan per tahun
+            $table->index(['barang_id', 'tanggal_perubahan']);
+            $table->index('user_id');
         });
     }
 

@@ -13,7 +13,6 @@ use App\Http\Controllers\LantaiController;
 use App\Http\Controllers\JenisRuanganController;
 use App\Http\Controllers\PicController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SewaController;
 use App\Http\Controllers\UserController;
 
@@ -65,22 +64,21 @@ Route::get('/barang/export-pdf', [BarangController::class, 'exportPdf'])->name('
 
 Route::get('/barang/export-preview', [BarangController::class, 'exportPreview'])
     ->name('barang.exportPreview');
+
 Route::middleware(['auth'])->group(function () {
     Route::post('/barang/import', [BarangController::class, 'import'])->name('barang.import');
     Route::resource('barang', BarangController::class);
-    Route::get('/scan/{kode}', [BarangController::class, 'scan'])
-    ->name('barang.scan');
     });
+
+    Route::get('/scan/{kode}', [BarangController::class, 'scan'])
+    ->name('barang.scan')
+    ->where('kode', '.*'); // Terima semua karakter setelah /scan/ sebagai kode
     
     Route::middleware(['auth'])->group(function () {
         Route::post('/pic/import', [PicController::class, 'import'])->name('pic.import');
         Route::resource('pic', PicController::class);
         });
-   
-// // Route AJAX untuk ambil PIC berdasarkan Divisi
-// Route::get('/pic/get-by-divisi/{divisiId}', 
-//     [PicController::class, 'getByDivisi'])
-//     ->name('pic.getByDivisi');
+  
 Route::get('/get-pic-by-divisi/{divisi}', 
     [PicController::class, 'getByDivisi']);
 
@@ -98,3 +96,6 @@ Route::resource('barang-sewa', SewaController::class)
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('users', UserController::class);
 });
+Route::get('/barang/{barang}/cetak', [BarangController::class, 'cetak'])
+    ->name('barang.cetak');
+Route::get('/barang/{kode}/barcode', [BarangController::class, 'barcode'])->name('barang.barcode');

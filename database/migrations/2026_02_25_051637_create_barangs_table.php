@@ -14,36 +14,35 @@ return new class extends Migration
         Schema::create('barangs', function (Blueprint $table) {
             $table->id();
 
-    $table->foreignId('divisi_id')
-          ->constrained('divisis')
-          ->onDelete('cascade');
+            $table->foreignId('divisi_id')
+                  ->constrained('divisis')
+                  ->onDelete('cascade');
 
-    $table->foreignId('ruang_id')
-          ->constrained('ruangs')
-          ->onDelete('cascade');
+            $table->foreignId('ruang_id')
+                  ->constrained('ruangs')
+                  ->onDelete('cascade');
 
-    $table->foreignId('sub_jenis_barang_id')
-      ->constrained('sub_jenis_barangs')
-      ->onDelete('cascade');
-      
-    $table->foreignId('pic_id')
-      ->constrained('pics')
-      ->onDelete('cascade');
+            $table->foreignId('sub_jenis_barang_id')
+              ->constrained('sub_jenis_barangs')
+              ->onDelete('cascade');
 
-    $table->string('kode_barang', 50)->unique();
+            $table->foreignId('pic_id')
+              ->constrained('pics')
+              ->onDelete('cascade');
 
-    $table->string('nama_barang');
-    // $table->string('merk')->nullable();
-    // $table->string('serial_number')->nullable();
-    $table->integer('tahun_perolehan')->nullable();
-    $table->string('kondisi')->default('baik');
-    
-    $table->integer('urutan')->default(0);
-    
-    $table->boolean('is_active')->default(true);
-    $table->text('catatan_nonaktif')->nullable();
+            $table->string('kode_barang', 50)->unique();
 
-    $table->timestamps();
+            $table->string('nama_barang');
+            $table->integer('tahun_perolehan')->nullable();
+            $table->string('kondisi')->default('baik');
+            $table->string('foto')->nullable();
+
+            $table->integer('urutan')->default(0);
+
+            $table->boolean('is_active')->default(true);
+            $table->text('catatan_nonaktif')->nullable();
+
+            $table->timestamps();
         });
     }
 
