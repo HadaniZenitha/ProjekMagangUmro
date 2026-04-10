@@ -10,11 +10,12 @@
     </h5>
 </div>
 
+{{-- Error Validasi --}}
 @if ($errors->any())
 <div class="alert alert-danger shadow-sm border-start border-5">
     <ul class="mb-0">
         @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
+        <li><small>{{ $error }}</small></li>
         @endforeach
     </ul>
 </div>
@@ -44,23 +45,30 @@
                         <input type="text" name="nama_barang" class="form-control @error('nama_barang') is-invalid @enderror" value="{{ old('nama_barang', $barang->nama_barang) }}" required>
                     </div>
 
+                    {{-- ROW 1 --}}
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">PIC (Penanggung Jawab)</label>
-                            <select name="pic_id" class="form-select" required>
-                                @foreach($pics as $p)
-                                <option value="{{ $p->id }}" {{ $barang->pic_id == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama_pic }} ({{ $p->divisi->nama_divisi }})
-                                </option>
+                            <label class="form-label fw-semibold">Fungsi <span class="text-danger">*</span></label>
+                            <select name="divisi_id" id="divisiSelect" class="form-select" required>
+                                <option value="">-- Pilih Fungsi --</option>
+                                @foreach($divisis as $d)
+                                    <option value="{{ $d->id }}"
+                                        {{ $barang->divisi_id == $d->id ? 'selected' : '' }}>
+                                        {{ $d->nama_divisi }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
+                    
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Tahun Perolehan</label>
-                            <input type="number" name="tahun_perolehan" class="form-control" value="{{ old('tahun_perolehan', $barang->tahun_perolehan) }}">
+                            <label class="form-label fw-semibold">PIC (Penanggung Jawab) <span class="text-danger">*</span></label>
+                            <select name="pic_id" id="picSelect" class="form-select" required>
+                                <option value="">-- Pilih PIC --</option>
+                            </select>
                         </div>
                     </div>
 
+                                       
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Lokasi Ruang</label>
@@ -73,6 +81,13 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Tahun Perolehan</label>
+                            <input type="number" name="tahun_perolehan" class="form-control" value="{{ old('tahun_perolehan', $barang->tahun_perolehan) }}">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Kondisi Barang</label>
                             <select name="kondisi" class="form-select text-capitalize">
                                 @php $kondisis = ['baik', 'perlu perbaikan', 'rusak']; @endphp
@@ -83,15 +98,15 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Status</label>
+                            <select name="is_active" id="statusSelect" class="form-select" required>
+                                <option value="1" {{ $barang->is_active ? 'selected' : '' }}>Aktif</option>
+                                <option value="0" {{ !$barang->is_active ? 'selected' : '' }}>Tidak Aktif</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Status</label>
-                        <select name="is_active" id="statusSelect" class="form-select" required>
-                            <option value="1" {{ $barang->is_active ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ !$barang->is_active ? 'selected' : '' }}>Tidak Aktif</option>
-                        </select>
-                    </div>
 
                     <div class="mb-4" id="catatanWrapper" style="{{ $barang->is_active ? 'display:none;' : '' }}">
                         <label class="form-label fw-semibold text-danger">Catatan Nonaktif</label>
@@ -140,9 +155,7 @@
         </form>
     </div>
 </div>
-
 @endsection
-
 
 @section('scripts')
 <script>
