@@ -107,7 +107,6 @@
                         </div>
                     </div>
 
-
                     <div class="mb-4" id="catatanWrapper" style="{{ $barang->is_active ? 'display:none;' : '' }}">
                         <label class="form-label fw-semibold text-danger">Catatan Nonaktif</label>
                         <textarea name="catatan_nonaktif" class="form-control border-danger" rows="3" placeholder="Alasan barang dinonaktifkan...">{{ old('catatan_nonaktif', $barang->catatan_nonaktif) }}</textarea>
