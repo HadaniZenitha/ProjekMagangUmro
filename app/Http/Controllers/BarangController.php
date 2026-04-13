@@ -20,6 +20,11 @@ class BarangController extends Controller
     {
         $query = Barang::with(['divisi', 'ruang', 'pic'])->latest('updated_at');
 
+        // // Filter Nama Barang
+        // if ($request->nama_barang) {
+        //     $query->where('nama_barang', 'like', '%' . $request->nama_barang . '%');
+        // }
+
         // Filter Divisi
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
@@ -61,11 +66,18 @@ class BarangController extends Controller
             ->orderBy('nama_ruang')
             ->get();
 
+        // Get unique nama_barang for dropdown filter
+        $namaBarangs = Barang::distinct()
+            ->where('is_active', true)
+            ->orderBy('nama_barang')
+            ->pluck('nama_barang');
+
         return view('barang.index', compact(
             'barangs',
             'divisis',
             'pics',
-            'ruangs'
+            'ruangs',
+            'namaBarangs'
         ));
     }
 
@@ -193,9 +205,10 @@ class BarangController extends Controller
 
     public function update(Request $request, Barang $barang)
     {
-        // VALIDASI (TANPA is_active BIAR TIDAK ERROR)
+        // VALIDASI
         $request->validate([
             'nama_barang'     => 'required|string|max:255',
+            'divisi_id'       => 'required|exists:divisis,id',
             'pic_id'          => 'required|exists:pics,id',
             'ruang_id'        => 'required|exists:ruangs,id',
             'kondisi'         => 'required|in:baik,perlu perbaikan,rusak',
@@ -224,6 +237,7 @@ class BarangController extends Controller
 
         $barang->update([
             'nama_barang'         => $request->nama_barang,
+            'divisi_id'           => $request->divisi_id,
             'pic_id'              => $request->pic_id,
             'tahun_perolehan'     => $request->tahun_perolehan,
             'kondisi'             => $request->kondisi,
@@ -232,7 +246,7 @@ class BarangController extends Controller
             'foto'                => $fotoPath,
             'catatan_nonaktif'    => $request->is_active == 1 ? null : $request->catatan_nonaktif,
             'tahun_perolehan'     => $request->tahun_perolehan,
-        ]);
+        ]); 
 
         return redirect()->route('barang.index')
             ->with('success', 'Barang berhasil diperbarui');
