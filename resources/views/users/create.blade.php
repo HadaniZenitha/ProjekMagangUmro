@@ -91,7 +91,8 @@
 
 <script>
 document.getElementById('nid').addEventListener('blur', function() {
-    const nid = this.value.trim();
+    const nid = this.value.trim().toUpperCase();
+    this.value = nid;
     const loading = document.getElementById('nid-loading');
     const nameInput = document.getElementById('name');
     const divisiInput = document.getElementById('divisi');
@@ -107,7 +108,7 @@ document.getElementById('nid').addEventListener('blur', function() {
     loading.classList.remove('d-none');
     errorDisplay.classList.add('d-none');
 
-    fetch(`/register/get-nid-data?nid=${encodeURIComponent(nid)}`)
+    fetch(`{{ route('register.getNidData') }}?nid=${encodeURIComponent(nid)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

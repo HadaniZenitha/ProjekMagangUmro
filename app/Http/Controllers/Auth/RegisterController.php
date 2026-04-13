@@ -38,7 +38,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest')->except('getNidData');
     }
 
     /**
@@ -49,7 +49,7 @@ class RegisterController extends Controller
     public function getNidData()
     {
         try {
-            $nid = trim(request('nid'));
+            $nid = strtoupper(trim((string) request('nid')));
             
             if (!$nid) {
                 return response()->json(['error' => 'NID harus diisi'], 422);
