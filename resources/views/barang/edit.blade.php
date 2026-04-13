@@ -145,7 +145,7 @@
 
             <hr class="my-4 opacity-50">
 
-            <div class="d-flex justify-content-end gap-2">
+            <div class="d-flex justify-content-start gap-2">
                 <a href="{{ route('barang.index') }}" class="btn btn-danger px-4">Batal</a>
                 <button type="submit" class="btn btn-warning px-4 fw-bold">
                     <i class="fa-solid fa-save me-1"></i> Simpan Perubahan

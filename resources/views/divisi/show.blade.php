@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4">Detail FUngsi</h2>
+    <h2 class="mb-4">Detail Fungsi</h2>
 
     <ul class="list-group shadow-sm">
         <li class="list-group-item">
@@ -18,11 +18,11 @@
 
             @if($divisi->is_active)
                 <span class="badge bg-success ms-2">
-                    <i class="fa-solid fa-circle-check me-1"></i> Aktif
+                     Aktif
                 </span>
             @else
                 <span class="badge bg-danger ms-2">
-                    <i class="fa-solid fa-circle-xmark me-1"></i> Nonaktif
+                    Nonaktif
                 </span>
             @endif
         </li>

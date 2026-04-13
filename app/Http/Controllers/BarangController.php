@@ -19,7 +19,12 @@ class BarangController extends Controller
     public function index(Request $request)
     {
         $query = Barang::with(['divisi', 'ruang', 'pic'])->latest('updated_at');
-
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama_barang', 'like', '%' . $request->search . '%')
+                    ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+            });
+        }
         // Filter Divisi
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
@@ -97,14 +102,14 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'divisi_id'           => 'required|exists:divisis,id',
-            'ruang_id'            => 'required|exists:ruangs,id',
+            'divisi_id' => 'required|exists:divisis,id',
+            'ruang_id' => 'required|exists:ruangs,id',
             'sub_jenis_barang_id' => 'required|exists:sub_jenis_barangs,id',
-            'pic_id'              => 'required|exists:pics,id',
-            'nama_barang'         => 'required|string|max:255',
-            'tahun_perolehan'     => 'required|integer',
-            'kondisi'             => 'required|in:baik,perlu perbaikan,rusak',
-            'foto'                 => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'pic_id' => 'required|exists:pics,id',
+            'nama_barang' => 'required|string|max:255',
+            'tahun_perolehan' => 'required|integer',
+            'kondisi' => 'required|in:baik,perlu perbaikan,rusak',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $divisi = Divisi::findOrFail($request->divisi_id);
@@ -134,25 +139,25 @@ class BarangController extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
-            
+
             // Nama file: kode_barang + timestamp + extension
             $fileName = str_replace('/', '-', $kodeBarang) . '_' . now()->format('Ymd_His') . '.' . $extension;
-            
+
             $fotoPath = $file->storeAs('barang_foto', $fileName, 'public');
         }
 
         Barang::create([
-            'divisi_id'           => $divisi->id,
-            'ruang_id'            => $request->ruang_id,
+            'divisi_id' => $divisi->id,
+            'ruang_id' => $request->ruang_id,
             'sub_jenis_barang_id' => $request->sub_jenis_barang_id,
-            'pic_id'              => $request->pic_id,
-            'kode_barang'         => $kodeBarang,
-            'nama_barang'         => $request->nama_barang,
-            'tahun_perolehan'     => $request->tahun_perolehan,
-            'kondisi'             => $request->kondisi,
-            'urutan'              => $urutanBaru,
-            'is_active'           => true,
-            'foto'                => $fotoPath,
+            'pic_id' => $request->pic_id,
+            'kode_barang' => $kodeBarang,
+            'nama_barang' => $request->nama_barang,
+            'tahun_perolehan' => $request->tahun_perolehan,
+            'kondisi' => $request->kondisi,
+            'urutan' => $urutanBaru,
+            'is_active' => true,
+            'foto' => $fotoPath,
         ]);
 
         return redirect()->route('barang.index')
@@ -195,13 +200,13 @@ class BarangController extends Controller
     {
         // VALIDASI (TANPA is_active BIAR TIDAK ERROR)
         $request->validate([
-            'nama_barang'     => 'required|string|max:255',
-            'pic_id'          => 'required|exists:pics,id',
-            'ruang_id'        => 'required|exists:ruangs,id',
-            'kondisi'         => 'required|in:baik,perlu perbaikan,rusak',
-            'is_active'       => 'required|boolean',
+            'nama_barang' => 'required|string|max:255',
+            'pic_id' => 'required|exists:pics,id',
+            'ruang_id' => 'required|exists:ruangs,id',
+            'kondisi' => 'required|in:baik,perlu perbaikan,rusak',
+            'is_active' => 'required|boolean',
             'tahun_perolehan' => 'required|integer',
-            'foto'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'catatan_nonaktif' => 'nullable|string',
         ]);
 
@@ -215,23 +220,23 @@ class BarangController extends Controller
 
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
-            
+
             // Nama file tetap pakai kode barang yang sudah ada
             $fileName = str_replace('/', '-', $barang->kode_barang) . '_' . now()->format('Ymd_His') . '.' . $extension;
-            
+
             $fotoPath = $file->storeAs('barang_foto', $fileName, 'public');
         }
 
         $barang->update([
-            'nama_barang'         => $request->nama_barang,
-            'pic_id'              => $request->pic_id,
-            'tahun_perolehan'     => $request->tahun_perolehan,
-            'kondisi'             => $request->kondisi,
-            'ruang_id'            => $request->ruang_id,
-            'is_active'           => $request->is_active,
-            'foto'                => $fotoPath,
-            'catatan_nonaktif'    => $request->is_active == 1 ? null : $request->catatan_nonaktif,
-            'tahun_perolehan'     => $request->tahun_perolehan,
+            'nama_barang' => $request->nama_barang,
+            'pic_id' => $request->pic_id,
+            'tahun_perolehan' => $request->tahun_perolehan,
+            'kondisi' => $request->kondisi,
+            'ruang_id' => $request->ruang_id,
+            'is_active' => $request->is_active,
+            'foto' => $fotoPath,
+            'catatan_nonaktif' => $request->is_active == 1 ? null : $request->catatan_nonaktif,
+            'tahun_perolehan' => $request->tahun_perolehan,
         ]);
 
         return redirect()->route('barang.index')
@@ -293,24 +298,24 @@ class BarangController extends Controller
     }
 
 
-        public function exportPdf(Request $request)
+    public function exportPdf(Request $request)
     {
         $query = $this->buildFilterQuery($request);
 
         $tahunSekarang = (int) date('Y');
-        $tahunMulai    = (int) $request->input('tahun_awal', $tahunSekarang - 4);
-        $tahunSelesai  = (int) $request->input('tahun_akhir', $tahunSekarang);
+        $tahunMulai = (int) $request->input('tahun_awal', $tahunSekarang - 4);
+        $tahunSelesai = (int) $request->input('tahun_akhir', $tahunSekarang);
 
         $tahunRange = range($tahunMulai, $tahunSelesai);
 
         $barangs = $query->with([
-            'divisi', 
-            'pic', 
+            'divisi',
+            'pic',
             'ruang',
             'barangHistories' => function ($q) use ($tahunMulai, $tahunSelesai) {
                 $q->select('barang_id', 'kondisi', 'tahun_perolehan', 'tanggal_perubahan')
-                  ->whereBetween('tahun_perolehan', [$tahunMulai, $tahunSelesai])
-                  ->orderBy('tanggal_perubahan', 'asc');
+                    ->whereBetween('tahun_perolehan', [$tahunMulai, $tahunSelesai])
+                    ->orderBy('tanggal_perubahan', 'asc');
             }
         ])->get();
 
@@ -359,11 +364,11 @@ class BarangController extends Controller
 
         // Render PDF
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('barang.export-pdf', [
-            'data'        => $processedData,
-            'tahun_list'  => $tahunRange,
-            'tahun_awal'  => $tahunMulai,
+            'data' => $processedData,
+            'tahun_list' => $tahunRange,
+            'tahun_awal' => $tahunMulai,
             'tahun_akhir' => $tahunSelesai,
-            'filter'      => $request->all(),
+            'filter' => $request->all(),
         ]);
 
         $pdf->setPaper('A4', 'landscape');

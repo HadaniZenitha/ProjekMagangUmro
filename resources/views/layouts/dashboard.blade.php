@@ -345,7 +345,7 @@
 
             <div>
                 <div style="font-weight:700; font-size:18px; color:#005697; letter-spacing:12px;">PLN</div>
-                <div style="font-weight:400; font-size:13px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
+                <div style="font-weight:400; font-size:12px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
             </div>
 
         </div>
@@ -371,7 +371,7 @@
                     </a>
                 </div>
                 <div class="collapse {{ request()->routeIs(['divisi.*','pic.*']) ? 'show' : '' }} sub-menu" id="menuKaryawan">
-                    <a href="{{ route('divisi.index') }}" class="{{ request()->routeIs('divisi.*') ? 'active-sub' : '' }}">BIDANG <i class="fa-solid fa-building"></i></a>
+                    <a href="{{ route('divisi.index') }}" class="{{ request()->routeIs('divisi.*') ? 'active-sub' : '' }}">FUNGSI <i class="fa-solid fa-building"></i></a>
                     <a href="{{ route('pic.index') }}" class="{{ request()->routeIs('pic.*') ? 'active-sub' : '' }}">KARYAWAN <i class="fa-solid fa-user-tie ms-2"></i></a>
                 </div>
 
@@ -395,14 +395,14 @@
                 <div class="nav-link-collapse {{ request()->routeIs(['kelompok.*','jenis.*','subjenis.*']) ? '' : 'collapsed' }}"
                     data-bs-toggle="collapse" data-bs-target="#menuBarang">
                     <a href="javascript:void(0)">
-                        MASTER BARANG
+                        MASTER ITEM
                         <i class="fa-solid fa-chevron-right rotate-icon"></i>
                         <i class="fa-solid fa-cubes"></i>
                     </a>
                 </div>
                 <div class="collapse {{ request()->routeIs(['kelompok.*','jenis.*','subjenis.*']) ? 'show' : '' }} sub-menu" id="menuBarang">
-                    <a href="{{ route('kelompok.index') }}" class="{{ request()->routeIs('kelompok.*') ? 'active-sub' : '' }}">KELOMPOK BARANG <i class="fa-solid fa-box-archive"></i></a>
-                    <a href="{{ route('jenis.index') }}" class="{{ request()->routeIs('jenis.*') ? 'active-sub' : '' }}">JENIS BARANG <i class="fa-solid fa-tags"></i></a>
+                    <a href="{{ route('kelompok.index') }}" class="{{ request()->routeIs('kelompok.*') ? 'active-sub' : '' }}">KELOMPOK ITEM <i class="fa-solid fa-box-archive"></i></a>
+                    <a href="{{ route('jenis.index') }}" class="{{ request()->routeIs('jenis.*') ? 'active-sub' : '' }}">JENIS ITEM <i class="fa-solid fa-tags"></i></a>
                     <a href="{{ route('subjenis.index') }}" class="{{ request()->routeIs('subjenis.*') ? 'active-sub' : '' }}">SUB JENIS <i class="fa-solid fa-folder-tree"></i></a>
                 </div>
             @endif
@@ -418,9 +418,9 @@
             </div>
             <div class="collapse {{ request()->routeIs(['barang.*']) ? 'show' : '' }} sub-menu" id="menuInventaris">
                 <a href="{{ route('barang.index') }}" class="{{ request()->routeIs('barang.*') ? 'active-sub' : '' }}">
-                    BARANG INVENTARIS <i class="fa-solid fa-database"></i>
+                    ITEM INVENTARIS <i class="fa-solid fa-database"></i>
                 </a>
-                <a href="{{ route('barang-sewa.index') }}">BARANG SEWA<i class="fa-solid fa-list-check"></i></a>
+                <a href="{{ route('barang-sewa.index') }}">ITEM SEWA<i class="fa-solid fa-list-check"></i></a>
             </div>
 
             <!-- Management Akun (Only for Superadmin) -->
@@ -531,7 +531,7 @@
             <footer class="d-flex justify-content-between align-items-center mt-3">
 
                 <div class="text-muted small">
-                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhoul
+                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhaul
                 </div>
 
                 <div class="small text-muted">
@@ -583,7 +583,7 @@
             <div class="modal-body p-4">
                 <div class="text-center mb-4">
                     <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
-                    <h4 class="mt-3 fw-bold text-dark">i - Noni</h4>
+                    <h4 class="mt-3 fw-bold text-dark">SmartUMRO</h4>
                     <p class="text-muted mb-0">Sistem Inventarisasi UNIT UMRO</p>
                     <span class="badge bg-light text-muted border">Versi 1.0.0</span>
                 </div>
@@ -826,164 +826,6 @@
         }
     </script>
 
-    <!-- ================= MODAL INFORMASI SISTEM ================= -->
-    <div class="modal fade" id="infoModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg">
-
-                <!-- HEADER -->
-                <div class="modal-header text-white"
-                    style="background: linear-gradient(135deg,#309FB0,#1F7A88);">
-
-                    <h5 class="modal-title fw-bold">
-                        <i class="fa-solid fa-circle-info me-2"></i>
-                        Informasi Sistem
-                    </h5>
-
-                    <button type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="modal">
-                    </button>
-
-                </div>
-
-                <div class="modal-body">
-
-                    <!-- LOGO + TITLE -->
-                    <div class="text-center mb-4">
-
-                        <img src="{{ asset('images/pln.jpeg') }}"
-                            height="70"
-                            class="mb-2">
-
-                        <h3 class="fw-bold mb-1">i - Noni</h3>
-
-                        <p class="text-muted mb-0">
-                            Sistem Inventarisasi UNIT MAINTENANCE REPAIR AND OVERHAUL
-                        </p>
-
-                        <span class="badge bg-secondary mt-2">
-                            Versi 1.0.0
-                        </span>
-
-                    </div>
-
-                    <hr>
-
-                    <!-- TENTANG SISTEM -->
-                    <div class="mb-4">
-
-                        <h6 class="fw-bold text-primary mb-2">
-                            <i class="fa-solid fa-circle-info me-2"></i>
-                            Tentang Sistem
-                        </h6>
-
-                        <p style="text-align: justify;">
-                            i-Noni merupakan sistem inventarisasi yang dirancang untuk membantu
-                            pengelolaan data aset dan barang secara terstruktur, terintegrasi,
-                            dan mudah diakses. Sistem ini mendukung pengelolaan data karyawan,
-                            lokasi (gedung, lantai, ruangan), serta data inventaris sehingga
-                            proses monitoring aset menjadi lebih efektif, akurat, dan transparan.
-                        </p>
-
-                    </div>
-
-                    <hr>
-
-                    <!-- FITUR UTAMA -->
-                    <div class="mb-4">
-
-                        <h6 class="fw-bold text-primary mb-3">
-                            <i class="fa-solid fa-star me-2"></i>
-                            Fitur Utama Sistem
-                        </h6>
-
-                        <div class="row text-center">
-
-                            <div class="col-md-4 mb-3">
-
-                                <i class="fa-solid fa-users fa-2x text-info mb-2"></i>
-
-                                <h6 class="fw-bold mb-1">Manajemen Karyawan</h6>
-
-                                <small class="text-muted">
-                                    Mengelola data bidang dan karyawan
-                                </small>
-
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <i class="fa-solid fa-building fa-2x text-success mb-2"></i>
-
-                                <h6 class="fw-bold mb-1">Manajemen Lokasi</h6>
-
-                                <small class="text-muted">
-                                    Mengelola gedung, lantai, dan ruangan
-                                </small>
-
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-
-                                <i class="fa-solid fa-box fa-2x text-warning mb-2"></i>
-
-                                <h6 class="fw-bold mb-1">Inventaris Barang</h6>
-
-                                <small class="text-muted">
-                                    Pengelolaan data barang dan aset
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <hr>
-
-                    <!-- PANDUAN -->
-                    <div>
-
-                        <h6 class="fw-bold text-primary mb-2">
-                            <i class="fa-solid fa-book me-2"></i>
-                            Panduan Singkat
-                        </h6>
-
-                        <ol style="font-size:14px; padding-left:18px;">
-
-                            <li>Gunakan menu sidebar untuk memilih modul sistem.</li>
-                            <li>Tambahkan data melalui tombol <b>Tambah</b>.</li>
-                            <li>Gunakan fitur <b>Edit</b> untuk memperbarui data.</li>
-                            <li>Pastikan data lokasi dan karyawan tersedia sebelum menambahkan inventaris.</li>
-                            <li>Gunakan fitur <b>Search</b> untuk menemukan data dengan cepat.</li>
-
-                        </ol>
-
-                    </div>
-
-                </div>
-
-                <!-- FOOTER -->
-                <div class="modal-footer d-flex justify-content-between align-items-center bg-light">
-
-                    <div class="text-muted small">
-
-                        <i class="fa-solid fa-code me-1"></i>
-                        Developed by <b>SMART UMRO</b> • UNIT MAINTENANCE REPAIR AND OVERHAUL • 2026
-
-                    </div>
-
-                    <button class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                        Tutup
-                    </button>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
     <!-- ================= MODAL NOTIFIKASI ================= -->
     <div class="modal fade" id="notifModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
