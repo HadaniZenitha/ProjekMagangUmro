@@ -11,11 +11,23 @@ class SubJenisBarangController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->query('search', ''));
+
         $subjenis = SubJenisBarang::with('jenis')
-        ->orderBy('kode_subjenis')
-        ->paginate(10);
+                ->when($search !== '', function ($query) use ($search) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('kode_subjenis', 'like', "%{$search}%")
+                            ->orWhere('nama_subjenis', 'like', "%{$search}%")
+                            ->orWhereHas('jenis', function ($jenisQuery) use ($search) {
+                                $jenisQuery->where('nama_jenis', 'like', "%{$search}%");
+                            });
+                    });
+                })
+                ->orderBy('kode_subjenis')
+                ->paginate(10)
+                ->withQueryString();
 
         return view('subjenis.index', compact('subjenis'));
     }

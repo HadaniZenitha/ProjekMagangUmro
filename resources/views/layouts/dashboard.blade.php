@@ -531,7 +531,7 @@
             <footer class="d-flex justify-content-between align-items-center mt-3">
 
                 <div class="text-muted small">
-                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhoul
+                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhaul
                 </div>
 
                 <div class="small text-muted">
@@ -1038,9 +1038,9 @@
                         <i class="fa-solid fa-user fa-3x text-white"></i>
                     </div>
                     <h5 class="fw-bold text-white mb-1">{{ Auth::user()->name }}</h5>
-                    <small class="text-white" style="opacity: 0.9;">
+                    <!-- <small class="text-white" style="opacity: 0.9;">
                         <i class="fa-regular fa-envelope me-2"></i>{{ Auth::user()->email }}
-                    </small>
+                    </small> -->
                 </div>
 
                 <!-- Info Cards -->
