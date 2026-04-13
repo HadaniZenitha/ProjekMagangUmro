@@ -71,7 +71,7 @@
                             @endif
                         @else
                             <p class="text-muted mb-0">Belum ada PIC default untuk ruangan ini.</p>
-                            <small class="text-muted">Saat membuat barang, akan menggunakan PIC individu.</small>
+                            <small class="text-muted">Saat membuat item, akan menggunakan PIC individu.</small>
                         @endif
                     </div>
                 </div>

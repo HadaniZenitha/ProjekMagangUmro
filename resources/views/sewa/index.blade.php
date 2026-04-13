@@ -1,18 +1,18 @@
 @extends('layouts.dashboard')
 
-@section('page-title', 'Data Barang Sewa')
-@section('title', 'Data Barang Sewa')
+@section('page-title', 'Data Item Sewa')
+@section('title', 'Data Item Sewa')
 
 @section('content')
 
 <div class="container-fluid">
 
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
-    <h5 class="fw-bold mb-0">Data Barang Sewa</h5>
+    <h5 class="fw-bold mb-0">Data Item Sewa</h5>
 
     <div class="d-flex flex-wrap gap-2">
         <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro">
-            <i class="fa-solid fa-plus"></i> Tambah Barang
+            <i class="fa-solid fa-plus"></i> Tambah Item
         </a>
     </div>
 </div>
@@ -33,7 +33,7 @@
                     <th>Kode</th>
                     <th>PIC</th>
                     <th>Fungsi</th>
-                    <th>Nama Barang</th>
+                    <th>Nama Item</th>
                     <th>Lokasi</th>
                     <th>Tahun</th>
                     <th>Kondisi</th>
@@ -102,7 +102,7 @@
                 <tr>
                     <td colspan="9" class="text-center text-muted py-4">
                         <i class="fa-solid fa-box-open fa-2x mb-2 d-block"></i>
-                        Data barang sewa belum tersedia
+                        Data Item sewa belum tersedia
                     </td>
                 </tr>
                 @endforelse

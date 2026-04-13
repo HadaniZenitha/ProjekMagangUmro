@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Barang Inventaris')
+@section('title', 'Tambah Item Inventaris')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Tambah Barang Inventaris</h5>
+    <h5 class="fw-bold mb-0">Tambah Item Inventaris</h5>
 </div>
 
 @if ($errors->any())
@@ -23,7 +23,7 @@
             @csrf
 
             <div class="mb-3">
-                <label class="form-label fw-semibold">Nama Barang <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold">Nama Item <span class="text-danger">*</span></label>
                 <input type="text" name="nama_barang" class="form-control" placeholder="Masukkan nama barang" required>
             </div>
 
@@ -48,7 +48,7 @@
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label fw-semibold">Sub Jenis Barang <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold">Sub Jenis Item <span class="text-danger">*</span></label>
                     <input list="subjenisOptions" id="subjenis-input" class="form-control" placeholder="Ketik untuk mencari sub jenis..." required>
                     
                     <datalist id="subjenisOptions">
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="col-md-6 mb-4">
-                    <label class="form-label fw-semibold">Kondisi Barang <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold">Kondisi Item <span class="text-danger">*</span></label>
                     <select name="kondisi" class="form-select" required>
                         <option value="baik">Baik</option>
                         <option value="perlu perbaikan">Perlu Perbaikan</option>
@@ -89,7 +89,7 @@
 
             <!-- Upload Foto -->
             <div class="mb-4">
-                <label class="form-label fw-semibold">Foto Barang (Opsional)</label>
+                <label class="form-label fw-semibold">Foto Item (Opsional)</label>
                 <input type="file" name="foto" class="form-control" accept="image/*">
                 <small class="text-muted">Format: jpg, jpeg, png. Maksimal 2MB</small>
             </div>
@@ -101,7 +101,7 @@
 
                 {{-- 🔴 TOMBOL BATAL (SUDAH DIPERBAIKI) --}}
                 <a href="{{ route('barang.index') }}" class="btn btn-danger px-4">
-                    <i class="fa-solid fa-xmark me-1"></i> Batal
+                    Batal
                 </a>
             </div>
 

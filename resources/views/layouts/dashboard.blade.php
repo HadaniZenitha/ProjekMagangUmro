@@ -15,11 +15,6 @@
         height: 100%;
     }
 
-.main-wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
         :root {
             --bg-sidebar: #309FB0;
             --pln-yellow: #FACC15;
@@ -278,51 +273,111 @@
             height: 1rem;
         }
 
+        .date-mobile {
+            display: none;
+        }
+
+        @media (max-width: 576px) {
+            .date-desktop {
+                display: none;
+            }
+
+            .date-mobile {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                white-space: nowrap;
+                font-size: 12px;
+            }
+        }
+
         @media (max-width: 991px) {
 
+            /* ===== SIDEBAR ===== */
             .sidebar {
                 transform: translateX(-100%);
+                position: fixed;
+                z-index: 1000;
+                width: 260px;
             }
 
             .sidebar.show {
                 transform: translateX(0);
             }
 
+            /* ===== MAIN ===== */
             .main-wrapper {
-                margin-left: 0;
+                margin-left: 0 !important;
+                width: 100%;
             }
 
+            /* ===== NAVBAR ===== */
+            .top-navbar {
+                padding: 10px 12px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+                gap: 8px;
+            }
+
+            .top-navbar .d-flex.align-items-center.gap-3 {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-shrink: 0;
+            }
+
+            /* HAMBURGER */
             .mobile-toggle {
-                display: inline-block;
-            }
-
-            .overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.4);
-                z-index: 900;
-            }
-
-            .overlay.show {
-                display: block;
-            }
-
-            .search-box {
-                width: 180px;
-            }
-
-            .icon-top i {
-                font-size: 20px;
+                display: inline-block !important;
+                font-size: 18px;
+                flex-shrink: 0; /* 🔥 biar ga hilang */
                 cursor: pointer;
             }
 
-            .icon-top i:hover {
-                color: #309FB0;
-                transform: scale(1.15);
-                transition: 0.2s;
+            /* SEARCH */
+            .search-box {
+                width: 100%;
+                max-width: 180px;
             }
 
+            /* ICON TOP */
+            .icon-top {
+                gap: 10px !important;
+            }
+
+            .icon-top i {
+                font-size: 18px;
+            }
+
+            /* ===== HEADER ===== */
+            .banner-header {
+                padding: 15px 20px;
+                height: auto;
+            }
+
+            .banner-header h2 {
+                font-size: 18px;
+            }
+
+            /* ===== CONTENT ===== */
+            .content-card {
+                margin: -20px 10px 20px;
+                padding: 15px;
+                border-radius: 10px;
+            }
+
+            /* ===== FIX AGAR GA NGECIL ===== */
+            body, html {
+                width: 100%;
+                overflow-x: hidden;
+            }
+
+            /* ===== OVERLAY ===== */
+            .overlay.show {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -371,7 +426,7 @@
                     </a>
                 </div>
                 <div class="collapse {{ request()->routeIs(['divisi.*','pic.*']) ? 'show' : '' }} sub-menu" id="menuKaryawan">
-                    <a href="{{ route('divisi.index') }}" class="{{ request()->routeIs('divisi.*') ? 'active-sub' : '' }}">BIDANG <i class="fa-solid fa-building"></i></a>
+                    <a href="{{ route('divisi.index') }}" class="{{ request()->routeIs('divisi.*') ? 'active-sub' : '' }}">FUNGSI <i class="fa-solid fa-building"></i></a>
                     <a href="{{ route('pic.index') }}" class="{{ request()->routeIs('pic.*') ? 'active-sub' : '' }}">KARYAWAN <i class="fa-solid fa-user-tie ms-2"></i></a>
                 </div>
 
@@ -401,8 +456,8 @@
                     </a>
                 </div>
                 <div class="collapse {{ request()->routeIs(['kelompok.*','jenis.*','subjenis.*']) ? 'show' : '' }} sub-menu" id="menuBarang">
-                    <a href="{{ route('kelompok.index') }}" class="{{ request()->routeIs('kelompok.*') ? 'active-sub' : '' }}">KELOMPOK BARANG <i class="fa-solid fa-box-archive"></i></a>
-                    <a href="{{ route('jenis.index') }}" class="{{ request()->routeIs('jenis.*') ? 'active-sub' : '' }}">JENIS BARANG <i class="fa-solid fa-tags"></i></a>
+                    <a href="{{ route('kelompok.index') }}" class="{{ request()->routeIs('kelompok.*') ? 'active-sub' : '' }}">KELOMPOK ITEM <i class="fa-solid fa-box-archive"></i></a>
+                    <a href="{{ route('jenis.index') }}" class="{{ request()->routeIs('jenis.*') ? 'active-sub' : '' }}">JENIS ITEM <i class="fa-solid fa-tags"></i></a>
                     <a href="{{ route('subjenis.index') }}" class="{{ request()->routeIs('subjenis.*') ? 'active-sub' : '' }}">SUB JENIS <i class="fa-solid fa-folder-tree"></i></a>
                 </div>
             @endif
@@ -418,9 +473,9 @@
             </div>
             <div class="collapse {{ request()->routeIs(['barang.*']) ? 'show' : '' }} sub-menu" id="menuInventaris">
                 <a href="{{ route('barang.index') }}" class="{{ request()->routeIs('barang.*') ? 'active-sub' : '' }}">
-                    BARANG INVENTARIS <i class="fa-solid fa-database"></i>
+                    ITEM INVENTARIS <i class="fa-solid fa-database"></i>
                 </a>
-                <a href="{{ route('barang-sewa.index') }}">BARANG SEWA<i class="fa-solid fa-list-check"></i></a>
+                <a href="{{ route('barang-sewa.index') }}">ITEM SEWA<i class="fa-solid fa-list-check"></i></a>
             </div>
 
             <!-- Management Akun (Only for Superadmin) -->
@@ -493,9 +548,14 @@
             <div class="d-flex align-items-center gap-4 text-muted icon-top">
 
                 <!-- TANGGAL -->
-                <div class="small text-muted">
+                <div class="date-desktop small text-muted">
                     <i class="fa-regular fa-calendar me-1"></i>
                     {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+                </div>
+
+                <div class="date-mobile small text-muted">
+                    <i class="fa-regular fa-calendar me-1"></i>
+                    {{\Carbon\Carbon::now()->format('d/m/y')}}
                 </div>
 
                 <!-- NOTIFIKASI -->
@@ -585,8 +645,8 @@
                     <!-- HEADER -->
                     <div class="text-center mb-4">
                         <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
-                        <h4 class="mt-3 fw-bold">i - Noni</h4>
-                        <p class="text-muted mb-0">Sistem Inventarisasi UNIT UMRO</p>
+                        <h4 class="mt-3 fw-bold">SMART - UMRO</h4>
+                        <p class="text-muted mb-0">Sistem Manajemen Aset Terintegrasi</p>
                         <small class="text-muted">Versi 1.0.0</small>
                     </div>
 
@@ -595,11 +655,7 @@
                     <!-- DESKRIPSI SISTEM -->
                     <h6 class="fw-bold text-primary">Tentang Sistem</h6>
                     <p style="text-align: justify;">
-                        i-Noni adalah sistem inventarisasi yang dirancang untuk membantu
-                        pengelolaan data aset dan barang secara terstruktur dan terintegrasi.
-                        Sistem ini mencakup pengelolaan data karyawan, lokasi (gedung, lantai, ruangan),
-                        serta data barang dan inventaris sehingga proses monitoring menjadi lebih efektif,
-                        akurat, dan transparan.
+                        SMART-UMRO (Sistem Manajemen Aset Terintegrasi) adalah aplikasi digital yang digunakan untuk mengelola data inventaris secara terpusat, mulai dari pencatatan barang, lokasi, PIC (penanggung jawab), hingga kondisi aset. Sistem ini dilengkapi fitur QR Code untuk mempermudah identifikasi dan pengecekan barang secara cepat dan akurat, sehingga meningkatkan efisiensi, transparansi, dan kontrol dalam pengelolaan aset.
                     </p>
 
                     <hr>
@@ -858,7 +914,7 @@
                                 <h6 class="fw-bold mb-1">Manajemen Karyawan</h6>
 
                                 <small class="text-muted">
-                                    Mengelola data bidang dan karyawan
+                                    Mengelola data fungsi dan karyawan
                                 </small>
 
                             </div>

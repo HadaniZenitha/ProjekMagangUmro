@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Barang Sewa')
+@section('title', 'Edit Item Sewa')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Edit Barang Sewa</h5>
+    <h5 class="fw-bold mb-0">Edit Item Sewa</h5>
 </div>
 
 {{-- ERROR VALIDASI --}}
@@ -28,7 +28,7 @@
 
             {{-- Kode Barang --}}
             <div class="mb-3">
-                <label class="form-label fw-semibold">Kode Barang</label>
+                <label class="form-label fw-semibold">Kode Item</label>
                 <input type="text"
                        class="form-control"
                        value="{{ $sewa->kode_barang }}"
@@ -37,7 +37,7 @@
 
             {{-- Nama Barang --}}
             <div class="mb-3">
-                <label class="form-label fw-semibold">Nama Barang</label>
+                <label class="form-label fw-semibold">Nama Item</label>
                 <input type="text" name="nama_barang" class="form-control" value="{{ old('nama_barang', $sewa->nama_barang) }}" required>
             </div>
 

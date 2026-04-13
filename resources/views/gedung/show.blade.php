@@ -16,11 +16,11 @@
 
             @if($gedung->is_active)
                 <span class="badge bg-success ms-2">
-                    <i class="fa-solid fa-circle-check me-1"></i> Aktif
+                    Aktif
                 </span>
             @else
                 <span class="badge bg-danger ms-2">
-                    <i class="fa-solid fa-circle-xmark me-1"></i> Nonaktif
+                    Nonaktif
                 </span>
             @endif
         </li>    

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 
-    <h2 class="mb-4">Detail Barang</h2>
+    <h2 class="mb-4">Detail Item</h2>
 
     <div class="row">
 
@@ -17,7 +17,7 @@
                     <ul class="list-group list-group-flush">
 
                         <li class="list-group-item">
-                            <b>Nama Barang :</b> {{ $sewa->nama_barang }}
+                            <b>Nama Item :</b> {{ $sewa->nama_barang }}
                         </li>
 
                         <li class="list-group-item">
@@ -52,14 +52,14 @@
 
                 <div class="card-body">
 
-                    <h5 class="mb-3">QR Code Barang</h5>
+                    <h5 class="mb-3">QR Code Item</h5>
 
                     <div class="p-3 bg-light d-inline-block rounded">
                         {!! QrCode::size(180)->generate($sewa->kode_barang) !!}
                     </div>
 
                     <p class="mt-3 text-muted small">
-                        Scan QR Code untuk melihat informasi barang.
+                        Scan QR Code untuk melihat informasi Item.
                     </p>
 
                 </div>

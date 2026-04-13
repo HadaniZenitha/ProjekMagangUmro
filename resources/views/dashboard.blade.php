@@ -160,7 +160,7 @@
                 </div>
 
                 <div>
-                    <div class="stat-title">Total Barang</div>
+                    <div class="stat-title">Total Item</div>
                     <div class="stat-value">
                         {{ $totalBarang }} Item
                     </div>
@@ -262,7 +262,7 @@
                 </div>
 
                 <div>
-                    <div class="stat-title">Barang Rusak</div>
+                    <div class="stat-title">Item Rusak</div>
                     <div class="stat-value">
                         {{ $barangRusak }} Item
                     </div>
@@ -306,7 +306,7 @@
                             <thead>
 
                                 <tr>
-                                    <th>Nama Barang</th>
+                                    <th>Nama Item</th>
                                     <th>Jenis</th>
                                     <th>Lokasi</th>
                                     <th>Status</th>
@@ -368,7 +368,7 @@
                     </a>
 
                     <a href="{{ route('barang.index') }}" class="btn btn-outline-secondary quick-btn btn-modern">
-                        <i class="fa-solid fa-box"></i> Lihat Data Barang
+                        <i class="fa-solid fa-box"></i> Lihat Item
                     </a>
 
                     <a href="{{ route('ruangs.index') }}" class="btn btn-outline-warning quick-btn btn-modern">

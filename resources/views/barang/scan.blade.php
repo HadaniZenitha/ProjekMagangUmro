@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container text-center">
-    <h5 class="mb-3">Scan QR Barang</h5>
+    <h5 class="mb-3">Scan QR Item</h5>
 
     <div id="reader" style="width: 100%; max-width: 400px; margin:auto;"></div>
 

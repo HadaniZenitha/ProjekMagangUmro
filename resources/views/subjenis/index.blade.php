@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Master Sub Jenis Barang')
+@section('title', 'Master Sub Jenis Item')
 
 @section('content')
 
@@ -50,7 +50,7 @@
 <div class="mb-3 d-flex flex-md-row flex-column align-items-md-center">
     
     <h5 class="fw-semibold mb-2 mb-md-0">
-        Master Sub Jenis Barang
+        Master Sub Jenis Item
     </h5>
 
     <a href="{{ route('subjenis.create') }}" 
@@ -75,7 +75,7 @@
                 <tr>
                     <th>Kode</th>
                     <th>Nama Sub Jenis</th>
-                    <th>Jenis Barang</th>
+                    <th>Jenis Item</th>
                     <th width="220" class="text-center">Aksi</th>
                 </tr>
             </thead>
