@@ -16,8 +16,12 @@ class PicController extends Controller
     public function index(Request $request)
     {
         $search = trim((string) $request->query('search', ''));
+        $fungsi = $request->query('fungsi');
 
         $pics = Pic::with('divisi')
+                ->when(!empty($fungsi), function ($query) use ($fungsi) {
+                    $query->where('divisi_id', $fungsi);
+                })
                 ->when($search !== '', function ($query) use ($search) {
                     $query->where(function ($q) use ($search) {
                         $q->where('nama_pic', 'like', "%{$search}%")
@@ -32,7 +36,11 @@ class PicController extends Controller
                 ->paginate(15)
                 ->withQueryString();
 
-        return view('pic.index', compact('pics'));
+        $divisis = Divisi::where('is_active', true)
+            ->orderBy('nama_divisi')
+            ->get();
+
+        return view('pic.index', compact('pics', 'divisis'));
     }
 
     /**
