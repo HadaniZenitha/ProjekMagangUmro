@@ -277,7 +277,7 @@
 	<div class="table-responsive">
 		<table class="table table-bordered align-middle mb-0">
 			<thead class="table-light">
-				<tr>
+				<tr class="text-center">
 					<th>Kode</th>
 					<th>PIC</th>
 					<th>Nama Barang</th>
