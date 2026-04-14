@@ -165,7 +165,6 @@
                             Batal
                         </a>
                     </div>
-                @endforeach
             </div>
 
             @error('roles')
