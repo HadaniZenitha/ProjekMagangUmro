@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Detail Barang')
+@section('title', 'Detail Item')
 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold mb-0">Detail Inventaris</h4>
+        <h4 class="fw-bold mb-0">Detail Item</h4>
         <div class="d-flex gap-2">
             <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-warning text-white shadow-sm">
                 <i class="fa-solid fa-pen-to-square"></i> Edit
@@ -20,7 +20,7 @@
         <div class="col-lg-4 col-md-5">
             <div class="card border-0 shadow-sm mb-4 text-center">
                 <div class="card-header bg-white py-3 text-start">
-                    <h6 class="fw-bold mb-0">Foto Barang</h6>
+                    <h6 class="fw-bold mb-0">Foto Item</h6>
                 </div>
                 <div class="card-body">
                     @if ($barang->foto)
@@ -59,12 +59,12 @@
                 </div>
                 <div class="card-body">
                     <div class="row mb-3 align-items-center">
-                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Kode Barang</label>
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Kode Item</label>
                         <div class="col-sm-8 text-dark fw-bold text-primary">{{ $barang->kode_barang }}</div>
                     </div>
                     <hr class="opacity-50">
                     <div class="row mb-3 align-items-center">
-                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Nama Barang</label>
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Nama Item</label>
                         <div class="col-sm-8 text-dark">{{ $barang->nama_barang }}</div>
                     </div>
                     <hr class="opacity-50">

@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Master Jenis Barang')
+@section('title', 'Master Jenis Item')
 
 @section('content')
 
@@ -50,7 +50,7 @@
 <div class="mb-3 d-flex flex-md-row flex-column align-items-md-center">
     
     <h5 class="fw-semibold mb-2 mb-md-0">
-        Master Jenis Barang
+        Master Jenis Item
     </h5>
 
     <a href="{{ route('jenis.create') }}" 
@@ -129,7 +129,7 @@
                 @empty
                 <tr>
                     <td colspan="5" class="text-center text-muted py-3">
-                        Belum ada data jenis barang.
+                        Belum ada data jenis item.
                     </td>
                 </tr>
                 @endforelse

@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Cetak Stiker Barang</title>
+    <title>Cetak Stiker Item</title>
 
     <style>
         body {

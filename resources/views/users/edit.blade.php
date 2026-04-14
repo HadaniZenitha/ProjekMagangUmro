@@ -3,6 +3,89 @@
 @section('title', 'Edit User')
 
 @section('content')
+
+<style>
+/* ===== CARD CLEAN ===== */
+.custom-card{
+    border-radius:14px;
+    background:#ffffff;
+    padding:20px;
+    border:1px solid #eaeaea;
+    box-shadow:0 4px 12px rgba(0,0,0,0.04);
+}
+
+/* ===== BUTTON CLEAN ===== */
+.btn-clean{
+    border-radius:8px;
+    font-weight:500;
+    font-size:14px;
+    padding:6px 12px;
+    box-shadow:none;
+    transition:all 0.2s ease;
+}
+
+/* ===== WARNA SAMA ===== */
+.btn-warning.btn-clean{
+    background-color:#facc15;
+    border:none;
+    color:#000;
+}
+
+.btn-warning.btn-clean:hover{
+    background-color:#fbbf24;
+}
+
+/* BATAL = MERAH */
+.btn-danger.btn-clean{
+    background-color:#ef4444;
+    border:none;
+    color:#fff;
+}
+
+.btn-danger.btn-clean:hover{
+    background-color:#dc2626;
+}
+
+.btn-secondary.btn-clean{
+    background-color:#e5e7eb;
+    border:none;
+    color:#000;
+}
+
+/* HOVER */
+.btn-clean:hover{
+    transform:translateY(-1px);
+}
+
+/* INPUT */
+.form-control{
+    border-radius:8px;
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+    .btn-mobile-full{
+        width:100%;
+        text-align:center;
+    }
+}
+</style>
+
+<!-- HEADER -->
+<div class="mb-3 d-flex flex-md-row flex-column align-items-md-center">
+    
+    <h5 class="fw-semibold mb-2 mb-md-0">
+        Edit User
+    </h5>
+
+</div>
+
+<div class="custom-card">
+
+    <form action="{{ route('users.update', $user) }}" method="POST">
+        @csrf
+        @method('PUT')
+
 <div class="row">
     <div class="col-md-8">
         <div class="card border-0 shadow-sm">
@@ -43,7 +126,7 @@
 
                     <!-- BIDANG/DIVISI -->
                     <div class="mb-3">
-                        <label for="divisi" class="form-label fw-bold">Bidang</label>
+                        <label for="divisi" class="form-label fw-bold">Fungsi</label>
                         <input type="text" class="form-control" 
                             id="divisi" readonly
                             placeholder="Bidang (Auto-fill dari NID)">
@@ -84,10 +167,27 @@
                             Batal
                         </a>
                     </div>
-                </form>
+                @endforeach
             </div>
+
+            @error('roles')
+                <div class="text-danger small mt-2">{{ $message }}</div>
+            @enderror
         </div>
-    </div>
+
+        <!-- BUTTON -->
+        <div class="d-flex flex-md-row flex-column gap-2">
+            <button type="submit" class="btn btn-warning btn-clean btn-mobile-full">
+                <i class="fa-solid fa-save me-1"></i> Update
+            </button>
+
+            <a href="{{ route('users.index') }}" 
+               class="btn btn-danger btn-clean btn-mobile-full"> Batal
+            </a>
+        </div>
+
+    </form>
+
 </div>
 
 <script>

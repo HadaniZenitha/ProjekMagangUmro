@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Master Sub Jenis Barang')
+@section('title', 'Master Sub Jenis Item')
 
 @section('content')
 
@@ -104,7 +104,7 @@
                 <tr>
                     <th>Kode</th>
                     <th>Nama Sub Jenis</th>
-                    <th>Jenis Barang</th>
+                    <th>Jenis Item</th>
                     <th width="220" class="text-center">Aksi</th>
                 </tr>
             </thead>

@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('page-title', 'Data Barang Inventaris')
-@section('title', 'Data Barang Inventaris')
+@section('page-title', 'Data Item Inventaris')
+@section('title', 'Data Item Inventaris')
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -124,11 +124,11 @@
 
 
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4 header-flex">
-	<h5 class="fw-bold mb-0">Data Barang Inventaris</h5>
+	<h5 class="fw-bold mb-0">Data Item Inventaris</h5>
 
 	<div class="d-flex flex-wrap gap-2">
 		<a href="{{ route('barang.create') }}" class="btn btn-warning btn-pro">
-			<i class="fa-solid fa-plus"></i> Tambah Barang
+			<i class="fa-solid fa-plus"></i> Tambah Item
 		</a>
 
 		<button class="btn btn-success btn-pro" data-bs-toggle="modal" data-bs-target="#modalImport">
@@ -165,7 +165,7 @@
 					<thead>
 						<tr>
 							<th width="80">Baris</th>
-							<th>Nama Barang</th>
+							<th>Nama Item</th>
 							<th>Alasan Gagal</th>
 						</tr>
 					</thead>
@@ -280,7 +280,7 @@
 				<tr class="text-center">
 					<th>Kode</th>
 					<th>PIC</th>
-					<th>Nama Barang</th>
+					<th>Nama Item</th>
 					<th>Lokasi</th>
 					<th>Tahun</th>
 					<th>Kondisi</th>
