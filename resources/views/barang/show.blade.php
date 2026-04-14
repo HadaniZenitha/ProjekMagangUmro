@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Detail Barang')
+@section('title', 'Detail Item Inventaris')
 
 <style>
     /* ===== BUTTON CLEAN ===== */
