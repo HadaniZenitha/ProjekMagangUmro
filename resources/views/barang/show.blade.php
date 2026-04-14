@@ -1,31 +1,30 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Detail Barang')
+@section('title', 'Detail Item')
 
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold mb-0">Detail Inventaris</h4>
+            <h4 class="fw-bold mb-0">Detail Item Inventaris</h4>
         </div>
 
-        <div class="row">
-            <div class="col-lg-4 col-md-5">
-                <div class="card border-0 shadow-sm mb-4 text-center">
-                    <div class="card-header bg-white py-3 text-start">
-                        <h6 class="fw-bold mb-0">Foto Barang</h6>
-                    </div>
-                    <div class="card-body">
-                        @if ($barang->foto)
-                            <img src="{{ asset('storage/' . $barang->foto) }}" class="img-fluid rounded shadow-sm"
-                                style="max-height: 300px; width: 100%; object-fit: cover;">
-                        @else
-                            <div class="bg-light border rounded d-flex flex-column align-items-center justify-content-center"
-                                style="height: 250px;">
-                                <i class="fa-solid fa-image fa-3x text-muted mb-2"></i>
-                                <p class="text-muted small">Foto tidak tersedia</p>
-                            </div>
-                        @endif
-                    </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-5">
+            <div class="card border-0 shadow-sm mb-4 text-center">
+                <div class="card-header bg-white py-3 text-start">
+                    <h6 class="fw-bold mb-0">Foto Item</h6>
+                </div>
+                <div class="card-body">
+                    @if ($barang->foto)
+                        <img src="{{ asset('storage/' . $barang->foto) }}" 
+                             class="img-fluid rounded shadow-sm" 
+                             style="max-height: 300px; width: 100%; object-fit: cover;">
+                    @else
+                        <div class="bg-light border rounded d-flex flex-column align-items-center justify-content-center" style="height: 250px;">
+                            <i class="fa-solid fa-image fa-3x text-muted mb-2"></i>
+                            <p class="text-muted small">Foto tidak tersedia</p>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="card border-0 shadow-sm mb-4 py-4 text-center">

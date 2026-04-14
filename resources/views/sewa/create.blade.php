@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Barang Sewa')
+@section('title', 'Tambah Item Sewa')
 
 @section('content')
 
@@ -27,13 +27,13 @@
 
             {{-- Kode Barang --}}
             <div class="mb-3">
-                <label class="form-label fw-semibold">Kode Barang <span class="text-danger">*</span></label>
-                <input type="text" name="kode_barang" class="form-control" placeholder="Masukkan kode barang" required>
+                <label class="form-label fw-semibold">Kode Item <span class="text-danger">*</span></label>
+                <input type="text" name="kode_barang" class="form-control" placeholder="Masukkan kode item" required>
             </div>
 
             {{-- Nama Barang --}}
             <div class="mb-3">
-                <label class="form-label fw-semibold">Nama Barang</label>
+                <label class="form-label fw-semibold">Nama Item</label>
                 <input type="text" name="nama_barang" class="form-control" value="{{ old('nama_barang') }}" required>
             </div>
 

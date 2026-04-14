@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('page-title', 'Data Barang Sewa')
-@section('title', 'Data Barang Sewa')
+@section('page-title', 'Data Item Sewa')
+@section('title', 'Data Item Sewa')
 
 @section('content')
 
