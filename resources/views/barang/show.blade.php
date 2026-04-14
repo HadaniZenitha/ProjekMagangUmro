@@ -122,7 +122,13 @@
                         <label class="col-sm-4 text-muted small text-uppercase fw-bold">Lokasi & PIC</label>
                         <div class="col-sm-8 text-dark">
                             <span class="d-block text-capitalize">{{ $barang->ruang->nama_ruang ?? '-' }}</span>
-                            <span class="small text-muted">Oleh: {{ $barang->pic->nama_pic ?? '-' }}</span>
+                            <span class="small text-muted">Oleh: {{ $barang->pic->nama_pic ?? '-' }} - 
+                                @if($barang->pic->is_active)
+								            <span class="badge-status bg-status-aktif">PIC Aktif</span>
+								        @else
+								            <span class="badge-status bg-status-nonaktif">PIC Nonaktif</span>
+								@endif
+                            </span>
                         </div>
                     </div>
                     <hr class="opacity-50">
