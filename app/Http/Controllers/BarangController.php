@@ -112,9 +112,6 @@ class BarangController extends Controller
             'foto'                => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $divisi = Divisi::findOrFail($request->divisi_id);
-        $ruang = Ruang::findOrFail($request->ruang_id);
-
         // 1. Ambil data Ruangan beserta relasi PIC dan Divisi-nya
         // Asumsi: Di model Ruang ada relasi 'pic', dan di model Pic ada relasi 'divisi'
         $ruang = Ruang::with('pic.divisi')->findOrFail($request->ruang_id);
@@ -174,10 +171,10 @@ class BarangController extends Controller
         }
 
         Barang::create([
-            'divisi_id' => $divisi->id,
-            'ruang_id' => $request->ruang_id,
+            'divisi_id'           => $finalDivisiId,
+            'ruang_id'            => $request->ruang_id,
             'sub_jenis_barang_id' => $request->sub_jenis_barang_id,
-            'pic_id'              => $request->pic_id,
+            'pic_id'              => $finalPicId,
             'kode_barang'         => $kodeBarang,
             'nama_barang'         => $request->nama_barang,
             'tahun_perolehan'     => $request->tahun_perolehan,

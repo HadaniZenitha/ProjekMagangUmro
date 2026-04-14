@@ -156,18 +156,16 @@
                         <strong>Catatan:</strong> Password akan otomatis di-generate dari NID yang Anda input. Jika ingin mengubah NID, data nama dan bidang akan otomatis terupdate.
                     </div>
 
-                    <!-- BUTTONS -->
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa-solid fa-save me-2"></i>
-                            Update
+                    {{-- BUTTON --}}
+                    <div class="d-flex flex-md-row flex-column gap-2">
+                        <button type="submit" class="btn btn-warning btn-clean btn-mobile-full">
+                            <i class="fa-solid fa-save me-1"></i> Update
                         </button>
-                        <a href="{{ route('users.index') }}" class="btn btn-secondary">
-                            <i class="fa-solid fa-times me-2"></i>
-                            Batal
+            
+                        <a href="{{ route('users.index') }}" 
+                           class="btn btn-danger btn-clean btn-mobile-full"> Batal
                         </a>
                     </div>
-                @endforeach
             </div>
 
             @error('roles')
@@ -176,15 +174,6 @@
         </div>
 
         <!-- BUTTON -->
-        <div class="d-flex flex-md-row flex-column gap-2">
-            <button type="submit" class="btn btn-warning btn-clean btn-mobile-full">
-                <i class="fa-solid fa-save me-1"></i> Update
-            </button>
-
-            <a href="{{ route('users.index') }}" 
-               class="btn btn-danger btn-clean btn-mobile-full"> Batal
-            </a>
-        </div>
 
     </form>
 
