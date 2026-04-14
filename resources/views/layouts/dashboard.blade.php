@@ -811,7 +811,6 @@
 
         });
 
-
         /* ================= CLOSE RESULT ================= */
 
         document.addEventListener('click', function(e) {
