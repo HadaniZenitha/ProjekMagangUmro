@@ -123,11 +123,11 @@
 
 
 		<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4 header-flex">
-			<h5 class="fw-bold mb-0">Data Barang Inventaris</h5>
+			<h5 class="fw-bold mb-0">Item Inventaris</h5>
 
 			<div class="d-flex flex-wrap gap-2">
 				<a href="{{ route('barang.create') }}" class="btn btn-warning btn-pro">
-					<i class="fa-solid fa-plus"></i> Tambah Barang
+					<i class="fa-solid fa-plus"></i> Tambah Item
 				</a>
 
 				<button class="btn btn-success btn-pro" data-bs-toggle="modal" data-bs-target="#modalImport">
@@ -187,24 +187,33 @@
 			</div>
 		@endif
 
-		{{-- FORM FILTER --}}
 		<form method="GET" action="{{ route('barang.index') }}">
 			<div class="card mb-3 shadow-sm border-0">
 				<div class="card-body">
 
-					{{-- 🔹 ROW 1: SEARCH + EXPORT --}}
+					{{-- 🔹 ROW 1: SEARCH + ACTION --}}
 					<div class="row g-3 align-items-end">
 
 						{{-- SEARCH --}}
 						<div class="col-lg-6 col-md-12">
-							<label class="form-label small fw-semibold mb-1">Cari Barang</label>
+							<label class="form-label small fw-semibold mb-1">Cari Item</label>
+
 							<div class="input-group">
 								<span class="input-group-text bg-white">
 									<i class="fa-solid fa-magnifying-glass text-muted"></i>
 								</span>
-								<input type="text" name="search" class="form-control"
-									placeholder="Cari kode / nama barang..." value="{{ request('search') }}">
+
+								<input list="barangOptions" id="barang-input" class="form-control"
+									placeholder="Cari berdasarkan kode atau nama item..." autocomplete="off">
+
+								<datalist id="barangOptions">
+									@foreach($barangList as $b)
+										<option data-id="{{ $b->id }}" value="{{ $b->kode_barang }} - {{ $b->nama_barang }}">
+									@endforeach
+								</datalist>
 							</div>
+
+							<input type="hidden" name="barang_id" id="barang-hidden">
 						</div>
 
 						{{-- PREVIEW --}}
@@ -242,7 +251,7 @@
 						</div>
 
 						{{-- PIC --}}
-						<div class="col-lg-3 col-md-6">
+						<div class="col-lg-2 col-md-6">
 							<label class="form-label small fw-semibold mb-1">PIC</label>
 							<select name="pic" class="form-select select2">
 								<option value="">Semua PIC</option>
@@ -264,32 +273,32 @@
 							</select>
 						</div>
 
-						{{-- RANGE TAHUN --}}
-						<div class="col-lg-2 col-md-6">
+						{{-- TAHUN --}}
+						<div class="col-lg-3 col-md-6">
 							<label class="form-label small fw-semibold mb-1">Tahun</label>
 							<div class="input-group">
-								<input type="number" name="tahun_awal" class="form-control text-center" placeholder="2020"
+								<input type="number" name="tahun_awal" class="form-control text-center"
 									value="{{ request('tahun_awal', date('Y') - 4) }}">
-
-								<span class="input-group-text bg-light fw-bold">-</span>
-
-								<input type="number" name="tahun_akhir" class="form-control text-center" placeholder="2025"
+								<span class="input-group-text">-</span>
+								<input type="number" name="tahun_akhir" class="form-control text-center"
 									value="{{ request('tahun_akhir', date('Y')) }}">
 							</div>
 						</div>
 
 						{{-- FILTER --}}
-						<div class="col-lg-auto col-md-6 d-flex">
-							<button class="btn btn-primary btn-pro px-3 w-100 w-lg-auto">
-								<i class="fa-solid fa-filter me-1"></i> Filter
+						<div class="col-lg-auto col-md-4 d-flex">
+							<button class="btn btn-primary btn-pro w-100">
+								<i class="fa-solid fa-filter"></i> Filter
 							</button>
 						</div>
+
 						{{-- RESET --}}
-						<div class="col-lg-auto col-md-6 d-flex">
+						<div class="col-lg-auto col-md-4 d-flex">
 							<a href="{{ route('barang.index') }}" class="btn btn-secondary btn-pro w-100">
-								<i class="fa-solid fa-rotate-left me-1"></i> Reset
+								<i class="fa-solid fa-rotate-left"></i> Reset
 							</a>
 						</div>
+
 					</div>
 
 				</div>
@@ -418,11 +427,22 @@
 @section('scripts')
 
 	<script>
-		$(document).ready(function () {
-			$('.select2').select2({
-				placeholder: "Pilih atau cari...",
-				allowClear: true,
-				width: '100%'
+		document.addEventListener("DOMContentLoaded", function () {
+			const input = document.getElementById('barang-input');
+			const hidden = document.getElementById('barang-hidden');
+			const options = document.getElementById('barangOptions').options;
+
+			input.addEventListener('input', function () {
+				let selectedId = '';
+
+				for (let i = 0; i < options.length; i++) {
+					if (options[i].value === this.value) {
+						selectedId = options[i].dataset.id;
+						break;
+					}
+				}
+
+				hidden.value = selectedId;
 			});
 		});
 	</script>

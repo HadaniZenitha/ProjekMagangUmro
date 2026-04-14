@@ -19,28 +19,26 @@ class BarangController extends Controller
     public function index(Request $request)
     {
         $query = Barang::with(['divisi', 'ruang', 'pic'])->latest('updated_at');
+
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('nama_barang', 'like', '%' . $request->search . '%')
                     ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
             });
         }
-        // Filter Divisi
+
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
         }
 
-        // Filter PIC
         if ($request->pic) {
             $query->where('pic_id', $request->pic);
         }
 
-        // Filter Ruangan
         if ($request->ruang) {
             $query->where('ruang_id', $request->ruang);
         }
 
-        // Filter Tahun
         if ($request->tahun_awal && $request->tahun_akhir) {
             $query->whereBetween('tahun_perolehan', [
                 $request->tahun_awal,
@@ -48,7 +46,6 @@ class BarangController extends Controller
             ]);
         }
 
-        // Filter Status
         if ($request->status !== null && $request->status !== '') {
             $query->where('is_active', $request->status);
         }
@@ -66,11 +63,17 @@ class BarangController extends Controller
             ->orderBy('nama_ruang')
             ->get();
 
+        // 🔥 FIX ERROR DI SINI
+        $barangList = Barang::select('id', 'kode_barang', 'nama_barang')
+            ->orderBy('kode_barang')
+            ->get();
+
         return view('barang.index', compact(
             'barangs',
             'divisis',
             'pics',
-            'ruangs'
+            'ruangs',
+            'barangList'
         ));
     }
 

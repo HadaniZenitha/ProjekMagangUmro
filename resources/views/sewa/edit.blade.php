@@ -102,7 +102,7 @@
 
             {{-- KONDISI --}}
             <div class="mb-4">
-                <label class="form-label fw-semibold">Kondisi Barang <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold">Kondisi Item <span class="text-danger">*</span></label>
                 <select name="kondisi" class="form-select" required>
                     <option value="Baik" {{ old('kondisi', $sewa->kondisi) == 'Baik' ? 'selected' : '' }}>Baik</option>
                     <option value="Perlu Perbaikan" {{ old('kondisi', $sewa->kondisi) == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>

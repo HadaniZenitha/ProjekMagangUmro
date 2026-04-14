@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Barang Inventaris')
+@section('title', 'Edit Item Inventaris')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0 text-dark">
-        Edit Barang Inventaris
+        Edit Item Inventaris
     </h5>
 </div>
 

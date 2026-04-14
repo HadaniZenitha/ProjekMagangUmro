@@ -400,7 +400,7 @@
 
             <div>
                 <div style="font-weight:700; font-size:18px; color:#005697; letter-spacing:12px;">PLN</div>
-                <div style="font-weight:400; font-size:12px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
+                <div style="font-weight:400; font-size:13px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
             </div>
 
         </div>
@@ -450,7 +450,7 @@
                 <div class="nav-link-collapse {{ request()->routeIs(['kelompok.*','jenis.*','subjenis.*']) ? '' : 'collapsed' }}"
                     data-bs-toggle="collapse" data-bs-target="#menuBarang">
                     <a href="javascript:void(0)">
-                        MASTER ITEM
+                        MASTER BARANG
                         <i class="fa-solid fa-chevron-right rotate-icon"></i>
                         <i class="fa-solid fa-cubes"></i>
                     </a>
@@ -591,7 +591,7 @@
             <footer class="d-flex justify-content-between align-items-center mt-3">
 
                 <div class="text-muted small">
-                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhaul
+                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhoul
                 </div>
 
                 <div class="small text-muted">
@@ -628,27 +628,19 @@
         });
     </script>
     <!-- ================= MODAL INFORMASI ================= -->
-<div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0 shadow">
-            
-            <div class="modal-header" style="background:#309FB0; color:white;">
-                <h5 class="modal-title">
-                    <i class="fa-solid fa-circle-info me-2"></i>
-                    Informasi Sistem
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+    <div class="modal fade" id="infoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
 
-            <div class="modal-body p-4">
-                <div class="text-center mb-4">
-                    <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
-                    <h4 class="mt-3 fw-bold text-dark">SmartUMRO</h4>
-                    <p class="text-muted mb-0">Sistem Inventarisasi UNIT UMRO</p>
-                    <span class="badge bg-light text-muted border">Versi 1.0.0</span>
+                <div class="modal-header" style="background:#309FB0; color:white;">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-circle-info me-2"></i>
+                        Informasi Sistem
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
-                <hr class="opacity-10">
+                <div class="modal-body">
 
                     <!-- HEADER -->
                     <div class="text-center mb-4">
@@ -667,85 +659,43 @@
                     </p>
                 </div>
 
-                <hr class="opacity-10">
+                    <hr>
 
-                <div class="mb-4">
-                    <h6 class="fw-bold text-primary mb-3">
-                        <i class="fa-solid fa-star me-2"></i>Fitur Utama Sistem
-                    </h6>
-                    <div class="row g-3 text-center">
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-sitemap fa-2x text-info mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Manajemen Fungsi</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Data divisi</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-user-tie fa-2x text-success mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Manajemen PIC</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Penanggung jawab</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-building fa-2x text-warning mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Manajemen Lokasi</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Gedung & ruangan</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-box fa-2x text-danger mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Inventaris Barang</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Data aset</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-qrcode fa-2x text-dark mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">QR Code</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Scan identifikasi</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-file-export fa-2x text-primary mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Laporan & Export</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Excel & PDF</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <!-- DESKRIPSI SISTEM -->
+                    <h6 class="fw-bold text-primary">Tentang Sistem</h6>
+                    <p style="text-align: justify;">
+                        SMART-UMRO (Sistem Manajemen Aset Terintegrasi) adalah aplikasi digital yang digunakan untuk mengelola data inventaris secara terpusat, mulai dari pencatatan barang, lokasi, PIC (penanggung jawab), hingga kondisi aset. Sistem ini dilengkapi fitur QR Code untuk mempermudah identifikasi dan pengecekan barang secara cepat dan akurat, sehingga meningkatkan efisiensi, transparansi, dan kontrol dalam pengelolaan aset.
+                    </p>
 
-                <hr class="opacity-10">
+                    <hr>
 
-                <div class="bg-light p-3 rounded">
-                    <h6 class="fw-bold text-primary mb-2">
-                        <i class="fa-solid fa-book me-2"></i>Panduan Singkat
-                    </h6>
-                    <ol class="mb-0" style="font-size:13px; padding-left:20px; line-height: 1.8;">
-                        <li>Gunakan menu sidebar untuk memilih modul sistem.</li>
-                        <li>Tambahkan data melalui tombol <b>Tambah</b>.</li>
-                        <li>Gunakan fitur <b>Edit</b> untuk memperbarui data.</li>
-                        <li>Pastikan data lokasi tersedia sebelum menambahkan inventaris.</li>
-                        <li>Gunakan fitur <b>Search</b> untuk pencarian cepat.</li>
+                    <!-- PANDUAN SINGKAT -->
+                    <h6 class="fw-bold text-primary">Panduan Singkat Penggunaan</h6>
+                    <ol style="font-size: 14px;">
+                        <li>Gunakan menu di sidebar untuk memilih modul yang diinginkan.</li>
+                        <li>Tambahkan data melalui tombol <strong>Tambah</strong> pada setiap halaman.</li>
+                        <li>Gunakan fitur edit untuk memperbarui data yang sudah ada.</li>
+                        <li>Pastikan data lokasi dan karyawan telah dibuat sebelum menambahkan inventaris.</li>
+                        <li>Gunakan fitur pencarian pada bagian atas untuk menemukan data dengan cepat.</li>
                     </ol>
-                </div>
-            </div>
 
-            <div class="modal-footer d-flex justify-content-between align-items-center bg-light border-0">
-                <div class="text-muted" style="font-size: 11px;">
-                    <i class="fa-solid fa-code me-1"></i>
-                    Developed by <b>SMART UMRO</b> • 2026
-                </div>
-                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Tutup</button>
-            </div>
+                    <hr>
 
+                    <!-- PENGEMBANG -->
+                    <h6 class="fw-bold text-primary">Pengembang Sistem</h6>
+                    <p class="mb-1"><strong>Nama :</strong> Hwanzelnuts n Team</p>
+                    <p class="mb-1"><strong>Unit :</strong> UNIT UMRO</p>
+                    <p class="mb-0"><strong>Tahun Pengembangan :</strong> 2026</p>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
 
     <script>
         function toggleSidebar() {
