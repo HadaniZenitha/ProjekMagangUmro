@@ -44,14 +44,43 @@
         text-align:center;
     }
 }
+
+.subjenis-toolbar .search-form {
+    width: 100%;
+}
+
+.subjenis-toolbar .search-input {
+    min-width: 0;
+}
+
+@media (min-width: 768px){
+    .subjenis-toolbar .search-form {
+        width: auto;
+    }
+
+    .subjenis-toolbar .search-input {
+        width: 320px;
+    }
+}
 </style>
 
 <!-- ===== BAGIAN YANG DIPERBAIKI ===== -->
-<div class="mb-3 d-flex flex-md-row flex-column align-items-md-center">
-    
-    <h5 class="fw-semibold mb-2 mb-md-0">
-        Master Sub Jenis Item
-    </h5>
+<div class="mb-3 d-flex flex-md-row flex-column align-items-md-center gap-2 subjenis-toolbar">
+    <form action="{{ route('subjenis.index') }}" method="GET" class="d-flex flex-column flex-md-row gap-2 mb-2 mb-md-0 search-form">
+        <input
+            type="text"
+            name="search"
+            class="form-control search-input"
+            placeholder="Search"
+            value="{{ request('search') }}"
+        >
+        <button type="submit" class="btn btn-primary btn-clean">
+            <i class="fa-solid fa-magnifying-glass me-1"></i> Cari
+        </button>
+        @if(request('search'))
+            <a href="{{ route('subjenis.index') }}" class="btn btn-secondary btn-clean">Reset</a>
+        @endif
+    </form>
 
     <a href="{{ route('subjenis.create') }}" 
        class="btn btn-warning btn-clean btn-mobile-full ms-md-auto mt-2 mt-md-0">

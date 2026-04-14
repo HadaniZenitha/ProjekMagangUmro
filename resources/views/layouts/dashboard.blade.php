@@ -473,7 +473,7 @@
             </div>
             <div class="collapse {{ request()->routeIs(['barang.*']) ? 'show' : '' }} sub-menu" id="menuInventaris">
                 <a href="{{ route('barang.index') }}" class="{{ request()->routeIs('barang.*') ? 'active-sub' : '' }}">
-                    ITEM INVENTARIS <i class="fa-solid fa-database"></i>
+                    ITEM INVENTARISASI <i class="fa-solid fa-database"></i>
                 </a>
                 <a href="{{ route('barang-sewa.index') }}">ITEM SEWA<i class="fa-solid fa-list-check"></i></a>
             </div>
@@ -649,6 +649,15 @@
                         <p class="text-muted mb-0">Sistem Manajemen Aset Terintegrasi</p>
                         <small class="text-muted">Versi 1.0.0</small>
                     </div>
+
+                    <hr>
+
+                    <!-- DESKRIPSI SISTEM -->
+                    <h6 class="fw-bold text-primary">Tentang Sistem</h6>
+                    <p style="text-align: justify;">
+                        SMART-UMRO (Sistem Manajemen Aset Terintegrasi) adalah aplikasi digital yang digunakan untuk mengelola data inventaris secara terpusat, mulai dari pencatatan barang, lokasi, PIC (penanggung jawab), hingga kondisi aset. Sistem ini dilengkapi fitur QR Code untuk mempermudah identifikasi dan pengecekan barang secara cepat dan akurat, sehingga meningkatkan efisiensi, transparansi, dan kontrol dalam pengelolaan aset.
+                    </p>
+                </div>
 
                     <hr>
 
@@ -1045,9 +1054,9 @@
                         <i class="fa-solid fa-user fa-3x text-white"></i>
                     </div>
                     <h5 class="fw-bold text-white mb-1">{{ Auth::user()->name }}</h5>
-                    <small class="text-white" style="opacity: 0.9;">
+                    <!-- <small class="text-white" style="opacity: 0.9;">
                         <i class="fa-regular fa-envelope me-2"></i>{{ Auth::user()->email }}
-                    </small>
+                    </small> -->
                 </div>
 
                 <!-- Info Cards -->

@@ -6,6 +6,11 @@
 
 <style>
 
+/* BACKGROUND */
+body {
+    background: linear-gradient(135deg, #f8f9fa, #eef2ff);
+}
+
 /* WRAPPER */
 .scan-wrapper {
     max-width: 500px;

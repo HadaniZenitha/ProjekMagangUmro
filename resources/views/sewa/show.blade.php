@@ -113,8 +113,19 @@
 
             </div>
         </div>
-
     </div>
 
+<!-- BUTTONS OUTSIDE BORDER -->
+<div class="mt-3 d-flex justify-content-between align-items-center gap-2">
+
+    <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary px-3">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+    </a>
+    {{-- <a href="{{ route('barang-sewa.cetak', $sewa->id) }}" class="btn btn-primary px-3">
+        <i class="fa-solid fa-print me-1"></i> Cetak Stiker
+    </a> --}}
+
 </div>
+</div>
+
 @endsection

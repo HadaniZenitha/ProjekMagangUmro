@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-semibold">Fungsi <span class="text-danger">*</span></label>
-                    <select name="divisi_id" id="divisiSelect" class="form-select" required>
+                    <select name="divisi_id" id="divisiSelect" class="form-select">
                         <option value="">-- Pilih Fungsi --</option>
                         @foreach($divisis as $d)
                             <option value="{{ $d->id }}">{{ $d->nama_divisi }}</option>
@@ -40,7 +40,7 @@
 
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-semibold">PIC (Penanggung Jawab) <span class="text-danger">*</span></label>
-                    <select name="pic_id" id="picSelect" class="form-select" required>
+                    <select name="pic_id" id="picSelect" class="form-select">
                         <option value="">-- Pilih PIC --</option>
                     </select>
                 </div>
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('form').addEventListener('submit', function(e) {
         if (!subjenisHidden.value) {
             e.preventDefault();
-            alert('Silakan pilih Sub Jenis Barang dari daftar yang tersedia.');
+            alert('Silakan pilih Sub Jenis Item dari daftar yang tersedia.');
             subjenisInput.focus();
         }
     });

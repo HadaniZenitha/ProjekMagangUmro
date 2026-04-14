@@ -28,7 +28,7 @@
             {{-- Kode Barang --}}
             <div class="mb-3">
                 <label class="form-label fw-semibold">Kode Item <span class="text-danger">*</span></label>
-                <input type="text" name="kode_barang" class="form-control" placeholder="Masukkan kode barang" required>
+                <input type="text" name="kode_barang" class="form-control" placeholder="Masukkan kode item" required>
             </div>
 
             {{-- Nama Barang --}}
@@ -93,6 +93,12 @@
                     <option value="Perlu Perbaikan" {{ old('kondisi') == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>
                     <option value="Rusak" {{ old('kondisi') == 'Rusak' ? 'selected' : '' }}>Rusak</option>
                 </select>
+            </div>
+             <!-- Upload Foto -->
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Foto Item (Opsional)</label>
+                <input type="file" name="foto" class="form-control" accept="image/*">
+                <small class="text-muted">Format: jpg, jpeg, png. Maksimal 2MB</small>
             </div>
 
             {{-- BUTTON --}}

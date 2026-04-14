@@ -18,7 +18,7 @@
 
             @if($divisi->is_active)
                 <span class="badge bg-success ms-2">
-                    Aktif
+                     Aktif
                 </span>
             @else
                 <span class="badge bg-danger ms-2">

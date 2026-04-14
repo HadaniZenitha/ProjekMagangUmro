@@ -85,55 +85,86 @@
     <form action="{{ route('users.store') }}" method="POST">
         @csrf
 
-        <!-- NAMA -->
-        <div class="mb-3">
-            <label class="form-label fw-semibold">Nama <span class="text-danger">*</span></label>
-            <input type="text" 
-                class="form-control @error('name') is-invalid @enderror" 
-                name="name" value="{{ old('name') }}" required>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white fw-bold">
+                <i class="fa-solid fa-user-plus me-2"></i>
+                Tambah User Baru
+            </div>
+            <div class="card-body">
+                <form action="{{ route('users.store') }}" method="POST" id="createUserForm">
+                    @csrf
 
-            @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- NID -->
-        <div class="mb-3">
-            <label class="form-label fw-semibold">NID Karyawan <span class="text-danger">*</span></label>
-            <input type="text" 
-                class="form-control @error('nid') is-invalid @enderror" 
-                name="nid" value="{{ old('nid') }}" required 
-                placeholder="Contoh: 7503018JA">
-
-            <small class="text-muted d-block mt-2">
-                <i class="fa-solid fa-info-circle me-1"></i>
-                Password akan otomatis di-generate dari NID yang Anda input
-            </small>
-
-            @error('nid')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- ROLES -->
-        <div class="mb-4">
-            <label class="form-label fw-semibold">Role <span class="text-danger">*</span></label>
-
-            <div class="border rounded p-3" style="background-color:#f9f9f9;">
-                @foreach ($roles as $role)
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" 
-                            type="checkbox" 
-                            name="roles[]" 
-                            value="{{ $role->name }}" 
-                            id="role_{{ $role->name }}"
-                            {{ in_array($role->name, old('roles', [])) ? 'checked' : '' }}>
-
-                        <label class="form-check-label" for="role_{{ $role->name }}">
-                            {{ ucfirst($role->name) }}
-                        </label>
+                    <!-- NID -->
+                    <div class="mb-3">
+                        <label for="nid" class="form-label fw-bold">NID Karyawan <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('nid') is-invalid @enderror" 
+                            id="nid" name="nid" value="{{ old('nid') }}" required autocomplete="off"
+                            placeholder="Contoh: 7503018JA">
+                        <div id="nid-loading" class="mt-2 text-muted d-none">
+                            <i class="fa-solid fa-spinner fa-spin me-1"></i>Mencari NID...
+                        </div>
+                        <div id="nid-error" class="mt-2 text-danger small d-none"></div>
+                        @error('nid')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
-                @endforeach
+
+                    <!-- NAMA -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold">Nama <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                            id="name" name="name" value="{{ old('name') }}" required readonly
+                            placeholder="Nama Lengkap (Auto-fill dari NID)">
+                        @error('name')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- BIDANG/DIVISI -->
+                    <div class="mb-3">
+                        <label for="divisi" class="form-label fw-bold">Bidang</label>
+                        <input type="text" class="form-control" 
+                            id="divisi" readonly
+                            placeholder="Bidang (Auto-fill dari NID)">
+                    </div>
+
+                    <!-- ROLE -->
+                    <div class="mb-4">
+                        <label for="role" class="form-label fw-bold">Role <span class="text-danger">*</span></label>
+                        <select class="form-control @error('role') is-invalid @enderror" 
+                            id="role" name="role" required>
+                            <option value="">-- Pilih Role --</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->name }}" 
+                                    {{ old('role') == $role->name ? 'selected' : '' }}>
+                                    {{ ucfirst(str_replace('tim', 'Tim ', $role->name)) }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('role')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- INFO -->
+                    <div class="alert alert-info small mb-4">
+                        <i class="fa-solid fa-info-circle me-2"></i>
+                        <strong>Catatan:</strong> Password akan otomatis di-generate dari NID yang Anda input
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning btn-clean btn-mobile-full">
+                            <i class="fa-solid fa-save me-2"></i>
+                            Simpan
+                        </button>
+                        <a href="{{ route('users.index') }}" class="btn btn-danger btn-clean btn-mobile-full">
+                            <i class="fa-solid fa-times me-2"></i>
+                            Batal
+                        </a>
+                    </div>
             </div>
 
             @error('roles')
@@ -141,19 +172,69 @@
             @enderror
         </div>
 
-        <!-- BUTTON -->
-        <div class="d-flex flex-md-row flex-column gap-2">
-            <button type="submit" class="btn btn-warning btn-clean btn-mobile-full">
-                <i class="fa-solid fa-save me-1"></i> Simpan
-            </button>
-
-            <a href="{{ route('users.index') }}" 
-               class="btn btn-danger btn-clean btn-mobile-full">Batal
-            </a>
-        </div>
-
     </form>
 
 </div>
 
+<script>
+document.getElementById('nid').addEventListener('blur', function() {
+    const nid = this.value.trim().toUpperCase();
+    this.value = nid;
+    const loading = document.getElementById('nid-loading');
+    const nameInput = document.getElementById('name');
+    const divisiInput = document.getElementById('divisi');
+    const errorDisplay = document.getElementById('nid-error');
+    
+    if (!nid) {
+        nameInput.value = '';
+        divisiInput.value = '';
+        errorDisplay.classList.add('d-none');
+        return;
+    }
+
+    loading.classList.remove('d-none');
+    errorDisplay.classList.add('d-none');
+
+    fetch(`{{ route('register.getNidData') }}?nid=${encodeURIComponent(nid)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            loading.classList.add('d-none');
+            
+            if (data.error) {
+                nameInput.value = '';
+                divisiInput.value = '';
+                errorDisplay.textContent = data.error;
+                errorDisplay.classList.remove('d-none');
+            } else if (data.success) {
+                nameInput.value = data.name;
+                divisiInput.value = data.divisi;
+                errorDisplay.classList.add('d-none');
+            }
+        })
+        .catch(error => {
+            loading.classList.add('d-none');
+            console.error('Error:', error);
+            nameInput.value = '';
+            divisiInput.value = '';
+            errorDisplay.textContent = 'Terjadi kesalahan saat mengambil data NID';
+            errorDisplay.classList.remove('d-none');
+        });
+});
+
+// Validasi form sebelum submit
+document.getElementById('createUserForm').addEventListener('submit', function(e) {
+    const nameInput = document.getElementById('name');
+    if (!nameInput.value.trim()) {
+        e.preventDefault();
+        alert('Silakan isi NID terlebih dahulu dan tunggu nama auto-fill');
+        document.getElementById('nid').focus();
+        return false;
+    }
+});
+</script>
 @endsection

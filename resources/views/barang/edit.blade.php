@@ -180,63 +180,87 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. Inisialisasi Elemen
+    const elements = {
+        divisi: document.getElementById('divisiSelect'),
+        pic: document.getElementById('picSelect'),
+        status: document.getElementById('statusSelect'),
+        catatan: document.getElementById('catatanWrapper'),
+        foto: document.getElementById('fotoInput'),
+        preview: document.getElementById('preview'),
+        noPhoto: document.getElementById('no-photo'),
+        form: document.querySelector('form')
+    };
 
-    const divisiSelect = document.getElementById('divisiSelect');
-    const picSelect = document.getElementById('picSelect');
-
-    // LOAD PIC
+    // 2. Logika Load PIC (AJAX)
     function loadPic(divisiId, selectedPic = null) {
-        picSelect.innerHTML = '<option>Loading...</option>';
+        if (!divisiId) return;
 
-        fetch('/get-pic-by-divisi/' + divisiId)
+        elements.pic.innerHTML = '<option value="">Memuat...</option>';
+        
+        fetch(`/get-pic-by-divisi/${divisiId}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
         .then(res => res.json())
         .then(data => {
-            picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
-
+            elements.pic.innerHTML = '<option value="">-- Pilih PIC --</option>';
             data.forEach(pic => {
-                let opt = document.createElement('option');
-                opt.value = pic.id;
-                opt.textContent = pic.nama_pic;
-
-                if(selectedPic == pic.id) opt.selected = true;
-
-                picSelect.appendChild(opt);
+                const option = new Option(pic.nama_pic, pic.id);
+                if (selectedPic && selectedPic == pic.id) option.selected = true;
+                elements.pic.add(option);
             });
+        })
+        .catch(() => {
+            elements.pic.innerHTML = '<option value="">Gagal memuat data</option>';
         });
     }
 
-    // INIT
-    if (divisiSelect.value) {
-        loadPic(divisiSelect.value, "{{ $barang->pic_id }}");
-    }
-
-    // CHANGE
-    divisiSelect.addEventListener('change', function() {
-        loadPic(this.value);
-    });
-
-    // STATUS
-    const statusSelect = document.getElementById('statusSelect');
-    const catatanWrapper = document.getElementById('catatanWrapper');
-
-    statusSelect.addEventListener('change', function() {
-        catatanWrapper.style.display = this.value == "0" ? 'block' : 'none';
-    });
-
-    // PREVIEW FOTO
-    const fotoInput = document.getElementById('fotoInput');
-    const preview = document.getElementById('preview');
-    const noPhoto = document.getElementById('no-photo');
-
-    fotoInput.onchange = e => {
-        const file = e.target.files[0];
-        if(file){
-            preview.src = URL.createObjectURL(file);
-            preview.classList.remove('d-none');
-            if(noPhoto) noPhoto.style.display = 'none';
+    // 3. Logika Tampilan Catatan Nonaktif
+    function toggleCatatan() {
+        if (elements.status && elements.catatan) {
+            elements.catatan.style.display = (elements.status.value === "0") ? 'block' : 'none';
         }
     }
 
+    // 4. Preview Foto
+    function handlePreview() {
+        if (elements.foto && elements.foto.files[0]) {
+            const file = elements.foto.files[0];
+            elements.preview.src = URL.createObjectURL(file);
+            elements.preview.classList.remove('d-none');
+            if (elements.noPhoto) elements.noPhoto.classList.add('d-none');
+        }
+    }
+
+    // --- EVENT LISTENERS ---
+
+    // Trigger awal saat halaman edit dibuka
+    if (elements.divisi && elements.divisi.value) {
+        loadPic(elements.divisi.value, "{{ $barang->pic_id }}");
+    }
+    toggleCatatan();
+
+    // Event saat divisi diubah
+    elements.divisi?.addEventListener('change', function() {
+        loadPic(this.value);
+    });
+
+    // Event saat status diubah
+    elements.status?.addEventListener('change', toggleCatatan);
+
+    // Event saat foto dipilih
+    elements.foto?.addEventListener('change', handlePreview);
+
+    // Validasi Form sebelum submit
+    elements.form?.addEventListener('submit', function(e) {
+        // Jika status Nonaktif (0), catatan wajib diisi
+        const catatanInput = document.querySelector('textarea[name="catatan_nonaktif"]');
+        if (elements.status.value === "0" && (!catatanInput.value || catatanInput.value.trim() === "")) {
+            e.preventDefault();
+            alert('Mohon isi catatan alasan penonaktifan barang.');
+            catatanInput.focus();
+        }
+    });
 });
 </script>
 @endsection
