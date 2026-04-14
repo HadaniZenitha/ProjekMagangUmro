@@ -97,18 +97,45 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'divisi_id'           => 'required|exists:divisis,id',
+            'divisi_id'           => 'nullable|exists:divisis,id',
             'ruang_id'            => 'required|exists:ruangs,id',
             'sub_jenis_barang_id' => 'required|exists:sub_jenis_barangs,id',
-            'pic_id'              => 'required|exists:pics,id',
+            'pic_id'              => 'nullable|exists:pics,id',
             'nama_barang'         => 'required|string|max:255',
             'tahun_perolehan'     => 'required|integer',
             'kondisi'             => 'required|in:baik,perlu perbaikan,rusak',
-            'foto'                 => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto'                => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $divisi = Divisi::findOrFail($request->divisi_id);
         $ruang = Ruang::findOrFail($request->ruang_id);
+
+        // 1. Ambil data Ruangan beserta relasi PIC dan Divisi-nya
+        // Asumsi: Di model Ruang ada relasi 'pic', dan di model Pic ada relasi 'divisi'
+        $ruang = Ruang::with('pic.divisi')->findOrFail($request->ruang_id);
+    
+        // 2. Logika Otomatisasi PIC
+        $finalPicId = $request->pic_id;
+        if (empty($finalPicId)) {
+            $finalPicId = $ruang->pic_id;
+        }
+    
+        // 3. Logika Otomatisasi Divisi
+        $finalDivisiId = $request->divisi_id;
+        if (empty($finalDivisiId)) {
+            // Ambil divisi dari PIC yang terpilih (baik dari input maupun dari default ruangan)
+            if (!empty($finalPicId)) {
+                $picTerkait = Pic::find($finalPicId);
+                $finalDivisiId = $picTerkait->divisi_id;
+            }
+        }
+    
+        // Validasi Akhir: Jika setelah dicek otomatis tetap kosong (misal ruangan belum diset PIC-nya)
+        if (empty($finalPicId) || empty($finalDivisiId)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Gagal otomatisasi: Mohon pilih Divisi & PIC secara manual karena data default ruangan tidak lengkap.');
+        }
 
         $subjenis = SubJenisBarang::with('jenis.kelompok')
             ->findOrFail($request->sub_jenis_barang_id);
@@ -153,6 +180,7 @@ class BarangController extends Controller
             'urutan'              => $urutanBaru,
             'is_active'           => true,
             'foto'                => $fotoPath,
+            'catatan_nonaktif'    => $request->catatan_nonaktif ?? null,
         ]);
 
         return redirect()->route('barang.index')
@@ -193,9 +221,10 @@ class BarangController extends Controller
 
     public function update(Request $request, Barang $barang)
     {
-        // VALIDASI (TANPA is_active BIAR TIDAK ERROR)
+        
         $request->validate([
             'nama_barang'     => 'required|string|max:255',
+            'divisi_id'       => 'required|exists:divisis,id',
             'pic_id'          => 'required|exists:pics,id',
             'ruang_id'        => 'required|exists:ruangs,id',
             'kondisi'         => 'required|in:baik,perlu perbaikan,rusak',
@@ -224,6 +253,7 @@ class BarangController extends Controller
 
         $barang->update([
             'nama_barang'         => $request->nama_barang,
+            'divisi_id'           => $request->divisi_id,
             'pic_id'              => $request->pic_id,
             'tahun_perolehan'     => $request->tahun_perolehan,
             'kondisi'             => $request->kondisi,
@@ -231,7 +261,6 @@ class BarangController extends Controller
             'is_active'           => $request->is_active,
             'foto'                => $fotoPath,
             'catatan_nonaktif'    => $request->is_active == 1 ? null : $request->catatan_nonaktif,
-            'tahun_perolehan'     => $request->tahun_perolehan,
         ]);
 
         return redirect()->route('barang.index')
@@ -411,10 +440,19 @@ class BarangController extends Controller
     }
 
 
-    private function buildFilterQuery($request)
+    private function buildFilterQuery(Request $request)
     {
         $query = Barang::with(['divisi', 'pic', 'ruang']);
 
+        // Fungsi Pencarian Teks
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_barang', 'like', "%{$search}%")
+                  ->orWhere('kode_barang', 'like', "%{$search}%");
+            });
+        }
+        
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
         }

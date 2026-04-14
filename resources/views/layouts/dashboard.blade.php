@@ -418,9 +418,9 @@
             </div>
             <div class="collapse {{ request()->routeIs(['barang.*']) ? 'show' : '' }} sub-menu" id="menuInventaris">
                 <a href="{{ route('barang.index') }}" class="{{ request()->routeIs('barang.*') ? 'active-sub' : '' }}">
-                    BARANG INVENTARIS <i class="fa-solid fa-database"></i>
+                    ITEM INVENTARISASI <i class="fa-solid fa-database"></i>
                 </a>
-                <a href="{{ route('barang-sewa.index') }}">BARANG SEWA<i class="fa-solid fa-list-check"></i></a>
+                <a href="{{ route('barang-sewa.index') }}">ITEM SEWA<i class="fa-solid fa-list-check"></i></a>
             </div>
 
             <!-- Management Akun (Only for Superadmin) -->
