@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('form').addEventListener('submit', function(e) {
         if (!subjenisHidden.value) {
             e.preventDefault();
-            alert('Silakan pilih Sub Jenis Barang dari daftar yang tersedia.');
+            alert('Silakan pilih Sub Jenis Item dari daftar yang tersedia.');
             subjenisInput.focus();
         }
     });

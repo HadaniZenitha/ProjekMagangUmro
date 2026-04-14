@@ -54,9 +54,9 @@
 
                     <h5 class="mb-3">QR Code Item</h5>
 
-                    <div class="p-3 bg-light d-inline-block rounded">
+                    <!-- <div class="p-3 bg-light d-inline-block rounded">
                         {!! QrCode::size(180)->generate($sewa->kode_barang) !!}
-                    </div>
+                    </div> -->
 
                     <p class="mt-3 text-muted small">
                         Scan QR Code untuk melihat informasi Item.
@@ -65,9 +65,7 @@
                 </div>
 
             </div>
-
         </div>
-
     </div>
 
 <!-- BUTTONS OUTSIDE BORDER -->
@@ -76,7 +74,6 @@
     <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary px-3">
         <i class="fa-solid fa-arrow-left me-1"></i> Kembali
     </a>
-
     {{-- <a href="{{ route('barang-sewa.cetak', $sewa->id) }}" class="btn btn-primary px-3">
         <i class="fa-solid fa-print me-1"></i> Cetak Stiker
     </a> --}}
