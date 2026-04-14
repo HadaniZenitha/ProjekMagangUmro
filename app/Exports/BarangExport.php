@@ -29,6 +29,7 @@ class BarangExport implements FromCollection, WithHeadings
                 'PIC'    => $b->pic->nama_pic ?? '-',
                 'Ruang'  => $b->ruang->nama_ruang ?? '-',
                 'Tahun'  => $b->tahun_perolehan,
+                'kondisi' => $b->kondisi,
                 'Status' => $b->is_active ? 'Aktif' : 'Nonaktif',
                 'Catatan'=> $b->catatan_nonaktif ?? '-'
             ];
@@ -39,7 +40,7 @@ class BarangExport implements FromCollection, WithHeadings
     {
         return [
             'Kode','Nama','Divisi','PIC',
-            'Ruang','Tahun','Status','Catatan'
+            'Ruang','Tahun','Kondisi','Status','Catatan'
         ];
     }
 }

@@ -28,7 +28,7 @@
             {{-- Kode Barang --}}
             <div class="mb-3">
                 <label class="form-label fw-semibold">Kode Item <span class="text-danger">*</span></label>
-                <input type="text" name="kode_barang" class="form-control" placeholder="Masukkan kode barang" required>
+                <input type="text" name="kode_barang" class="form-control" placeholder="Masukkan kode item" required>
             </div>
 
             {{-- Nama Barang --}}

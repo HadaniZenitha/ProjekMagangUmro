@@ -3,6 +3,8 @@
 @section('title', 'Scan QR')
 
 @section('content')
+<div class="container text-center">
+    <h5 class="mb-3">Scan QR Item</h5>
 
 <style>
 

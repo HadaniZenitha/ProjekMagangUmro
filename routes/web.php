@@ -22,6 +22,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// Route untuk mengambil data NID di register form
+Route::get('/register/get-nid-data', [\App\Http\Controllers\Auth\RegisterController::class, 'getNidData'])->name('register.getNidData');
+
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {

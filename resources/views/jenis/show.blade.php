@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Detail Jenis Barang</h2>
+    <h2>Detail Jenis Item</h2>
 
     <ul class="list-group">
         <li class="list-group-item">
@@ -16,7 +16,7 @@
         </li>
 
         <li class="list-group-item">
-            <b>Kelompok Barang:</b> 
+            <b>Kelompok Item:</b> 
             {{ $jenis->kelompok->nama_kelompok }}
         </li>
 
