@@ -20,11 +20,11 @@ class HomeController extends Controller
         $totalRuang = Ruang::count();
 
         // AMBIL DATA BERDASARKAN KONDISI (AMAN & CLEAN)
-        $barangBaik = Barang::where('kondisi', 'baik')->count();
+        $barangBaik = Barang::where('kondisi', 'Baik')->count();
 
-        $barangPerbaikan = Barang::where('kondisi', 'perlu perbaikan')->count();
+        $barangPerbaikan = Barang::where('kondisi', 'Perlu Perbaikan')->count();
 
-        $barangRusak = Barang::where('kondisi', 'rusak')->count();
+        $barangRusak = Barang::where('kondisi', 'Rusak')->count();
 
         // DATA TERBARU
         $barangTerbaru = Barang::with(['subjenis', 'ruang'])

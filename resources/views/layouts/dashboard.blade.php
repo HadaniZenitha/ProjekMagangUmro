@@ -400,7 +400,7 @@
 
             <div>
                 <div style="font-weight:700; font-size:18px; color:#005697; letter-spacing:12px;">PLN</div>
-                <div style="font-weight:400; font-size:13px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
+                <div style="font-weight:400; font-size:12px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
             </div>
 
         </div>
@@ -450,7 +450,7 @@
                 <div class="nav-link-collapse {{ request()->routeIs(['kelompok.*','jenis.*','subjenis.*']) ? '' : 'collapsed' }}"
                     data-bs-toggle="collapse" data-bs-target="#menuBarang">
                     <a href="javascript:void(0)">
-                        MASTER BARANG
+                        MASTER ITEM
                         <i class="fa-solid fa-chevron-right rotate-icon"></i>
                         <i class="fa-solid fa-cubes"></i>
                     </a>
@@ -643,7 +643,7 @@
             <div class="modal-body p-4">
                 <div class="text-center mb-4">
                     <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
-                    <h4 class="mt-3 fw-bold text-dark">i - Noni</h4>
+                    <h4 class="mt-3 fw-bold text-dark">SmartUMRO</h4>
                     <p class="text-muted mb-0">Sistem Inventarisasi UNIT UMRO</p>
                     <span class="badge bg-light text-muted border">Versi 1.0.0</span>
                 </div>

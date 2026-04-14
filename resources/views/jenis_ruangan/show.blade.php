@@ -20,7 +20,7 @@
                 </span>
             @else
                 <span class="badge bg-danger ms-2">
-                    Nonaktif
+                     Nonaktif
                 </span>
             @endif
         </li>

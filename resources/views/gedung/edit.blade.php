@@ -4,6 +4,10 @@
 
 @section('content')
 
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0">Edit Gedung</h5>
+    </div>
+
     {{-- Error Validasi --}}
     @if ($errors->any())
         <div class="alert alert-danger">
