@@ -35,27 +35,23 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'nid' => 'required|string|max:20|unique:users,nid|regex:/^[a-zA-Z0-9]+$/',
-            'roles' => 'array',
-            'roles.*' => 'string|exists:roles,name',
+            'role' => 'required|string|exists:roles,name',
         ]);
 
         // Password di-generate dari NID
-        $password = $request->nid;
-
         $user = User::create([
             'name' => $request->name,
             'nid' => $request->nid,
-            'password' => Hash::make($password),
-            'role' => $request->roles[0] ?? null,
+            'password' => Hash::make($request->nid),
+            'role' => $request->role,
         ]);
 
-        // Assign roles
-        if ($request->roles) {
-            $roleNames = Role::whereIn('name', $request->roles)->pluck('name')->toArray();
-            $user->syncRoles($roleNames);
+        // Assign role
+        if ($request->role) {
+            $user->assignRole($request->role);
         }
 
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan. Password: ' . $password);
+        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan. Password: ' . $request->nid);
     }
 
     /**
@@ -83,37 +79,21 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'nid' => 'required|string|max:20|regex:/^[a-zA-Z0-9]+$/|unique:users,nid,' . $user->id,
-            'password' => 'nullable|string|min:6|confirmed',
-            'roles' => 'array',
-            'roles.*' => 'string|exists:roles,name',
+            'role' => 'required|string|exists:roles,name',
         ]);
 
         $updateData = [
             'name' => $request->name,
             'nid' => $request->nid,
+            'password' => Hash::make($request->nid),
+            'role' => $request->role,
         ];
-
-        if ($request->roles) {
-            $updateData['role'] = $request->roles[0];
-        }
-
-        // Jika password dikosongkan, generate dari NID
-        if (!$request->password) {
-            $updateData['password'] = Hash::make($request->nid);
-        }
 
         $user->update($updateData);
 
-        if ($request->password) {
-            $user->update(['password' => Hash::make($request->password)]);
-        }
-
-        // Update roles
-        if ($request->roles) {
-            $roleNames = Role::whereIn('name', $request->roles)->pluck('name')->toArray();
-            $user->syncRoles($roleNames);
-        } else {
-            $user->syncRoles([]);
+        // Assign role
+        if ($request->role) {
+            $user->syncRoles([$request->role]);
         }
 
         return redirect()->route('users.index')->with('success', 'User berhasil diperbarui');

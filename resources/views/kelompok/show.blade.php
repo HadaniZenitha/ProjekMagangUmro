@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Detail Kelompok Barang</h2>
+    <h2>Detail Kelompok Item</h2>
 
     <ul class="list-group">
         <li class="list-group-item">

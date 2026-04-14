@@ -6,9 +6,6 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="fw-bold mb-0">Edit Gedung</h5>
-        <a href="{{ route('gedung.index') }}" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-        </a>
     </div>
 
     {{-- Error Validasi --}}
@@ -68,7 +65,7 @@
                         <i class="fa-solid fa-save me-1"></i> Update
                     </button>
                     <a href="{{ route('gedung.index') }}" class="btn btn-danger">
-                        <i class="fa-solid fa-xmark me-1"></i> Batal
+                        Batal
                     </a>
                 </div>
 

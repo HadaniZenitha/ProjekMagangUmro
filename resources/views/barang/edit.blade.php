@@ -31,7 +31,7 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Kode Barang</label>
+                            <label class="form-label fw-semibold">Kode Item</label>
                             <input type="text" class="form-control bg-light border-0" value="{{ $barang->kode_barang }}" readonly>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Nama Barang</label>
+                        <label class="form-label fw-semibold">Nama Item</label>
                         <input type="text" name="nama_barang" class="form-control @error('nama_barang') is-invalid @enderror" value="{{ old('nama_barang', $barang->nama_barang) }}" required>
                     </div>
 
@@ -88,7 +88,7 @@
                     
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Kondisi Barang</label>
+                            <label class="form-label fw-semibold">Kondisi Item</label>
                             <select name="kondisi" class="form-select text-capitalize">
                                 @php $kondisis = ['baik', 'perlu perbaikan', 'rusak']; @endphp
                                 @foreach($kondisis as $k)
@@ -116,7 +116,7 @@
                 <div class="col-md-4">
                     <div class="card bg-light border-0 h-100">
                         <div class="card-body text-center">
-                            <label class="form-label fw-semibold d-block text-start mb-3">Foto Barang</label>
+                            <label class="form-label fw-semibold d-block text-start mb-3">Foto Item</label>
                             
                             <div class="mb-3">
                                 @if ($barang->foto)
@@ -145,7 +145,7 @@
 
             <hr class="my-4 opacity-50">
 
-            <div class="d-flex justify-content-end gap-2">
+            <div class="d-flex justify-content-start gap-2">
                 <a href="{{ route('barang.index') }}" class="btn btn-danger px-4">Batal</a>
                 <button type="submit" class="btn btn-warning px-4 fw-bold">
                     <i class="fa-solid fa-save me-1"></i> Simpan Perubahan

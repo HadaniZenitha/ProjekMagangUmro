@@ -15,11 +15,6 @@
         height: 100%;
     }
 
-.main-wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
         :root {
             --bg-sidebar: #309FB0;
             --pln-yellow: #FACC15;
@@ -278,51 +273,111 @@
             height: 1rem;
         }
 
+        .date-mobile {
+            display: none;
+        }
+
+        @media (max-width: 576px) {
+            .date-desktop {
+                display: none;
+            }
+
+            .date-mobile {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                white-space: nowrap;
+                font-size: 12px;
+            }
+        }
+
         @media (max-width: 991px) {
 
+            /* ===== SIDEBAR ===== */
             .sidebar {
                 transform: translateX(-100%);
+                position: fixed;
+                z-index: 1000;
+                width: 260px;
             }
 
             .sidebar.show {
                 transform: translateX(0);
             }
 
+            /* ===== MAIN ===== */
             .main-wrapper {
-                margin-left: 0;
+                margin-left: 0 !important;
+                width: 100%;
             }
 
+            /* ===== NAVBAR ===== */
+            .top-navbar {
+                padding: 10px 12px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+                gap: 8px;
+            }
+
+            .top-navbar .d-flex.align-items-center.gap-3 {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-shrink: 0;
+            }
+
+            /* HAMBURGER */
             .mobile-toggle {
-                display: inline-block;
-            }
-
-            .overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.4);
-                z-index: 900;
-            }
-
-            .overlay.show {
-                display: block;
-            }
-
-            .search-box {
-                width: 180px;
-            }
-
-            .icon-top i {
-                font-size: 20px;
+                display: inline-block !important;
+                font-size: 18px;
+                flex-shrink: 0; /* 🔥 biar ga hilang */
                 cursor: pointer;
             }
 
-            .icon-top i:hover {
-                color: #309FB0;
-                transform: scale(1.15);
-                transition: 0.2s;
+            /* SEARCH */
+            .search-box {
+                width: 100%;
+                max-width: 180px;
             }
 
+            /* ICON TOP */
+            .icon-top {
+                gap: 10px !important;
+            }
+
+            .icon-top i {
+                font-size: 18px;
+            }
+
+            /* ===== HEADER ===== */
+            .banner-header {
+                padding: 15px 20px;
+                height: auto;
+            }
+
+            .banner-header h2 {
+                font-size: 18px;
+            }
+
+            /* ===== CONTENT ===== */
+            .content-card {
+                margin: -20px 10px 20px;
+                padding: 15px;
+                border-radius: 10px;
+            }
+
+            /* ===== FIX AGAR GA NGECIL ===== */
+            body, html {
+                width: 100%;
+                overflow-x: hidden;
+            }
+
+            /* ===== OVERLAY ===== */
+            .overlay.show {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -345,7 +400,7 @@
 
             <div>
                 <div style="font-weight:700; font-size:18px; color:#005697; letter-spacing:12px;">PLN</div>
-                <div style="font-weight:400; font-size:13px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
+                <div style="font-weight:400; font-size:12px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
             </div>
 
         </div>
@@ -371,7 +426,7 @@
                     </a>
                 </div>
                 <div class="collapse {{ request()->routeIs(['divisi.*','pic.*']) ? 'show' : '' }} sub-menu" id="menuKaryawan">
-                    <a href="{{ route('divisi.index') }}" class="{{ request()->routeIs('divisi.*') ? 'active-sub' : '' }}">BIDANG <i class="fa-solid fa-building"></i></a>
+                    <a href="{{ route('divisi.index') }}" class="{{ request()->routeIs('divisi.*') ? 'active-sub' : '' }}">FUNGSI <i class="fa-solid fa-building"></i></a>
                     <a href="{{ route('pic.index') }}" class="{{ request()->routeIs('pic.*') ? 'active-sub' : '' }}">KARYAWAN <i class="fa-solid fa-user-tie ms-2"></i></a>
                 </div>
 
@@ -395,14 +450,14 @@
                 <div class="nav-link-collapse {{ request()->routeIs(['kelompok.*','jenis.*','subjenis.*']) ? '' : 'collapsed' }}"
                     data-bs-toggle="collapse" data-bs-target="#menuBarang">
                     <a href="javascript:void(0)">
-                        MASTER BARANG
+                        MASTER ITEM
                         <i class="fa-solid fa-chevron-right rotate-icon"></i>
                         <i class="fa-solid fa-cubes"></i>
                     </a>
                 </div>
                 <div class="collapse {{ request()->routeIs(['kelompok.*','jenis.*','subjenis.*']) ? 'show' : '' }} sub-menu" id="menuBarang">
-                    <a href="{{ route('kelompok.index') }}" class="{{ request()->routeIs('kelompok.*') ? 'active-sub' : '' }}">KELOMPOK BARANG <i class="fa-solid fa-box-archive"></i></a>
-                    <a href="{{ route('jenis.index') }}" class="{{ request()->routeIs('jenis.*') ? 'active-sub' : '' }}">JENIS BARANG <i class="fa-solid fa-tags"></i></a>
+                    <a href="{{ route('kelompok.index') }}" class="{{ request()->routeIs('kelompok.*') ? 'active-sub' : '' }}">KELOMPOK ITEM <i class="fa-solid fa-box-archive"></i></a>
+                    <a href="{{ route('jenis.index') }}" class="{{ request()->routeIs('jenis.*') ? 'active-sub' : '' }}">JENIS ITEM <i class="fa-solid fa-tags"></i></a>
                     <a href="{{ route('subjenis.index') }}" class="{{ request()->routeIs('subjenis.*') ? 'active-sub' : '' }}">SUB JENIS <i class="fa-solid fa-folder-tree"></i></a>
                 </div>
             @endif
@@ -493,9 +548,14 @@
             <div class="d-flex align-items-center gap-4 text-muted icon-top">
 
                 <!-- TANGGAL -->
-                <div class="small text-muted">
+                <div class="date-desktop small text-muted">
                     <i class="fa-regular fa-calendar me-1"></i>
                     {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+                </div>
+
+                <div class="date-mobile small text-muted">
+                    <i class="fa-regular fa-calendar me-1"></i>
+                    {{\Carbon\Carbon::now()->format('d/m/y')}}
                 </div>
 
                 <!-- NOTIFIKASI -->
@@ -531,7 +591,7 @@
             <footer class="d-flex justify-content-between align-items-center mt-3">
 
                 <div class="text-muted small">
-                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhoul
+                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhaul
                 </div>
 
                 <div class="small text-muted">
@@ -583,21 +643,27 @@
             <div class="modal-body p-4">
                 <div class="text-center mb-4">
                     <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
-                    <h4 class="mt-3 fw-bold text-dark">i - Noni</h4>
+                    <h4 class="mt-3 fw-bold text-dark">SmartUMRO</h4>
                     <p class="text-muted mb-0">Sistem Inventarisasi UNIT UMRO</p>
                     <span class="badge bg-light text-muted border">Versi 1.0.0</span>
                 </div>
 
                 <hr class="opacity-10">
 
-                <div class="mb-4">
-                    <h6 class="fw-bold text-primary mb-2">Tentang Sistem</h6>
-                    <p class="text-muted" style="text-align: justify; line-height: 1.6;">
-                        Smart UMRO merupakan sistem inventarisasi yang dirancang untuk membantu 
-                        pengelolaan data aset dan barang secara terstruktur, terintegrasi, dan 
-                        mudah diakses. Sistem ini mendukung pengelolaan data fungsi/divisi, 
-                        PIC (penanggung jawab), lokasi penyimpanan seperti gedung dan ruangan, 
-                        serta data inventaris barang secara menyeluruh.
+                    <!-- HEADER -->
+                    <div class="text-center mb-4">
+                        <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
+                        <h4 class="mt-3 fw-bold">SMART - UMRO</h4>
+                        <p class="text-muted mb-0">Sistem Manajemen Aset Terintegrasi</p>
+                        <small class="text-muted">Versi 1.0.0</small>
+                    </div>
+
+                    <hr>
+
+                    <!-- DESKRIPSI SISTEM -->
+                    <h6 class="fw-bold text-primary">Tentang Sistem</h6>
+                    <p style="text-align: justify;">
+                        SMART-UMRO (Sistem Manajemen Aset Terintegrasi) adalah aplikasi digital yang digunakan untuk mengelola data inventaris secara terpusat, mulai dari pencatatan barang, lokasi, PIC (penanggung jawab), hingga kondisi aset. Sistem ini dilengkapi fitur QR Code untuk mempermudah identifikasi dan pengecekan barang secara cepat dan akurat, sehingga meningkatkan efisiensi, transparansi, dan kontrol dalam pengelolaan aset.
                     </p>
                 </div>
 
@@ -907,7 +973,7 @@
                                 <h6 class="fw-bold mb-1">Manajemen Karyawan</h6>
 
                                 <small class="text-muted">
-                                    Mengelola data bidang dan karyawan
+                                    Mengelola data fungsi dan karyawan
                                 </small>
 
                             </div>
@@ -1038,9 +1104,9 @@
                         <i class="fa-solid fa-user fa-3x text-white"></i>
                     </div>
                     <h5 class="fw-bold text-white mb-1">{{ Auth::user()->name }}</h5>
-                    <small class="text-white" style="opacity: 0.9;">
+                    <!-- <small class="text-white" style="opacity: 0.9;">
                         <i class="fa-regular fa-envelope me-2"></i>{{ Auth::user()->email }}
-                    </small>
+                    </small> -->
                 </div>
 
                 <!-- Info Cards -->

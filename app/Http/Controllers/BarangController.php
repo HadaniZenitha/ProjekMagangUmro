@@ -19,7 +19,12 @@ class BarangController extends Controller
     public function index(Request $request)
     {
         $query = Barang::with(['divisi', 'ruang', 'pic'])->latest('updated_at');
-
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama_barang', 'like', '%' . $request->search . '%')
+                    ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+            });
+        }
         // Filter Divisi
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
@@ -161,16 +166,16 @@ class BarangController extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
-            
+
             // Nama file: kode_barang + timestamp + extension
             $fileName = str_replace('/', '-', $kodeBarang) . '_' . now()->format('Ymd_His') . '.' . $extension;
-            
+
             $fotoPath = $file->storeAs('barang_foto', $fileName, 'public');
         }
 
         Barang::create([
-            'divisi_id'           => $divisi->id,
-            'ruang_id'            => $request->ruang_id,
+            'divisi_id' => $divisi->id,
+            'ruang_id' => $request->ruang_id,
             'sub_jenis_barang_id' => $request->sub_jenis_barang_id,
             'pic_id'              => $request->pic_id,
             'kode_barang'         => $kodeBarang,
@@ -230,7 +235,7 @@ class BarangController extends Controller
             'kondisi'         => 'required|in:baik,perlu perbaikan,rusak',
             'is_active'       => 'required|boolean',
             'tahun_perolehan' => 'required|integer',
-            'foto'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'catatan_nonaktif' => 'nullable|string',
         ]);
 
@@ -244,10 +249,10 @@ class BarangController extends Controller
 
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
-            
+
             // Nama file tetap pakai kode barang yang sudah ada
             $fileName = str_replace('/', '-', $barang->kode_barang) . '_' . now()->format('Ymd_His') . '.' . $extension;
-            
+
             $fotoPath = $file->storeAs('barang_foto', $fileName, 'public');
         }
 
@@ -322,24 +327,24 @@ class BarangController extends Controller
     }
 
 
-        public function exportPdf(Request $request)
+    public function exportPdf(Request $request)
     {
         $query = $this->buildFilterQuery($request);
 
         $tahunSekarang = (int) date('Y');
-        $tahunMulai    = (int) $request->input('tahun_awal', $tahunSekarang - 4);
-        $tahunSelesai  = (int) $request->input('tahun_akhir', $tahunSekarang);
+        $tahunMulai = (int) $request->input('tahun_awal', $tahunSekarang - 4);
+        $tahunSelesai = (int) $request->input('tahun_akhir', $tahunSekarang);
 
         $tahunRange = range($tahunMulai, $tahunSelesai);
 
         $barangs = $query->with([
-            'divisi', 
-            'pic', 
+            'divisi',
+            'pic',
             'ruang',
             'barangHistories' => function ($q) use ($tahunMulai, $tahunSelesai) {
                 $q->select('barang_id', 'kondisi', 'tahun_perolehan', 'tanggal_perubahan')
-                  ->whereBetween('tahun_perolehan', [$tahunMulai, $tahunSelesai])
-                  ->orderBy('tanggal_perubahan', 'asc');
+                    ->whereBetween('tahun_perolehan', [$tahunMulai, $tahunSelesai])
+                    ->orderBy('tanggal_perubahan', 'asc');
             }
         ])->get();
 
@@ -388,11 +393,11 @@ class BarangController extends Controller
 
         // Render PDF
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('barang.export-pdf', [
-            'data'        => $processedData,
-            'tahun_list'  => $tahunRange,
-            'tahun_awal'  => $tahunMulai,
+            'data' => $processedData,
+            'tahun_list' => $tahunRange,
+            'tahun_awal' => $tahunMulai,
             'tahun_akhir' => $tahunSelesai,
-            'filter'      => $request->all(),
+            'filter' => $request->all(),
         ]);
 
         $pdf->setPaper('A4', 'landscape');

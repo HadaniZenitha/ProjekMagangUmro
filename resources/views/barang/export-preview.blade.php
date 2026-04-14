@@ -23,8 +23,8 @@
                 <thead class="table-light text-center">
                     <tr>
                         <th>No</th>
-                        <th>Kode Barang</th>
-                        <th>Nama Barang</th>
+                        <th>Kode Item</th>
+                        <th>Nama Item</th>
                         <th>Fungsi</th>
                         <th>Ruang</th>
                         <th>PIC</th>
@@ -50,7 +50,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="11" class="text-center">Tidak ada data barang</td>
+                        <td colspan="11" class="text-center">Tidak ada data Item</td>
                     </tr>
                     @endforelse
                 </tbody>
