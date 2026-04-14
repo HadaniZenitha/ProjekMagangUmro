@@ -53,6 +53,10 @@
             min-width: 0;
         }
 
+        .pic-toolbar .fungsi-select {
+            min-width: 220px;
+        }
+
         @media (min-width: 768px) {
             .pic-toolbar .search-form {
                 width: auto;
@@ -60,6 +64,10 @@
 
             .pic-toolbar .search-input {
                 width: 320px;
+            }
+
+            .pic-toolbar .fungsi-select {
+                width: 240px;
             }
         }
     </style>
@@ -70,10 +78,20 @@
             class="d-flex flex-column flex-md-row gap-2 mb-2 mb-md-0 search-form">
             <input type="text" name="search" class="form-control search-input" placeholder="Search "
                 value="{{ request('search') }}">
+
+            <select name="fungsi" class="form-select fungsi-select">
+                <option value="">Semua Fungsi</option>
+                @foreach($divisis as $divisi)
+                    <option value="{{ $divisi->id }}" @selected(request('fungsi') == $divisi->id)>
+                        {{ $divisi->nama_divisi }}
+                    </option>
+                @endforeach
+            </select>
+
             <button type="submit" class="btn btn-primary btn-clean">
                 <i class="fa-solid fa-magnifying-glass me-1"></i> Cari
             </button>
-            @if(request('search'))
+            @if(request('search') || request('fungsi'))
                 <a href="{{ route('pic.index') }}" class="btn btn-secondary btn-clean">Reset</a>
             @endif
         </form>
