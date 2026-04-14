@@ -77,10 +77,11 @@
         <i class="fa-solid fa-arrow-left me-1"></i> Kembali
     </a>
 
-    <a href="{{ route('barang-sewa.cetak', $sewa->id) }}" class="btn btn-primary px-3">
+    {{-- <a href="{{ route('barang-sewa.cetak', $sewa->id) }}" class="btn btn-primary px-3">
         <i class="fa-solid fa-print me-1"></i> Cetak Stiker
-    </a>
+    </a> --}}
 
 </div>
 </div>
+
 @endsection

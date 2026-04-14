@@ -69,10 +69,19 @@
                     </div>
                     <hr class="opacity-50">
                     <div class="row mb-3 align-items-center">
-                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Lokasi & PIC</label>
-                        <div class="col-sm-8 text-dark">
-                            <span class="d-block text-capitalize">{{ $barang->ruang->nama_ruang ?? '-' }}</span>
-                            <span class="small text-muted">Oleh: {{ $barang->pic->nama_pic ?? '-' }}</span>
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Lokasi</label>
+                        <div class="col-sm-8 text-dark">{{ $barang->ruang->nama_ruang ?? '-' }}</div>
+                    </div>
+                    <hr class="opacity-50">
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">PIC</label>
+                        <div class="col-sm-8 text-dark d-flex align-items-center gap-2">
+                            <span class="small text-muted">{{ $barang->pic->nama_pic ?? '-' }}</span>
+                            @if($barang->pic)
+                                <span class="badge rounded-pill bg-{{ $barang->pic->is_active ? 'success' : 'secondary' }} px-3">
+                                    {{ $barang->pic->is_active ? 'Aktif' : 'Nonaktif' }}
+                                </span>
+                            @endif
                         </div>
                     </div>
                     <hr class="opacity-50">

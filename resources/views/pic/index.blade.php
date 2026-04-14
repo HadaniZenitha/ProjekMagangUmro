@@ -18,10 +18,10 @@
 .btn-clean{
     border-radius:8px;
     font-weight:500;
-    font-size:14px;
-    padding:6px 12px;
-    box-shadow:none;
-    transition:all 0.2s ease;
+    padding:7px 16px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.08);
+    transition:all 0.25s ease;
+    border:none;
 }
 
 /* WARNA SOFT */
@@ -33,8 +33,14 @@
 
 /* HOVER HALUS */
 .btn-clean:hover{
-    transform:translateY(-1px);
+    transform:translateY(-2px);
+    box-shadow:0 6px 14px rgba(0,0,0,0.15);
     background-color:#fbbf24;
+}
+
+.btn-clean:active{
+    transform:translateY(0);
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
 /* MOBILE */
@@ -53,36 +59,74 @@
     min-width: 0;
 }
 
+.pic-toolbar .toolbar-control {
+    height: 38px;
+    border-radius: 8px;
+}
+
+.pic-toolbar .toolbar-button {
+    height: 38px;
+    min-width: 96px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.pic-toolbar .action-buttons .btn-clean {
+    height: 38px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    padding-inline: 16px;
+}
+
 @media (min-width: 768px){
     .pic-toolbar .search-form {
-        width: auto;
+        width: 100%;
+        flex: 1 1 auto;
     }
 
     .pic-toolbar .search-input {
-        width: 320px;
+        width: 280px;
+    }
+
+    .pic-toolbar .fungsi-select {
+        width: 260px;
     }
 }
 </style>
 
 <!-- ===== BAGIAN YANG DIPERBAIKI ===== -->
-<div class="mb-3 d-flex flex-md-row flex-column align-items-md-center gap-2 pic-toolbar">
+<div class="mb-3 d-flex flex-md-row flex-column align-items-stretch align-items-md-center gap-2 pic-toolbar">
     <form action="{{ route('pic.index') }}" method="GET" class="d-flex flex-column flex-md-row gap-2 mb-2 mb-md-0 search-form">
         <input
             type="text"
             name="search"
-            class="form-control search-input"
+            class="form-control search-input toolbar-control"
             placeholder="Search "
             value="{{ request('search') }}"
         >
-        <button type="submit" class="btn btn-primary btn-clean">
+        <select name="fungsi" class="form-select fungsi-select toolbar-control">
+            <option value="">Semua Fungsi</option>
+            @foreach($divisis as $divisi)
+                <option value="{{ $divisi->id }}" {{ (string) request('fungsi') === (string) $divisi->id ? 'selected' : '' }}>
+                    {{ $divisi->nama_divisi }}
+                </option>
+            @endforeach
+        </select>
+        <button type="submit" class="btn btn-primary btn-clean toolbar-button">
             <i class="fa-solid fa-magnifying-glass me-1"></i> Cari
         </button>
-        @if(request('search'))
-            <a href="{{ route('pic.index') }}" class="btn btn-secondary btn-clean">Reset</a>
+        @if(request('search') || request('fungsi'))
+            <a href="{{ route('pic.index') }}" class="btn btn-secondary btn-clean toolbar-button">Reset</a>
         @endif
     </form>
 
-    <div class="d-flex gap-2 ms-md-auto mt-2 mt-md-0 flex-column flex-md-row">
+    <div class="d-flex gap-2 ms-md-auto mt-2 mt-md-0 flex-column flex-md-row action-buttons">
         <button class="btn btn-success btn-clean btn-mobile-full" data-bs-toggle="modal" data-bs-target="#modalImportPic">
             <i class="fas fa-file-excel me-1"></i> Import Excel
         </button>

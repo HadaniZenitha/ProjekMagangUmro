@@ -3,6 +3,9 @@
 @section('page-title', 'Data Item Inventaris')
 @section('title', 'Data Item Inventaris')
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 @section('content')
 
 <style>
@@ -204,7 +207,7 @@
 
 				<div class="col-lg-3 col-md-6">
 				    <label class="form-label small mb-1">Ruangan</label>
-				    <select name="ruang" class="form-select">
+				    <select name="ruang" class="form-select select2">
 				        <option value="">Semua Ruangan</option>
 				        @foreach($ruangs as $r)
 				            <option value="{{ $r->id }}" {{ request('ruang') == $r->id ? 'selected' : '' }}>
@@ -216,7 +219,7 @@
 
 				<div class="col-lg-3 col-md-6">
 					<label class="form-label small mb-1">PIC</label>
-					<select name="pic" class="form-select">
+					<select name="pic" class="form-select select2">
 						<option value="">Semua PIC</option>
 						@foreach($pics as $p)
 						<option value="{{ $p->id }}" {{ request('pic') == $p->id ? 'selected' : '' }}>
@@ -229,9 +232,9 @@
 				<div class="col-lg-2 col-md-6">
 				    <label class="form-label small mb-1">Range Tahun</label>
 				    <div class="d-flex gap-2">
-				        <input type="number" name="tahun_awal" class="form-control" value="{{ date('Y') - 4 }}" title="Dari Tahun">
+				        <input type="number" name="tahun_awal" class="form-control" value="{{ request('tahun_awal', date('Y') - 4) }}" title="Dari Tahun">
 				        <span class="align-self-center">-</span>
-				        <input type="number" name="tahun_akhir" class="form-control" value="{{ date('Y') }}" title="Sampai Tahun">
+				        <input type="number" name="tahun_akhir" class="form-control" value="{{ request('tahun_akhir', date('Y')) }}" title="Sampai Tahun">
 				    </div>
 				</div>
 
@@ -274,7 +277,7 @@
 	<div class="table-responsive">
 		<table class="table table-bordered align-middle mb-0">
 			<thead class="table-light">
-				<tr>
+				<tr class="text-center">
 					<th>Kode</th>
 					<th>PIC</th>
 					<th>Nama Item</th>
@@ -384,4 +387,18 @@
 
 </div>
 
+@endsection
+
+@section('scripts')
+
+<script>
+$(document).ready(function() {
+    $('.select2').select2({
+        placeholder: "Pilih atau cari...",
+        allowClear: true,
+        width: '100%'
+    });
+});
+</script>
+	
 @endsection

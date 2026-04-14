@@ -10,13 +10,13 @@
 
 {{-- ERROR VALIDASI --}}
 @if ($errors->any())
-<div class="alert alert-danger">
-    <ul class="mb-0">
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
 @endif
 
 <div class="card shadow-sm border-0">
@@ -27,8 +27,8 @@
 
             {{-- Kode Barang --}}
             <div class="mb-3">
-                <label class="form-label fw-semibold">Kode Item</label>
-                <input type="text" name="kode_barang" class="form-control" required>
+                <label class="form-label fw-semibold">Kode Item <span class="text-danger">*</span></label>
+                <input type="text" name="kode_barang" class="form-control" placeholder="Masukkan kode item" required>
             </div>
 
             {{-- Nama Barang --}}
@@ -37,53 +37,57 @@
                 <input type="text" name="nama_barang" class="form-control" value="{{ old('nama_barang') }}" required>
             </div>
 
-            {{-- Fungsi --}}
-            <div class="mb-3">
-                <label class="form-label">Fungsi</label>
-                <select name="divisi_id" id="fungsiSelect" class="form-select" required>
-                    <option value="">-- Pilih Fungsi --</option>
-                    @foreach($divisis as $divisi)
-                        <option value="{{ $divisi->id }}" {{ old('divisi_id') == $divisi->id ? 'selected' : '' }}>
-                            {{ $divisi->nama_divisi }}
-                        </option>
-                    @endforeach
-                </select>
+            <div class="row">
+                {{-- Fungsi --}}
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Fungsi <span class="text-danger">*</span></label>
+                    <select name="divisi_id" id="divisiSelect" class="form-select" required>
+                        <option value="">-- Pilih Fungsi --</option>
+                        @foreach($divisis as $divisi)
+                            <option value="{{ $divisi->id }}" {{ old('divisi_id') == $divisi->id ? 'selected' : '' }}>
+                                {{ $divisi->nama_divisi }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- PIC --}}
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">PIC (Penanggung Jawab) <span class="text-danger">*</span></label>
+                    <select name="pic_id" id="picSelect" class="form-select" required>
+                        <option value="">-- Pilih Fungsi terlebih dahulu --</option>
+                    </select>
+                </div>
             </div>
 
-            {{-- PIC --}}
-            <div class="mb-3">
-                <label class="form-label">PIC</label>
-                <select name="pic_id" id="picSelect" class="form-select" required disabled>
-                    <option value="">-- Pilih Fungsi terlebih dahulu --</option>
-                </select>
-            </div>
+            <div class="row">
+                {{-- Lokasi --}}
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Lokasi Ruang <span class="text-danger">*</span></label>
+                    <select name="ruang_id" class="form-select" required>
+                        <option value="">-- Pilih Ruang --</option>
+                        @foreach($ruangs as $r)
+                            <option value="{{ $r->id }}" {{ old('ruang_id') == $r->id ? 'selected' : '' }}>
+                                {{ $r->nama_ruang }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            {{-- Lokasi --}}
-            <div class="mb-3">
-                <label class="form-label">Lokasi</label>
-                <select name="ruang_id" class="form-select" required>
-                    <option value="">-- Pilih Ruang --</option>
-                    @foreach($ruangs as $r)
-                        <option value="{{ $r->id }}" {{ old('ruang_id') == $r->id ? 'selected' : '' }}>
-                            {{ $r->nama_ruang }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            {{-- Tahun --}}
-            <div class="mb-3">
-                <label class="form-label fw-semibold">Tahun</label>
-                <input type="number"
-                       name="tahun"
-                       class="form-control"
-                       value="{{ date('Y') }}"
-                       required>
+                {{-- Tahun --}}
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Tahun <span class="text-danger">*</span></label>
+                    <input type="number"
+                           name="tahun"
+                           class="form-control"
+                           value="{{ date('Y') }}"
+                           required>
+                </div>
             </div>
 
             {{-- Kondisi --}}
-            <div class="mb-3">
-                <label class="form-label">Kondisi</label>
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Kondisi Barang <span class="text-danger">*</span></label>
                 <select name="kondisi" class="form-select" required>
                     <option value="Baik" {{ old('kondisi') == 'Baik' ? 'selected' : '' }}>Baik</option>
                     <option value="Perlu Perbaikan" {{ old('kondisi') == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>
@@ -109,11 +113,12 @@
 </div>
 
 <script>
-    const fungsiSelect = document.getElementById('fungsiSelect');
+document.addEventListener('DOMContentLoaded', function () {
+    const divisiSelect = document.getElementById('divisiSelect');
     const picSelect = document.getElementById('picSelect');
     const oldPicId = document.getElementById('barangSewaForm').dataset.oldPicId;
 
-    async function loadPics(divisiId, selectedPicId = null) {
+    function loadPics(divisiId, selectedPicId = null) {
         picSelect.innerHTML = '<option value="">Memuat PIC...</option>';
         picSelect.disabled = true;
 
@@ -122,38 +127,47 @@
             return;
         }
 
-        try {
-            const response = await fetch(`/get-pic-by-divisi/${divisiId}`);
-            const pics = await response.json();
-
+        fetch('/get-pic-by-divisi/' + divisiId, {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
             picSelect.innerHTML = '<option value="">-- Pilih PIC --</option>';
 
-            pics.forEach((pic) => {
+            if (data.length === 0) {
+                picSelect.innerHTML = '<option value="">PIC tidak tersedia</option>';
+                return;
+            }
+
+            data.forEach(pic => {
                 const option = document.createElement('option');
                 option.value = pic.id;
-                option.textContent = `${pic.nama_pic} (${pic.jabatan ?? '-'})`;
+                option.textContent = pic.nama_pic;
+
                 if (selectedPicId && String(selectedPicId) === String(pic.id)) {
                     option.selected = true;
                 }
+
                 picSelect.appendChild(option);
             });
 
-            picSelect.disabled = pics.length === 0;
-            if (pics.length === 0) {
-                picSelect.innerHTML = '<option value="">PIC untuk fungsi ini belum tersedia</option>';
-            }
-        } catch (error) {
+            picSelect.disabled = false;
+        })
+        .catch(() => {
             picSelect.innerHTML = '<option value="">Gagal memuat PIC</option>';
-        }
+        });
     }
 
-    fungsiSelect.addEventListener('change', function () {
+    divisiSelect.addEventListener('change', function () {
         loadPics(this.value);
     });
 
-    if (fungsiSelect.value) {
-        loadPics(fungsiSelect.value, oldPicId);
+    if (divisiSelect.value) {
+        loadPics(divisiSelect.value, oldPicId);
     }
+});
 </script>
 
 @endsection
