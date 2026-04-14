@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Barang Sewa')
+@section('title', 'Tambah Item Sewa')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Tambah Barang Sewa</h5>
+    <h5 class="fw-bold mb-0">Tambah Item Sewa</h5>
 </div>
 
 {{-- ERROR VALIDASI --}}
@@ -27,13 +27,13 @@
 
             {{-- Kode Barang --}}
             <div class="mb-3">
-                <label class="form-label fw-semibold">Kode Barang <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold">Kode Item <span class="text-danger">*</span></label>
                 <input type="text" name="kode_barang" class="form-control" placeholder="Masukkan kode barang" required>
             </div>
 
             {{-- Nama Barang --}}
             <div class="mb-3">
-                <label class="form-label fw-semibold">Nama Barang</label>
+                <label class="form-label fw-semibold">Nama Item</label>
                 <input type="text" name="nama_barang" class="form-control" value="{{ old('nama_barang') }}" required>
             </div>
 
@@ -87,12 +87,18 @@
 
             {{-- Kondisi --}}
             <div class="mb-4">
-                <label class="form-label fw-semibold">Kondisi Barang <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold">Kondisi Item <span class="text-danger">*</span></label>
                 <select name="kondisi" class="form-select" required>
                     <option value="Baik" {{ old('kondisi') == 'Baik' ? 'selected' : '' }}>Baik</option>
                     <option value="Perlu Perbaikan" {{ old('kondisi') == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>
                     <option value="Rusak" {{ old('kondisi') == 'Rusak' ? 'selected' : '' }}>Rusak</option>
                 </select>
+            </div>
+             <!-- Upload Foto -->
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Foto Item (Opsional)</label>
+                <input type="file" name="foto" class="form-control" accept="image/*">
+                <small class="text-muted">Format: jpg, jpeg, png. Maksimal 2MB</small>
             </div>
 
             {{-- BUTTON --}}

@@ -15,11 +15,6 @@
         height: 100%;
     }
 
-.main-wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
         :root {
             --bg-sidebar: #309FB0;
             --pln-yellow: #FACC15;
@@ -278,51 +273,111 @@
             height: 1rem;
         }
 
+        .date-mobile {
+            display: none;
+        }
+
+        @media (max-width: 576px) {
+            .date-desktop {
+                display: none;
+            }
+
+            .date-mobile {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                white-space: nowrap;
+                font-size: 12px;
+            }
+        }
+
         @media (max-width: 991px) {
 
+            /* ===== SIDEBAR ===== */
             .sidebar {
                 transform: translateX(-100%);
+                position: fixed;
+                z-index: 1000;
+                width: 260px;
             }
 
             .sidebar.show {
                 transform: translateX(0);
             }
 
+            /* ===== MAIN ===== */
             .main-wrapper {
-                margin-left: 0;
+                margin-left: 0 !important;
+                width: 100%;
             }
 
+            /* ===== NAVBAR ===== */
+            .top-navbar {
+                padding: 10px 12px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+                gap: 8px;
+            }
+
+            .top-navbar .d-flex.align-items-center.gap-3 {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-shrink: 0;
+            }
+
+            /* HAMBURGER */
             .mobile-toggle {
-                display: inline-block;
-            }
-
-            .overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.4);
-                z-index: 900;
-            }
-
-            .overlay.show {
-                display: block;
-            }
-
-            .search-box {
-                width: 180px;
-            }
-
-            .icon-top i {
-                font-size: 20px;
+                display: inline-block !important;
+                font-size: 18px;
+                flex-shrink: 0; /* 🔥 biar ga hilang */
                 cursor: pointer;
             }
 
-            .icon-top i:hover {
-                color: #309FB0;
-                transform: scale(1.15);
-                transition: 0.2s;
+            /* SEARCH */
+            .search-box {
+                width: 100%;
+                max-width: 180px;
             }
 
+            /* ICON TOP */
+            .icon-top {
+                gap: 10px !important;
+            }
+
+            .icon-top i {
+                font-size: 18px;
+            }
+
+            /* ===== HEADER ===== */
+            .banner-header {
+                padding: 15px 20px;
+                height: auto;
+            }
+
+            .banner-header h2 {
+                font-size: 18px;
+            }
+
+            /* ===== CONTENT ===== */
+            .content-card {
+                margin: -20px 10px 20px;
+                padding: 15px;
+                border-radius: 10px;
+            }
+
+            /* ===== FIX AGAR GA NGECIL ===== */
+            body, html {
+                width: 100%;
+                overflow-x: hidden;
+            }
+
+            /* ===== OVERLAY ===== */
+            .overlay.show {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -345,7 +400,7 @@
 
             <div>
                 <div style="font-weight:700; font-size:18px; color:#005697; letter-spacing:12px;">PLN</div>
-                <div style="font-weight:400; font-size:12px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
+                <div style="font-weight:400; font-size:13px; color:#FFD500; letter-spacing:3px;">NUSANTARA POWER</div>
             </div>
 
         </div>
@@ -395,7 +450,7 @@
                 <div class="nav-link-collapse {{ request()->routeIs(['kelompok.*','jenis.*','subjenis.*']) ? '' : 'collapsed' }}"
                     data-bs-toggle="collapse" data-bs-target="#menuBarang">
                     <a href="javascript:void(0)">
-                        MASTER ITEM
+                        MASTER BARANG
                         <i class="fa-solid fa-chevron-right rotate-icon"></i>
                         <i class="fa-solid fa-cubes"></i>
                     </a>
@@ -493,9 +548,14 @@
             <div class="d-flex align-items-center gap-4 text-muted icon-top">
 
                 <!-- TANGGAL -->
-                <div class="small text-muted">
+                <div class="date-desktop small text-muted">
                     <i class="fa-regular fa-calendar me-1"></i>
                     {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+                </div>
+
+                <div class="date-mobile small text-muted">
+                    <i class="fa-regular fa-calendar me-1"></i>
+                    {{\Carbon\Carbon::now()->format('d/m/y')}}
                 </div>
 
                 <!-- NOTIFIKASI -->
@@ -531,7 +591,7 @@
             <footer class="d-flex justify-content-between align-items-center mt-3">
 
                 <div class="text-muted small">
-                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhaul
+                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhoul
                 </div>
 
                 <div class="small text-muted">
@@ -568,118 +628,65 @@
         });
     </script>
     <!-- ================= MODAL INFORMASI ================= -->
-<div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0 shadow">
-            
-            <div class="modal-header" style="background:#309FB0; color:white;">
-                <h5 class="modal-title">
-                    <i class="fa-solid fa-circle-info me-2"></i>
-                    Informasi Sistem
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+    <div class="modal fade" id="infoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
 
-            <div class="modal-body p-4">
-                <div class="text-center mb-4">
-                    <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
-                    <h4 class="mt-3 fw-bold text-dark">SmartUMRO</h4>
-                    <p class="text-muted mb-0">Sistem Inventarisasi UNIT UMRO</p>
-                    <span class="badge bg-light text-muted border">Versi 1.0.0</span>
+                <div class="modal-header" style="background:#309FB0; color:white;">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-circle-info me-2"></i>
+                        Informasi Sistem
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
-                <hr class="opacity-10">
+                <div class="modal-body">
 
-                <div class="mb-4">
-                    <h6 class="fw-bold text-primary mb-2">Tentang Sistem</h6>
-                    <p class="text-muted" style="text-align: justify; line-height: 1.6;">
-                        Smart UMRO merupakan sistem inventarisasi yang dirancang untuk membantu 
-                        pengelolaan data aset dan barang secara terstruktur, terintegrasi, dan 
-                        mudah diakses. Sistem ini mendukung pengelolaan data fungsi/divisi, 
-                        PIC (penanggung jawab), lokasi penyimpanan seperti gedung dan ruangan, 
-                        serta data inventaris barang secara menyeluruh.
-                    </p>
-                </div>
-
-                <hr class="opacity-10">
-
-                <div class="mb-4">
-                    <h6 class="fw-bold text-primary mb-3">
-                        <i class="fa-solid fa-star me-2"></i>Fitur Utama Sistem
-                    </h6>
-                    <div class="row g-3 text-center">
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-sitemap fa-2x text-info mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Manajemen Fungsi</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Data divisi</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-user-tie fa-2x text-success mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Manajemen PIC</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Penanggung jawab</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-building fa-2x text-warning mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Manajemen Lokasi</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Gedung & ruangan</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-box fa-2x text-danger mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Inventaris Barang</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Data aset</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-qrcode fa-2x text-dark mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">QR Code</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Scan identifikasi</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-6">
-                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
-                                <i class="fa-solid fa-file-export fa-2x text-primary mb-2"></i>
-                                <h6 class="fw-bold mb-1 small">Laporan & Export</h6>
-                                <small class="text-muted d-block" style="font-size: 11px;">Excel & PDF</small>
-                            </div>
-                        </div>
+                    <!-- HEADER -->
+                    <div class="text-center mb-4">
+                        <img src="{{ asset('images/icon.png') }}" height="70" alt="Logo">
+                        <h4 class="mt-3 fw-bold">SMART - UMRO</h4>
+                        <p class="text-muted mb-0">Sistem Manajemen Aset Terintegrasi</p>
+                        <small class="text-muted">Versi 1.0.0</small>
                     </div>
-                </div>
 
-                <hr class="opacity-10">
+                    <hr>
 
-                <div class="bg-light p-3 rounded">
-                    <h6 class="fw-bold text-primary mb-2">
-                        <i class="fa-solid fa-book me-2"></i>Panduan Singkat
-                    </h6>
-                    <ol class="mb-0" style="font-size:13px; padding-left:20px; line-height: 1.8;">
-                        <li>Gunakan menu sidebar untuk memilih modul sistem.</li>
-                        <li>Tambahkan data melalui tombol <b>Tambah</b>.</li>
-                        <li>Gunakan fitur <b>Edit</b> untuk memperbarui data.</li>
-                        <li>Pastikan data lokasi tersedia sebelum menambahkan inventaris.</li>
-                        <li>Gunakan fitur <b>Search</b> untuk pencarian cepat.</li>
+                    <!-- DESKRIPSI SISTEM -->
+                    <h6 class="fw-bold text-primary">Tentang Sistem</h6>
+                    <p style="text-align: justify;">
+                        SMART-UMRO (Sistem Manajemen Aset Terintegrasi) adalah aplikasi digital yang digunakan untuk mengelola data inventaris secara terpusat, mulai dari pencatatan barang, lokasi, PIC (penanggung jawab), hingga kondisi aset. Sistem ini dilengkapi fitur QR Code untuk mempermudah identifikasi dan pengecekan barang secara cepat dan akurat, sehingga meningkatkan efisiensi, transparansi, dan kontrol dalam pengelolaan aset.
+                    </p>
+
+                    <hr>
+
+                    <!-- PANDUAN SINGKAT -->
+                    <h6 class="fw-bold text-primary">Panduan Singkat Penggunaan</h6>
+                    <ol style="font-size: 14px;">
+                        <li>Gunakan menu di sidebar untuk memilih modul yang diinginkan.</li>
+                        <li>Tambahkan data melalui tombol <strong>Tambah</strong> pada setiap halaman.</li>
+                        <li>Gunakan fitur edit untuk memperbarui data yang sudah ada.</li>
+                        <li>Pastikan data lokasi dan karyawan telah dibuat sebelum menambahkan inventaris.</li>
+                        <li>Gunakan fitur pencarian pada bagian atas untuk menemukan data dengan cepat.</li>
                     </ol>
-                </div>
-            </div>
 
-            <div class="modal-footer d-flex justify-content-between align-items-center bg-light border-0">
-                <div class="text-muted" style="font-size: 11px;">
-                    <i class="fa-solid fa-code me-1"></i>
-                    Developed by <b>SMART UMRO</b> • 2026
-                </div>
-                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Tutup</button>
-            </div>
+                    <hr>
 
+                    <!-- PENGEMBANG -->
+                    <h6 class="fw-bold text-primary">Pengembang Sistem</h6>
+                    <p class="mb-1"><strong>Nama :</strong> Hwanzelnuts n Team</p>
+                    <p class="mb-1"><strong>Unit :</strong> UNIT UMRO</p>
+                    <p class="mb-0"><strong>Tahun Pengembangan :</strong> 2026</p>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
 
     <script>
         function toggleSidebar() {
@@ -826,6 +833,164 @@
         }
     </script>
 
+    <!-- ================= MODAL INFORMASI SISTEM ================= -->
+    <div class="modal fade" id="infoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg">
+
+                <!-- HEADER -->
+                <div class="modal-header text-white"
+                    style="background: linear-gradient(135deg,#309FB0,#1F7A88);">
+
+                    <h5 class="modal-title fw-bold">
+                        <i class="fa-solid fa-circle-info me-2"></i>
+                        Informasi Sistem
+                    </h5>
+
+                    <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- LOGO + TITLE -->
+                    <div class="text-center mb-4">
+
+                        <img src="{{ asset('images/pln.jpeg') }}"
+                            height="70"
+                            class="mb-2">
+
+                        <h3 class="fw-bold mb-1">i - Noni</h3>
+
+                        <p class="text-muted mb-0">
+                            Sistem Inventarisasi UNIT MAINTENANCE REPAIR AND OVERHAUL
+                        </p>
+
+                        <span class="badge bg-secondary mt-2">
+                            Versi 1.0.0
+                        </span>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- TENTANG SISTEM -->
+                    <div class="mb-4">
+
+                        <h6 class="fw-bold text-primary mb-2">
+                            <i class="fa-solid fa-circle-info me-2"></i>
+                            Tentang Sistem
+                        </h6>
+
+                        <p style="text-align: justify;">
+                            i-Noni merupakan sistem inventarisasi yang dirancang untuk membantu
+                            pengelolaan data aset dan barang secara terstruktur, terintegrasi,
+                            dan mudah diakses. Sistem ini mendukung pengelolaan data karyawan,
+                            lokasi (gedung, lantai, ruangan), serta data inventaris sehingga
+                            proses monitoring aset menjadi lebih efektif, akurat, dan transparan.
+                        </p>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- FITUR UTAMA -->
+                    <div class="mb-4">
+
+                        <h6 class="fw-bold text-primary mb-3">
+                            <i class="fa-solid fa-star me-2"></i>
+                            Fitur Utama Sistem
+                        </h6>
+
+                        <div class="row text-center">
+
+                            <div class="col-md-4 mb-3">
+
+                                <i class="fa-solid fa-users fa-2x text-info mb-2"></i>
+
+                                <h6 class="fw-bold mb-1">Manajemen Karyawan</h6>
+
+                                <small class="text-muted">
+                                    Mengelola data fungsi dan karyawan
+                                </small>
+
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+
+                                <i class="fa-solid fa-building fa-2x text-success mb-2"></i>
+
+                                <h6 class="fw-bold mb-1">Manajemen Lokasi</h6>
+
+                                <small class="text-muted">
+                                    Mengelola gedung, lantai, dan ruangan
+                                </small>
+
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+
+                                <i class="fa-solid fa-box fa-2x text-warning mb-2"></i>
+
+                                <h6 class="fw-bold mb-1">Inventaris Barang</h6>
+
+                                <small class="text-muted">
+                                    Pengelolaan data barang dan aset
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- PANDUAN -->
+                    <div>
+
+                        <h6 class="fw-bold text-primary mb-2">
+                            <i class="fa-solid fa-book me-2"></i>
+                            Panduan Singkat
+                        </h6>
+
+                        <ol style="font-size:14px; padding-left:18px;">
+
+                            <li>Gunakan menu sidebar untuk memilih modul sistem.</li>
+                            <li>Tambahkan data melalui tombol <b>Tambah</b>.</li>
+                            <li>Gunakan fitur <b>Edit</b> untuk memperbarui data.</li>
+                            <li>Pastikan data lokasi dan karyawan tersedia sebelum menambahkan inventaris.</li>
+                            <li>Gunakan fitur <b>Search</b> untuk menemukan data dengan cepat.</li>
+
+                        </ol>
+
+                    </div>
+
+                </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer d-flex justify-content-between align-items-center bg-light">
+
+                    <div class="text-muted small">
+
+                        <i class="fa-solid fa-code me-1"></i>
+                        Developed by <b>SMART UMRO</b> • UNIT MAINTENANCE REPAIR AND OVERHAUL • 2026
+
+                    </div>
+
+                    <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Tutup
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
     <!-- ================= MODAL NOTIFIKASI ================= -->
     <div class="modal fade" id="notifModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">

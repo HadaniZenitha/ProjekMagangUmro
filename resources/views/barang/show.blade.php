@@ -12,7 +12,7 @@
             <div class="col-lg-4 col-md-5">
                 <div class="card border-0 shadow-sm mb-4 text-center">
                     <div class="card-header bg-white py-3 text-start">
-                        <h6 class="fw-bold mb-0">Foto Barang</h6>
+                        <h6 class="fw-bold mb-0">Foto item</h6>
                     </div>
                     <div class="card-body">
                         @if ($barang->foto)

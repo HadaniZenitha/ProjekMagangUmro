@@ -1,39 +1,73 @@
 @extends('layouts.dashboard')
 
-@section('page-title', 'Data Barang Sewa')
-@section('title', 'Data Barang Sewa')
+@section('page-title', 'Data Item Sewa')
+@section('title', 'Data Item Sewa')
 
 @section('content')
 
+    <style>
+        /* ===== CARD ===== */
+        .filter-card {
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-pro {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 6px 14px;
+        }
+
+        /* ===== TABLE ===== */
+        .table td {
+            vertical-align: middle;
+        }
+
+        /* ===== AKSI BUTTON ===== */
+        .aksi-group {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 768px) {
+            .btn-mobile {
+                width: 100%;
+            }
+        }
+    </style>
+
     <div class="container-fluid">
 
+        {{-- HEADER --}}
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
-            <h5 class="fw-bold mb-0">Data Barang Sewa</h5>
+            <h5 class="fw-bold mb-0">Data Item Sewa</h5>
 
-            <div class="d-flex flex-wrap gap-2">
-                <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro">
-                    <i class="fa-solid fa-plus"></i> Tambah Barang
-                </a>
-            </div>
+            <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile">
+                <i class="fa-solid fa-plus me-1"></i> Tambah Item
+            </a>
         </div>
 
         {{-- ALERT --}}
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success shadow-sm">
                 {{ session('success') }}
             </div>
         @endif
-        {{-- FORM FILTER --}}
-        <form method="GET" action="{{ route('barang.index') }}">
-            <div class="card mb-3 shadow-sm border-0">
+
+        {{-- FILTER --}}
+        <form method="GET" action="{{ route('barang-sewa.index') }}">
+            <div class="card filter-card shadow-sm mb-3">
                 <div class="card-body">
 
-                    {{-- 🔹 ROW 1: SEARCH + EXPORT --}}
+                    {{-- SEARCH --}}
                     <div class="row g-3 align-items-end">
+                        <div class="col-lg-6">
+                            <label class="form-label small fw-semibold mb-1">Cari Item</label>
 
-                        {{-- SEARCH --}}
-                        <div class="col-lg-6 col-md-12">
-                            <label class="form-label small fw-semibold mb-1">Cari Barang</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white">
                                     <i class="fa-solid fa-magnifying-glass text-muted"></i>
@@ -44,14 +78,14 @@
                         </div>
                     </div>
 
-                    {{-- 🔹 ROW 2: FILTER --}}
+                    {{-- FILTER --}}
                     <div class="row g-3 mt-2 align-items-end">
 
-                        {{-- RUANGAN --}}
+                        {{-- RUANG --}}
                         <div class="col-lg-2 col-md-6">
                             <label class="form-label small fw-semibold mb-1">Ruangan</label>
-                            <select name="ruang" class="form-select select2">
-                                <option value="">Semua Ruangan</option>
+                            <select name="ruang" class="form-select">
+                                <option value="">Semua</option>
                                 @foreach($ruangs as $r)
                                     <option value="{{ $r->id }}" {{ request('ruang') == $r->id ? 'selected' : '' }}>
                                         {{ $r->nama_ruang }}
@@ -61,10 +95,10 @@
                         </div>
 
                         {{-- PIC --}}
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-lg-2 col-md-6">
                             <label class="form-label small fw-semibold mb-1">PIC</label>
-                            <select name="pic" class="form-select select2">
-                                <option value="">Semua PIC</option>
+                            <select name="pic" class="form-select">
+                                <option value="">Semua</option>
                                 @foreach($pics as $p)
                                     <option value="{{ $p->id }}" {{ request('pic') == $p->id ? 'selected' : '' }}>
                                         {{ $p->nama_pic }}
@@ -83,54 +117,50 @@
                             </select>
                         </div>
 
-                        {{-- RANGE TAHUN --}}
-                        <div class="col-lg-2 col-md-6">
+                        {{-- TAHUN --}}
+                        <div class="col-lg-3 col-md-6">
                             <label class="form-label small fw-semibold mb-1">Tahun</label>
                             <div class="input-group">
-                                <input type="number" name="tahun_awal" class="form-control text-center" placeholder="2020"
+                                <input type="number" name="tahun_awal" class="form-control text-center"
                                     value="{{ request('tahun_awal', date('Y') - 4) }}">
-
-                                <span class="input-group-text bg-light fw-bold">-</span>
-
-                                <input type="number" name="tahun_akhir" class="form-control text-center" placeholder="2025"
+                                <span class="input-group-text">-</span>
+                                <input type="number" name="tahun_akhir" class="form-control text-center"
                                     value="{{ request('tahun_akhir', date('Y')) }}">
                             </div>
                         </div>
 
-                        {{-- FILTER --}}
+                        {{-- BUTTON --}}
                         <div class="col-lg-auto col-md-6 d-flex">
-                            <button class="btn btn-primary btn-pro px-3 w-100 w-lg-auto">
+                            <button class="btn btn-primary btn-pro w-100">
                                 <i class="fa-solid fa-filter me-1"></i> Filter
                             </button>
                         </div>
-                        {{-- RESET --}}
+
                         <div class="col-lg-auto col-md-6 d-flex">
-                            <a href="{{ route('barang.index') }}" class="btn btn-secondary btn-pro w-100">
+                            <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary btn-pro w-100">
                                 <i class="fa-solid fa-rotate-left me-1"></i> Reset
                             </a>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </form>
-        {{-- TABEL DATA --}}
-
-        {{-- TABEL --}}
+        {{-- TABLE --}}
         <div class="card shadow-sm border-0">
             <div class="table-responsive">
-                <table class="table table-bordered align-middle mb-0">
+                <table class="table table-hover align-middle mb-0">
+
                     <thead class="table-light text-center">
-                        <tr>
+                        <tr class="small text-uppercase text-muted">
                             <th>Kode</th>
                             <th>PIC</th>
                             <th>Fungsi</th>
-                            <th>Nama Barang</th>
+                            <th>Nama Item</th>
                             <th>Lokasi</th>
                             <th>Tahun</th>
                             <th>Kondisi</th>
-                            <th>QR</th>
-                            <th width="120">Aksi</th>
+                            <th width="130">Aksi</th>
                         </tr>
                     </thead>
 
@@ -142,14 +172,10 @@
                                 </td>
 
                                 <td>{{ $d->pic->nama_pic ?? '-' }}</td>
-
                                 <td>{{ $d->fungsi ?? '-' }}</td>
-
                                 <td>{{ $d->nama_barang }}</td>
-
                                 <td>{{ $d->ruang->nama_ruang ?? '-' }}</td>
-
-                                <td>{{ $d->tahun }}</td>
+                                <td class="fw-semibold">{{ $d->tahun }}</td>
 
                                 <td>
                                     @if($d->kondisi == 'Baik')
@@ -161,31 +187,22 @@
                                     @endif
                                 </td>
 
-                                <td class="qr-box">
-                                    {!! QrCode::size(60)->generate($d->kode_barang) !!}
-                                </td>
-
+                                {{-- AKSI --}}
                                 <td class="text-center">
-                                   <div class="d-flex justify-content-center flex-nowrap gap-1">
+                                    <div class="aksi-group">
 
-                                        {{-- LIHAT --}}
-                                        <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm btn-pro">
+                                        <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
 
-                                        {{-- EDIT --}}
-                                        <a href="{{ route('barang-sewa.edit', $d->id) }}"
-                                            class="btn btn-warning btn-sm btn-pro">
+                                        <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
                                             <i class="fa-solid fa-pen"></i>
                                         </a>
 
-                                        {{-- HAPUS --}}
-                                        <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST"
-                                            class="d-inline">
+                                        <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button onclick="return confirm('Hapus barang ini?')"
-                                                class="btn btn-danger btn-sm btn-pro">
+                                            <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </form>
@@ -195,13 +212,14 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="text-center text-muted py-4">
+                                <td colspan="8" class="text-center text-muted py-4">
                                     <i class="fa-solid fa-box-open fa-2x mb-2 d-block"></i>
-                                    Data barang sewa belum tersedia
+                                    Data Item sewa belum tersedia
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
+
                 </table>
             </div>
         </div>

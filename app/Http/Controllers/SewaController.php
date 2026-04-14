@@ -13,31 +13,50 @@ class SewaController extends Controller
 
     public function index(Request $request)
     {
-        $query = BarangSewa::with(['pic','ruang']);
+        $query = BarangSewa::with(['pic', 'ruang'])->latest();
 
-        // Filter PIC
+        // 🔍 SEARCH
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama_barang', 'like', '%' . $request->search . '%')
+                    ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // FILTER PIC
         if ($request->pic) {
             $query->where('pic_id', $request->pic);
         }
 
-        // Filter Ruang
+        // FILTER RUANG
         if ($request->ruang) {
             $query->where('ruang_id', $request->ruang);
         }
 
-        // Filter Tahun
-        if ($request->tahun) {
-            $query->where('tahun', $request->tahun);
+        // FILTER TAHUN RANGE
+        if ($request->tahun_awal && $request->tahun_akhir) {
+            $query->whereBetween('tahun', [
+                $request->tahun_awal,
+                $request->tahun_akhir
+            ]);
         }
 
         $data = $query->paginate(15)->withQueryString();
 
-        $pics = Pic::where('is_active', true)->get();
-        $ruangs = Ruang::where('is_active', true)->get();
+        $pics = Pic::where('is_active', true)
+            ->orderBy('nama_pic')
+            ->get();
 
-        return view('sewa.index', compact('data','pics','ruangs'));
+        $ruangs = Ruang::where('is_active', true)
+            ->orderBy('nama_ruang')
+            ->get();
+
+        return view('sewa.index', compact(
+            'data',
+            'pics',
+            'ruangs'
+        ));
     }
-
 
     public function create()
     {
@@ -123,7 +142,6 @@ class SewaController extends Controller
         return redirect()->route('barang-sewa.index')
             ->with('success', 'Barang sewa berhasil diupdate');
     }
-
 
     public function destroy(BarangSewa $sewa)
     {
