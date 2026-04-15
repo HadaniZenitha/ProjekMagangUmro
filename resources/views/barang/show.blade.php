@@ -1,18 +1,80 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Detail Barang')
+@section('title', 'Detail Item Inventaris')
+
+<style>
+    /* ===== BUTTON CLEAN ===== */
+    .btn-clean {
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        padding: 6px 12px;
+        box-shadow: none;
+        transition: all 0.2s ease;
+    }
+
+    /* ===== WARNA SAMA ===== */
+    .btn-warning.btn-clean {
+        background-color: #facc15;
+        border: none;
+        color: #000;
+    }
+
+    .btn-warning.btn-clean:hover {
+        background-color: #fbbf24;
+    }
+
+    /* BATAL = MERAH */
+    .btn-danger.btn-clean {
+        background-color: #ef4444;
+        border: none;
+        color: #fff;
+    }
+
+    .btn-danger.btn-clean:hover {
+        background-color: #dc2626;
+    }
+
+    .btn-secondary.btn-clean {
+        background-color: #e5e7eb;
+        border: none;
+        color: #000;
+    }
+
+    /* HOVER */
+    .btn-clean:hover {
+        transform: translateY(-1px);
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+        .btn-mobile-full {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
 
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold mb-0">Detail Inventaris</h4>
+            <div class="d-flex gap-2">
+                <a href="{{ route('barang.cetak', $barang->id) }}" target="_blank"
+                    class="btn btn-success btn-clean shadow-sm">
+                    <i class="fa-solid fa-print"></i> Cetak Stiker
+                </a>
+                <a href="{{ route('barang.index') }}" class="btn btn-secondary btn-clean shadow-sm">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </a>
+            </div>
         </div>
 
         <div class="row">
             <div class="col-lg-4 col-md-5">
                 <div class="card border-0 shadow-sm mb-4 text-center">
                     <div class="card-header bg-white py-3 text-start">
-                        <h6 class="fw-bold mb-0">Foto item</h6>
+                        <h6 class="fw-bold mb-0">Foto Barang</h6>
                     </div>
                     <div class="card-body">
                         @if ($barang->foto)
@@ -34,14 +96,6 @@
                         {!! QrCode::size(150)->generate(route('barang.scan', $barang->kode_barang)) !!}
                     </div>
                     <p class="text-muted small mb-0 px-3">Gunakan untuk tracking aset secara cepat.</p>
-                </div>
-                <div class="d-flex justify-content-start gap-2 mb-4">
-                    <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-warning px-4 fw-semibold">
-                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit
-                    </a>
-                    <a href="{{ route('barang.index') }}" class="btn btn-secondary px-4">
-                        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-                    </a>
                 </div>
             </div>
 
@@ -73,7 +127,13 @@
                             <label class="col-sm-4 text-muted small text-uppercase fw-bold">Lokasi & PIC</label>
                             <div class="col-sm-8 text-dark">
                                 <span class="d-block text-capitalize">{{ $barang->ruang->nama_ruang ?? '-' }}</span>
-                                <span class="small text-muted">Oleh: {{ $barang->pic->nama_pic ?? '-' }}</span>
+                                <span class="small text-muted">Oleh: {{ $barang->pic->nama_pic ?? '-' }} -
+                                    @if($barang->pic->is_active)
+                                        <span class="badge-status bg-status-aktif">PIC Aktif</span>
+                                    @else
+                                        <span class="badge-status bg-status-nonaktif">PIC Nonaktif</span>
+                                    @endif
+                                </span>
                             </div>
                         </div>
                         <hr class="opacity-50">
@@ -85,7 +145,7 @@
                                     {{ ucfirst($barang->kondisi) }}
                                 </span>
                                 <span
-                                    class="badge rounded-pill bg-{{ $barang->is_active ? 'success' : 'danger' }} text-white px-3">
+                                    class="badge rounded-pill bg-{{ $barang->is_active ? 'info' : 'secondary' }} text-white px-3">
                                     {{ $barang->is_active ? 'Aktif' : 'Nonaktif' }}
                                 </span>
                             </div>

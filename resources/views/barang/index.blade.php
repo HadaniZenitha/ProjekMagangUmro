@@ -326,7 +326,13 @@
 								<td>
 									<span class="badge bg-dark">{{ $b->kode_barang }}</span>
 								</td>
-								<td>{{ $b->pic->nama_pic ?? '-' }}</td>
+								<td>{{ $b->pic->nama_pic ?? '-' }} 
+									@if($b->pic->is_active) - 
+								            <span class="badge-status bg-status-aktif">PIC Aktif</span>
+								        @else
+								            <span class="badge-status bg-status-nonaktif">PIC Nonaktif</span>
+								    @endif
+								</td>
 								<td>{{ $b->nama_barang }}</td>
 								<td>{{ $b->ruang->nama_ruang ?? '-' }}</td>
 								<td>{{ $b->tahun_perolehan }}</td>

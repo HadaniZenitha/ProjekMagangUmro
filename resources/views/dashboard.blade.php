@@ -308,7 +308,7 @@
                                 <thead>
 
                                     <tr>
-                                        <th>Item</th>
+                                        <th>Nama Item</th>
                                         <th>Jenis</th>
                                         <th>Lokasi</th>
                                         <th>Status</th>

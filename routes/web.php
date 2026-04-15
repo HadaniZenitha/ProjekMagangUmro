@@ -22,6 +22,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// Route untuk mengambil data NID di register form
+Route::get('/register/get-nid-data', [\App\Http\Controllers\Auth\RegisterController::class, 'getNidData'])->name('register.getNidData');
+
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
@@ -99,6 +102,6 @@ Route::resource('barang-sewa', SewaController::class)
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('users', UserController::class);
 });
-Route::get('/barang/{barang}/cetak', [BarangController::class, 'cetak'])
+Route::get('/barang/cetak/{barang}', [BarangController::class, 'cetak'])
     ->name('barang.cetak');
-Route::get('/barang/{kode}/barcode', [BarangController::class, 'barcode'])->name('barang.barcode');
+    Route::get('/barang/{kode}/barcode', [BarangController::class, 'barcode'])->name('barang.barcode');
