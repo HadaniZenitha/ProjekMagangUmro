@@ -67,6 +67,7 @@ protected static function booted()
             'tahun_perolehan'   => $barang->tahun_perolehan,
             'is_active'         => $barang->is_active,
             'ruang_id'          => $barang->ruang_id,
+            'pic_id_baru'       => $barang->pic_id, // PIC saat ini dianggap sebagai PIC baru
             'user_id'           => Auth::id(),
             'catatan'           => 'Barang baru ditambahkan ke sistem',
             'tanggal_perubahan' => now(),
@@ -77,7 +78,7 @@ protected static function booted()
     static::updated(function (Barang $barang) {
 
         // Hanya jalan kalau ada perubahan penting
-        if ($barang->wasChanged(['kondisi', 'is_active', 'ruang_id', 'tahun_perolehan'])) {
+        if ($barang->wasChanged(['kondisi', 'is_active', 'ruang_id', 'tahun_perolehan', 'pic_id'])) {
 
             $changes = [];
 
@@ -86,6 +87,13 @@ protected static function booted()
                     . ($barang->getOriginal('kondisi') ?? '-') 
                     . " → " 
                     . $barang->kondisi;
+            }
+
+            if ($barang->wasChanged('pic_id')) {
+                // Ambil nama PIC lama untuk catatan (opsional)
+                $oldPicName = \App\Models\Pic::find($barang->getOriginal('pic_id'))->nama_pic ?? '-';
+                $newPicName = $barang->pic->nama_pic ?? '-';
+                $changes[] = "Pergantian PIC: $oldPicName → $newPicName";
             }
 
             if ($barang->wasChanged('tahun_perolehan')) {
@@ -103,7 +111,14 @@ protected static function booted()
             }
 
             if ($barang->wasChanged('ruang_id')) {
-                $changes[] = "Lokasi Ruang berubah";
+                // Ambil nama ruang lama
+                $oldRuangId = $barang->getOriginal('ruang_id');
+                $oldRuangName = \App\Models\Ruang::find($oldRuangId)->nama_ruang ?? '-';
+                
+                // Ambil nama ruang baru (sudah ter-update di object $barang)
+                $newRuangName = $barang->ruang->nama_ruang ?? '-';
+                
+                $changes[] = "Lokasi: $oldRuangName → $newRuangName";
             }
 
             // ✅ SIMPAN DATA TERBARU (SETELAH UPDATE)
@@ -112,6 +127,8 @@ protected static function booted()
                 'tahun_perolehan'   => $barang->tahun_perolehan,
                 'is_active'         => $barang->is_active,
                 'ruang_id'          => $barang->ruang_id,
+                'pic_id_lama'       => $barang->getOriginal('pic_id'), // PIC sebelum diubah
+                'pic_id_baru'       => $barang->pic_id, // PIC setelah diubah
                 'user_id'           => Auth::id(),
                 'catatan'           => 'Perubahan: ' . implode(', ', $changes),
                 'tanggal_perubahan' => now(),

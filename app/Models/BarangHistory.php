@@ -14,6 +14,8 @@ class BarangHistory extends Model
     protected $fillable = [
         'barang_id',
         'ruang_id',
+        'pic_id_lama',
+        'pic_id_baru',
         'user_id',
         'kondisi',
         'tahun_perolehan',
@@ -36,6 +38,18 @@ class BarangHistory extends Model
     public function ruang()
     {
         return $this->belongsTo(Ruang::class);
+    }
+
+    // Relasi ke PIC Lama
+    public function picLama()
+    {
+        return $this->belongsTo(Pic::class, 'pic_id_lama');
+    }
+
+    // Relasi ke PIC Baru
+    public function picBaru()
+    {
+        return $this->belongsTo(Pic::class, 'pic_id_baru');
     }
 
     public function user()

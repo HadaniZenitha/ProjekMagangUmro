@@ -22,12 +22,26 @@ return new class extends Migration
                   ->nullable()
                   ->constrained('ruangs')
                   ->onDelete('set null');
+            
+            // PIC Lama (Sebelum diubah)
+            $table->foreignId('pic_id_lama')
+                  ->nullable()
+                  ->constrained('pics')
+                  ->onDelete('set null');
 
+            // PIC Baru (Setelah diubah)
+            $table->foreignId('pic_id_baru')
+                  ->nullable()
+                  ->constrained('pics')
+                  ->onDelete('set null');
+
+            // User yang melakukan perubahan
             $table->foreignId('user_id')
                   ->nullable()
                   ->constrained('users')
                   ->onDelete('set null');
 
+            // Data Lain-Lain
             $table->string('kondisi');
             $table->integer('tahun_perolehan')->nullable();
             $table->boolean('is_active');
@@ -39,6 +53,7 @@ return new class extends Migration
             // Index untuk mempercepat query history per barang dan per tahun
             $table->index(['barang_id', 'tanggal_perubahan']);
             $table->index('user_id');
+            $table->index('pic_id_baru');
         });
     }
 

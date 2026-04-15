@@ -155,10 +155,10 @@ class BarangController extends Controller
         $formatUrutan = str_pad($urutanBaru, 2, '0', STR_PAD_LEFT);
 
         $kodeBarang =
-            $kelompok->kode_kelompok . '/' .
-            $subjenis->kode_subjenis . '/' .
-            $formatUrutan . '/' .
-            $tahun . '/' .
+            $kelompok->kode_kelompok . ' / ' .
+            $subjenis->kode_subjenis . ' / ' .
+            $formatUrutan . ' / ' .
+            $tahun . ' / ' .
             $ruang->nama_ruang;
 
         // Handle upload foto dengan nama sesuai kode barang
@@ -322,7 +322,7 @@ class BarangController extends Controller
 
         return Excel::download(
             new BarangExport($data),
-            'laporan_barang.xlsx'
+            'laporan_inventaris_' . date('Ymd_His') . '.xlsx'
         );
     }
 
