@@ -208,6 +208,27 @@
             box-shadow: none;
         }
 
+        /* Style Badge Status */
+        .badge-status {
+            padding: 5px 12px;
+            border-radius: 50px; /* Membuat bentuk kapsul */
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .bg-status-aktif {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+        
+        .bg-status-nonaktif {
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+
         /* ================= MAIN ================= */
 
         .main-wrapper {
@@ -650,24 +671,68 @@
                         <small class="text-muted">Versi 1.0.0</small>
                     </div>
 
-                    <hr>
+                    <hr class="opacity-10">
 
                     <!-- DESKRIPSI SISTEM -->
                     <h6 class="fw-bold text-primary">Tentang Sistem</h6>
                     <p style="text-align: justify;">
                         SMART-UMRO (Sistem Manajemen Aset Terintegrasi) adalah aplikasi digital yang digunakan untuk mengelola data inventaris secara terpusat, mulai dari pencatatan barang, lokasi, PIC (penanggung jawab), hingga kondisi aset. Sistem ini dilengkapi fitur QR Code untuk mempermudah identifikasi dan pengecekan barang secara cepat dan akurat, sehingga meningkatkan efisiensi, transparansi, dan kontrol dalam pengelolaan aset.
                     </p>
+
+                    <hr class="opacity-10">
+
+                    <!-- FITUR UTAMA -->
+                <div class="mb-4">
+                    <h6 class="fw-bold text-primary mb-3">
+                        <i class="fa-solid fa-star me-2"></i>Fitur Utama Sistem
+                    </h6>
+                    <div class="row g-3 text-center">
+                        <div class="col-md-4 col-6">
+                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
+                                <i class="fa-solid fa-sitemap fa-2x text-info mb-2"></i>
+                                <h6 class="fw-bold mb-1 small">Manajemen Fungsi</h6>
+                                <small class="text-muted d-block" style="font-size: 11px;">Data divisi</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
+                                <i class="fa-solid fa-user-tie fa-2x text-success mb-2"></i>
+                                <h6 class="fw-bold mb-1 small">Manajemen PIC</h6>
+                                <small class="text-muted d-block" style="font-size: 11px;">Penanggung jawab</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
+                                <i class="fa-solid fa-building fa-2x text-warning mb-2"></i>
+                                <h6 class="fw-bold mb-1 small">Manajemen Lokasi</h6>
+                                <small class="text-muted d-block" style="font-size: 11px;">Gedung & ruangan</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
+                                <i class="fa-solid fa-box fa-2x text-danger mb-2"></i>
+                                <h6 class="fw-bold mb-1 small">Inventaris Barang</h6>
+                                <small class="text-muted d-block" style="font-size: 11px;">Data aset</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
+                                <i class="fa-solid fa-qrcode fa-2x text-dark mb-2"></i>
+                                <h6 class="fw-bold mb-1 small">QR Code</h6>
+                                <small class="text-muted d-block" style="font-size: 11px;">Scan identifikasi</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <div class="p-3 border rounded shadow-sm h-100 bg-white">
+                                <i class="fa-solid fa-file-export fa-2x text-primary mb-2"></i>
+                                <h6 class="fw-bold mb-1 small">Laporan & Export</h6>
+                                <small class="text-muted d-block" style="font-size: 11px;">Excel & PDF</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                    <hr>
-
-                    <!-- DESKRIPSI SISTEM -->
-                    <h6 class="fw-bold text-primary">Tentang Sistem</h6>
-                    <p style="text-align: justify;">
-                        SMART-UMRO (Sistem Manajemen Aset Terintegrasi) adalah aplikasi digital yang digunakan untuk mengelola data inventaris secara terpusat, mulai dari pencatatan barang, lokasi, PIC (penanggung jawab), hingga kondisi aset. Sistem ini dilengkapi fitur QR Code untuk mempermudah identifikasi dan pengecekan barang secara cepat dan akurat, sehingga meningkatkan efisiensi, transparansi, dan kontrol dalam pengelolaan aset.
-                    </p>
-
-                    <hr>
+                <hr class="opacity-10">
 
                     <!-- PANDUAN SINGKAT -->
                     <h6 class="fw-bold text-primary">Panduan Singkat Penggunaan</h6>

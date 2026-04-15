@@ -29,4 +29,16 @@ class Pic extends Model
     {
         return $this->hasMany(Barang::class);
     }
+
+    // Melihat riwayat di mana orang ini menjadi PIC LAMA (Barang keluar dari tanggung jawabnya)
+    public function riwayatLepasBarang()
+    {
+        return $this->hasMany(BarangHistory::class, 'pic_id_lama');
+    }
+
+    // Melihat riwayat di mana orang ini menjadi PIC BARU (Barang masuk ke tanggung jawabnya)
+    public function riwayatTerimaBarang()
+    {
+        return $this->hasMany(BarangHistory::class, 'pic_id_baru');
+    }
 }

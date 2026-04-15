@@ -3,8 +3,6 @@
 @section('title', 'Scan QR')
 
 @section('content')
-<div class="container text-center">
-    <h5 class="mb-3">Scan QR Item</h5>
 
 <style>
 
@@ -21,16 +19,15 @@ body {
 
 /* CARD */
 .scan-card {
-    border: none;
-    border-radius: 18px;
+    border-radius: 16px;
     padding: 20px;
     background: #ffffff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 1px solid var(--menu-bg);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
     position: relative;
-    overflow: hidden;
 }
 
-/* ACCENT TOP BAR */
+/* ACCENT LINE */
 .scan-card::before {
     content: "";
     position: absolute;
@@ -38,50 +35,57 @@ body {
     left: 0;
     height: 5px;
     width: 100%;
-    background: linear-gradient(90deg, #ffc107, #ff9800);
+    background: linear-gradient(90deg, var(--bg-sidebar), var(--pln-yellow));
 }
 
 /* TITLE */
 .scan-title {
-    font-weight: 700;
-    color: #333;
+    color: var(--text-dark);
+    font-weight: 600;
 }
 
 /* ICON */
 .scan-icon {
-    font-size: 36px;
-    color: #ffc107;
+    font-size: 32px;
+    color: var(--bg-sidebar);
 }
 
-/* SCANNER BOX */
+/* SCANNER */
 #reader {
     width: 100%;
     border-radius: 12px;
     overflow: hidden;
-    border: 2px dashed #ffc107;
-    background: #fffdf5;
-    padding: 5px;
+    border: 2px dashed var(--menu-bg);
+    background: #f9fcfc;
+    padding: 6px;
 }
 
-/* RESULT BOX */
+/* RESULT */
 .result-box {
     margin-top: 15px;
     padding: 12px;
     border-radius: 10px;
-    background: #fff3cd;
-    border: 1px solid #ffe69c;
+    background: var(--menu-active);
+    border: 1px solid var(--menu-bg);
     font-size: 14px;
 }
 
-/* RESULT TEXT */
 #result {
-    color: #856404;
+    color: var(--text-dark);
 }
 
 /* BUTTON */
 .btn-back {
     border-radius: 10px;
     font-weight: 500;
+    background: var(--bg-sidebar);
+    color: white;
+    border: none;
+}
+
+.btn-back:hover {
+    background: #257e8c;
+    color: white;
 }
 
 /* MOBILE */
@@ -121,7 +125,7 @@ body {
 
             {{-- BUTTON --}}
             <div class="mt-3">
-                <a href="{{ route('barang.index') }}" class="btn btn-outline-dark w-100 btn-back">
+                <a href="{{ route('barang.index') }}" class="btn w-100 btn-back">
                     <i class="fa-solid fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
