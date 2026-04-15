@@ -436,7 +436,7 @@
                 DASHBOARD <i class="fa-solid fa-house"></i>
             </a>
 
-            @if(!auth()->user()->hasRole('timinventarisasi'))
+            @if(!auth()->user()->hasRole('timinventarisasi') && !auth()->user()->hasRole('user'))
                 <!-- Master Karyawan -->
                 <div class="nav-link-collapse {{ request()->routeIs(['divisi.*','pic.*']) ? '' : 'collapsed' }}"
                     data-bs-toggle="collapse" data-bs-target="#menuKaryawan">

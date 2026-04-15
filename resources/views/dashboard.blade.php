@@ -174,7 +174,7 @@
             </div>
 
             <!-- TOTAL RUANG -->
-
+            @if(!auth()->user()->hasRole('user'))
             <div class="col-lg-4 col-md-6 col-12">
 
                 <div class="stat-card d-flex align-items-center">
@@ -196,6 +196,7 @@
                 </div>
 
             </div>
+            @endif
 
             <!-- BARANG BAIK -->
 
@@ -365,17 +366,21 @@
 
                     <div class="card-body d-grid gap-2">
 
-                        <a href="{{ route('barang.create') }}" class="btn btn-outline-primary quick-btn btn-modern">
-                            <i class="fa-solid fa-plus"></i> Tambah Inventaris
-                        </a>
+                        @if(!auth()->user()->hasRole('user'))
+                            <a href="{{ route('barang.create') }}" class="btn btn-outline-primary quick-btn btn-modern">
+                                <i class="fa-solid fa-plus"></i> Tambah Inventaris
+                            </a>
+                        @endif
 
                         <a href="{{ route('barang.index') }}" class="btn btn-outline-secondary quick-btn btn-modern">
                             <i class="fa-solid fa-box"></i> Lihat Item
                         </a>
 
-                        <a href="{{ route('ruangs.index') }}" class="btn btn-outline-warning quick-btn btn-modern">
-                            <i class="fa-solid fa-door-open"></i> Kelola Ruangan
-                        </a>
+                        @if(!auth()->user()->hasRole('user'))
+                            <a href="{{ route('ruangs.index') }}" class="btn btn-outline-warning quick-btn btn-modern">
+                                <i class="fa-solid fa-door-open"></i> Kelola Ruangan
+                            </a>
+                        @endif
 
                     </div>
 

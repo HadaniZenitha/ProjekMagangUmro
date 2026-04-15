@@ -80,6 +80,10 @@ class BarangController extends Controller
 
     public function create()
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $divisis = Divisi::where('is_active', true)->get();
 
         $ruangs = Ruang::where('is_active', true)->get();
@@ -104,6 +108,10 @@ class BarangController extends Controller
 
     public function store(Request $request)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $request->validate([
             'divisi_id'           => 'nullable|exists:divisis,id',
             'ruang_id'            => 'required|exists:ruangs,id',
@@ -201,6 +209,10 @@ class BarangController extends Controller
 
     public function edit(Barang $barang)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $divisis = Divisi::all();
 
         $ruangs = Ruang::all();
@@ -226,7 +238,10 @@ class BarangController extends Controller
 
     public function update(Request $request, Barang $barang)
     {
-        
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $request->validate([
             'nama_barang'     => 'required|string|max:255',
             'divisi_id'       => 'required|exists:divisis,id',
@@ -274,6 +289,10 @@ class BarangController extends Controller
 
     public function destroy(Barang $barang)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         // 1. Cek apakah barang memiliki foto
         if ($barang->foto) {
             // 2. Hapus file foto dari storage public

@@ -126,17 +126,19 @@
 			<h5 class="fw-bold mb-0">Item Inventaris</h5>
 
 			<div class="d-flex flex-wrap gap-2">
-				<a href="{{ route('barang.create') }}" class="btn btn-warning btn-pro">
-					<i class="fa-solid fa-plus"></i> Tambah Item
-				</a>
+				@if(!auth()->user()->hasRole('user'))
+					<a href="{{ route('barang.create') }}" class="btn btn-warning btn-pro">
+						<i class="fa-solid fa-plus"></i> Tambah Item
+					</a>
 
-				<button class="btn btn-success btn-pro" data-bs-toggle="modal" data-bs-target="#modalImport">
-					<i class="fas fa-file-excel"></i> Import Excel
-				</button>
+					<button class="btn btn-success btn-pro" data-bs-toggle="modal" data-bs-target="#modalImport">
+						<i class="fas fa-file-excel"></i> Import Excel
+					</button>
 
-				<a href="{{ route('barang.scan') }}" class="btn btn-dark btn-pro">
-					<i class="fa-solid fa-qrcode"></i> Scan QR
-				</a>
+					<a href="{{ route('barang.scan') }}" class="btn btn-dark btn-pro">
+						<i class="fa-solid fa-qrcode"></i> Scan QR
+					</a>
+				@endif
 			</div>
 		</div>
 
@@ -347,19 +349,21 @@
 											<i class="fa-solid fa-eye"></i>
 										</a>
 
-										<a href="{{ route('barang.edit', $b->id) }}"
-											class="btn btn-warning btn-sm btn-pro btn-icon" title="Edit">
-											<i class="fa-solid fa-pen"></i>
-										</a>
+										@if(!auth()->user()->hasRole('user'))
+											<a href="{{ route('barang.edit', $b->id) }}"
+												class="btn btn-warning btn-sm btn-pro btn-icon" title="Edit">
+												<i class="fa-solid fa-pen"></i>
+											</a>
 
-										<form action="{{ route('barang.destroy', $b->id) }}" method="POST" class="d-inline">
-											@csrf
-											@method('DELETE')
-											<button onclick="return confirm('Hapus barang ini?')"
-												class="btn btn-danger btn-sm btn-pro btn-icon" title="Hapus">
-												<i class="fa-solid fa-trash"></i>
-											</button>
-										</form>
+											<form action="{{ route('barang.destroy', $b->id) }}" method="POST" class="d-inline">
+												@csrf
+												@method('DELETE')
+												<button onclick="return confirm('Hapus barang ini?')"
+													class="btn btn-danger btn-sm btn-pro btn-icon" title="Hapus">
+													<i class="fa-solid fa-trash"></i>
+												</button>
+											</form>
+										@endif
 									</div>
 								</td>
 							</tr>

@@ -60,6 +60,10 @@ class SewaController extends Controller
 
     public function create()
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $divisis = Divisi::where('is_active', true)->orderBy('nama_divisi')->get();
         $ruangs = Ruang::where('is_active', true)->get();
 
@@ -69,6 +73,10 @@ class SewaController extends Controller
 
     public function store(Request $request)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $request->validate([
             'kode_barang' => 'required|unique:barang_sewa,kode_barang',
             'nama_barang' => 'required',
@@ -98,6 +106,10 @@ class SewaController extends Controller
 
     public function edit(BarangSewa $sewa)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $divisis = Divisi::where('is_active', true)->orderBy('nama_divisi')->get();
         $ruangs = Ruang::where('is_active', true)->get();
         $selectedDivisi = Divisi::where('nama_divisi', $sewa->fungsi)->first();
@@ -119,6 +131,10 @@ class SewaController extends Controller
 
     public function update(Request $request, BarangSewa $sewa)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $request->validate([
             'nama_barang' => 'required',
             'divisi_id' => 'required|exists:divisis,id',
@@ -145,6 +161,10 @@ class SewaController extends Controller
 
     public function destroy(BarangSewa $sewa)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $sewa->delete();
 
         return redirect()->route('barang-sewa.index')

@@ -49,18 +49,12 @@
 
 <div class="container-fluid">
 
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
-        <h5 class="fw-bold mb-0">Data Item Sewa</h5>
-        <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile-full">
-            <i class="fa-solid fa-plus me-1"></i> Tambah Item
-        </a>
-    </div>
-
-    @if(session('success'))
-        <div class="alert alert-success shadow-sm border-0">
-            {{ session('success') }}
+            @if(!auth()->user()->hasRole('user'))
+                <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile">
+                    <i class="fa-solid fa-plus me-1"></i> Tambah Item
+                </a>
+            @endif
         </div>
-    @endif
 
     <form method="GET" action="{{ route('barang-sewa.index') }}">
         <div class="card filter-card shadow-sm mb-4">
@@ -199,16 +193,68 @@
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
-                                <i class="fa-solid fa-box-open fa-3x mb-3 d-block"></i>
-                                Belum ada data item sewa yang ditemukan.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        @forelse($data as $d)
+                            <tr>
+                                <td>
+                                    <span class="badge bg-dark">{{ $d->kode_barang }}</span>
+                                </td>
+
+                                <td>{{ $d->pic->nama_pic ?? '-' }}</td>
+                                <td>{{ $d->fungsi ?? '-' }}</td>
+                                <td>{{ $d->nama_barang }}</td>
+                                <td>{{ $d->ruang->nama_ruang ?? '-' }}</td>
+                                <td class="fw-semibold">{{ $d->tahun }}</td>
+
+                                <td>
+                                    @if($d->kondisi == 'Baik')
+                                        <span class="badge bg-success">Baik</span>
+                                    @elseif($d->kondisi == 'Perlu Perbaikan')
+                                        <span class="badge bg-warning text-dark">Perlu Perbaikan</span>
+                                    @else
+                                        <span class="badge bg-danger">Rusak</span>
+                                    @endif
+                                </td>
+
+                                {{-- AKSI --}}
+                                <td class="text-center">
+                                    <div class="aksi-group">
+
+                                        <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+
+                                        @if(!auth()->user()->hasRole('user'))
+                                            <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </a>
+
+                                            <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    <i class="fa-solid fa-box-open fa-2x mb-2 d-block"></i>
+                                    Data Item sewa belum tersedia
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                @endforelse
+                </table>
+            </div>
         </div>
     </div>
 
