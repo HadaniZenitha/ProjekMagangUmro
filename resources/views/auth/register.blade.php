@@ -58,33 +58,13 @@
             </div>
         </div>
 
-        <!-- ROLE -->
-        <div>
-            <label for="role" class="sr-only">Role</label>
-            <div class="relative">
-                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </span>
-                <select id="role" name="role" required class="h-12 w-full rounded-lg border bg-slate-100 pl-11 pr-4 text-sm text-slate-800 placeholder:text-slate-400 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-200 {{ $errors->has('role') ? 'border-red-400 ring-2 ring-red-300' : 'border-transparent' }}">
-                    <option value="">-- Pilih Role --</option>
-                    <option value="superadmin" {{ old('role') == 'superadmin' ? 'selected' : '' }}>Superadmin</option>
-                    <option value="timinventarisasi" {{ old('role') == 'timinventarisasi' ? 'selected' : '' }}>Tim Inventarisasi</option>
-                </select>
-            </div>
-            @error('role')
-                <p class="mt-1 text-xs font-medium text-red-500">{{ $message }}</p>
-            @enderror
-        </div>
-
         <!-- KETERANGAN -->
-        <div class="rounded-lg bg-teal-50 p-3 border border-teal-200">
-            <p class="text-xs text-teal-800">
+        <!-- <div class="rounded-lg bg-teal-50 p-3 border border-teal-200"> -->
+            <!-- <p class="text-xs text-teal-800">
                 <i class="fa-solid fa-info-circle me-2"></i>
                 <strong>Catatan:</strong> Password akan otomatis di-generate dari NID Anda
-            </p>
-        </div>
+            </p> -->
+        <!-- </div> -->
 
         <button type="submit" class="mt-6! h-12 w-full rounded-lg bg-teal-600 text-sm font-bold tracking-wide text-white transition hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-300">
             REGISTER
@@ -146,7 +126,7 @@
             const nameInput = document.getElementById('name');
             if (!nameInput.value.trim()) {
                 e.preventDefault();
-                alert('Silakan isi NID terlebih dahulu dan tunggu nama auto-fill');
+                // alert('Silakan isi NID terlebih dahulu dan tunggu nama auto-fill');
                 document.getElementById('nid').focus();
                 return false;
             }

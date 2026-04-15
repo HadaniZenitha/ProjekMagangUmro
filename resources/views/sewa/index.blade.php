@@ -46,9 +46,11 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
             <h5 class="fw-bold mb-0">Data Item Sewa</h5>
 
-            <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Item
-            </a>
+            @if(!auth()->user()->hasRole('user'))
+                <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile">
+                    <i class="fa-solid fa-plus me-1"></i> Tambah Item
+                </a>
+            @endif
         </div>
 
         {{-- ALERT --}}
@@ -195,17 +197,19 @@
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
 
-                                        <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </a>
+                                        @if(!auth()->user()->hasRole('user'))
+                                            <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </a>
 
-                                        <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
+                                            <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
 
                                     </div>
                                 </td>
