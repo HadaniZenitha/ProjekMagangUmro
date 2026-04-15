@@ -167,108 +167,108 @@
             </div>
 
             <div class="card border-0 shadow-sm overflow-hidden">
-    <div class="card-header bg-white py-3 border-bottom-0">
-        <h6 class="fw-bold mb-0">
-            <i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>
-            Riwayat Perubahan & Mutasi
-        </h6>
-    </div>
-   
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="bg-light">
-                <tr class="small text-uppercase fw-bold text-muted">
-                    <th class="ps-3" style="width: 130px;">Tanggal</th>
-                    <th>PIC (Lama → Baru)</th>
-                    <th style="width: 120px;">Kondisi</th>
-                    <th class="d-none d-lg-table-cell">Admin</th>
-                    <th>Detail Perubahan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($barang->barangHistories->sortByDesc('tanggal_perubahan') as $history)
-                <tr>
-                    <!-- Tanggal -->
-                    <td class="ps-3">
-                        <span class="fw-medium text-dark d-block" style="font-size: 0.9rem;">
-                            {{ $history->tanggal_perubahan->format('d M Y') }}
-                        </span>
-                        <small class="text-muted" style="font-size: 0.8rem;">
-                            {{ $history->tanggal_perubahan->format('H:i') }} WIB
-                        </small>
-                    </td>
-
-                    <!-- PIC (Lama → Baru) -->
-                    <td>
-                        @if($history->pic_id_baru)
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="badge bg-light text-muted border fw-normal small">
-                                    {{ $history->picLama->nama_pic ?? 'Awal' }}
-                                </span>
-                                <i class="fa-solid fa-arrow-right-long text-primary small"></i>
-                                <span class="badge bg-white text-primary border border-primary fw-semibold small">
-                                    {{ $history->picBaru->nama_pic ?? '—' }}
-                                </span>
-                            </div>
-                        @else
-                            <span class="text-muted small italic">—</span>
-                        @endif
-                    </td>
-
-                    <!-- Kondisi -->
-                    <td>
-                        @php
-                            $color = $history->kondisi == 'baik' ? 'success' : ($history->kondisi == 'perlu perbaikan' ? 'warning' : 'danger');
-                        @endphp
-                        <div class="d-flex align-items-center">
-                            <span class="badge rounded-pill bg-{{ $color }}" style="width: 8px; height: 8px; padding: 0; margin-right: 8px;"></span>
-                            <span class="small fw-medium text-{{ $color }}">
-                                {{ strtoupper($history->kondisi) }}
-                            </span>
-                        </div>
-                    </td>
-
-                    <!-- Admin -->
-                    <td class="d-none d-lg-table-cell">
-                        <div class="d-flex align-items-center small text-muted">
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
-                                <i class="fa-solid fa-user-gear" style="font-size: 0.7rem;"></i>
-                            </div>
-                            {{ $history->user->name ?? 'System' }}
-                        </div>
-                    </td>
-
-                    <!-- Detail Perubahan -->
-                    <td class="small text-muted">
-                        @php
-                            $catatanArr = explode(', ', $history->catatan);
-                            $filteredCatatan = array_filter($catatanArr, function($item) {
-                                return stripos($item, 'PIC') === false;
-                            });
-                            $outputCatatan = implode(', ', $filteredCatatan);
-                            $cleanOutput = trim(str_replace('Perubahan:', '', $outputCatatan));
-                        @endphp
-                        @if($cleanOutput && $cleanOutput != "")
-                            {{ $cleanOutput }}
-                        @else
-                            <span class="text-muted opacity-50 italic">Hanya pergantian PIC</span>
-                        @endif
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" class="text-center py-5">
-                        <div class="py-3">
-                            <i class="fa-solid fa-folder-open fa-3x mb-3 text-light"></i>
-                            <p class="text-muted mb-0">Belum ada riwayat perubahan.</p>
-                        </div>
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-</div>
+                <div class="card-header bg-white py-3 border-bottom-0">
+                    <h6 class="fw-bold mb-0">
+                        <i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>
+                        Riwayat Perubahan & Mutasi
+                    </h6>
+                </div>
+            
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr class="small text-uppercase fw-bold text-muted">
+                                <th class="ps-3" style="width: 130px;">Tanggal</th>
+                                <th>PIC (Lama → Baru)</th>
+                                <th style="width: 120px;">Kondisi</th>
+                                <th class="d-none d-lg-table-cell">Admin</th>
+                                <th>Detail Perubahan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($barang->barangHistories->sortByDesc('tanggal_perubahan') as $history)
+                            <tr>
+                                <!-- Tanggal -->
+                                <td class="ps-3">
+                                    <span class="fw-medium text-dark d-block" style="font-size: 0.9rem;">
+                                        {{ $history->tanggal_perubahan->format('d M Y') }}
+                                    </span>
+                                    <small class="text-muted" style="font-size: 0.8rem;">
+                                        {{ $history->tanggal_perubahan->format('H:i') }} WIB
+                                    </small>
+                                </td>
+                            
+                                <!-- PIC (Lama → Baru) -->
+                                <td>
+                                    @if($history->pic_id_baru)
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <span class="badge bg-light text-muted border fw-normal small">
+                                                {{ $history->picLama->nama_pic ?? 'Awal' }}
+                                            </span>
+                                            <i class="fa-solid fa-arrow-right-long text-primary small"></i>
+                                            <span class="badge bg-white text-primary border border-primary fw-semibold small">
+                                                {{ $history->picBaru->nama_pic ?? '—' }}
+                                            </span>
+                                        </div>
+                                    @else
+                                        <span class="text-muted small italic">—</span>
+                                    @endif
+                                </td>
+                            
+                                <!-- Kondisi -->
+                                <td>
+                                    @php
+                                        $color = $history->kondisi == 'baik' ? 'success' : ($history->kondisi == 'perlu perbaikan' ? 'warning' : 'danger');
+                                    @endphp
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge rounded-pill bg-{{ $color }}" style="width: 8px; height: 8px; padding: 0; margin-right: 8px;"></span>
+                                        <span class="small fw-medium text-{{ $color }}">
+                                            {{ strtoupper($history->kondisi) }}
+                                        </span>
+                                    </div>
+                                </td>
+                            
+                                <!-- Admin -->
+                                <td class="d-none d-lg-table-cell">
+                                    <div class="d-flex align-items-center small text-muted">
+                                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px;">
+                                            <i class="fa-solid fa-user-gear" style="font-size: 0.7rem;"></i>
+                                        </div>
+                                        {{ $history->user->name ?? 'System' }}
+                                    </div>
+                                </td>
+                            
+                                <!-- Detail Perubahan -->
+                                <td class="small text-muted">
+                                    @php
+                                        $catatanArr = explode(', ', $history->catatan);
+                                        $filteredCatatan = array_filter($catatanArr, function($item) {
+                                            return stripos($item, 'PIC') === false;
+                                        });
+                                        $outputCatatan = implode(', ', $filteredCatatan);
+                                        $cleanOutput = trim(str_replace('Perubahan:', '', $outputCatatan));
+                                    @endphp
+                                    @if($cleanOutput && $cleanOutput != "")
+                                        {{ $cleanOutput }}
+                                    @else
+                                        <span class="text-muted opacity-50 italic">Hanya pergantian PIC</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="py-3">
+                                        <i class="fa-solid fa-folder-open fa-3x mb-3 text-light"></i>
+                                        <p class="text-muted mb-0">Belum ada riwayat perubahan.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             
             {{-- <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3">
