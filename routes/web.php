@@ -96,9 +96,9 @@ Route::get('/scan', [BarangController::class, 'scanPage'])
     ->middleware('auth');
 
 // 2. REDIRECT DARI QR (TIDAK PERLU AUTH)
-Route::get('/scan-redirect/{kode}', function ($kode) {
-    return redirect()->route('scan.process', $kode);
-});
+// Route::get('/scan-redirect/{kode}', function ($kode) {
+//     return redirect()->route('scan.process', $kode);
+// });
 
 // 3. PROSES HASIL SCAN (DETAIL BARANG)
 Route::get('/scan/{kode}', [BarangController::class, 'scan'])

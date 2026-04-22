@@ -101,7 +101,7 @@
         </div>
 
         <div class="qr">
-            {!! QrCode::size(120)->generate(route('barang.scan', $barang->kode_barang)) !!}
+            {!! QrCode::size(120)->generate(route('scan.process', $barang->kode_barang)) !!}
         </div>
 
     </div>
