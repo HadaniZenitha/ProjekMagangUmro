@@ -5,93 +5,179 @@
 @section('content')
 
 <style>
-/* ===== CARD CLEAN ===== */
+:root{
+    --bg-sidebar: #309FB0;
+    --pln-yellow: #FACC15;
+    --pln-red: #ef4444;
+    --text-dark: #1F3A56;
+}
+
+/* CARD */
 .custom-card{
-    border-radius:14px;
+    border-radius:16px;
     background:#ffffff;
-    padding:20px;
-    border:1px solid #eaeaea;
-    box-shadow:0 4px 12px rgba(0,0,0,0.04);
-}
-
-/* ===== BUTTON CLEAN ===== */
-.btn-clean{
-    border-radius:8px;
-    font-weight:500;
-    font-size:14px;
-    padding:6px 12px;
-    box-shadow:none;
-    transition:all 0.2s ease;
-}
-
-/* ===== WARNA SAMA ===== */
-.btn-warning.btn-clean{
-    background-color:#facc15;
+    padding:28px;
     border:none;
-    color:#000;
+    box-shadow:0 8px 24px rgba(0,0,0,0.06);
 }
 
-.btn-warning.btn-clean:hover{
-    background-color:#fbbf24;
-}
-
-/* BATAL = MERAH */
-.btn-danger.btn-clean{
-    background-color:#ef4444;
-    border:none;
-    color:#fff;
-}
-
-.btn-danger.btn-clean:hover{
-    background-color:#dc2626;
-}
-
-.btn-secondary.btn-clean{
-    background-color:#e5e7eb;
-    border:none;
-    color:#000;
-}
-
-/* HOVER */
-.btn-clean:hover{
-    transform:translateY(-1px);
+/* TITLE */
+.page-title{
+    font-size:20px;
+    font-weight:600;
+    color:var(--text-dark);
 }
 
 /* INPUT */
 .form-control{
-    border-radius:8px;
+    border-radius:10px;
+    padding:10px 12px;
+    border:1px solid #e5e7eb;
+}
+
+.form-control:focus{
+    border-color:var(--bg-sidebar);
+    box-shadow:0 0 0 2px rgba(48,159,176,0.15);
+}
+
+/* BUTTON BASE */
+.btn-clean{
+    border-radius:10px;
+    font-weight:500;
+    padding:8px 16px;
+    border:none;
+    box-shadow:none;
+}
+
+/* UPDATE */
+.btn-warning.btn-clean{
+    background:var(--pln-yellow);
+    color:#000;
+}
+
+/* BATAL */
+.btn-danger.btn-clean{
+    background:var(--pln-red);
+    color:#fff;
+}
+
+/* NO HOVER */
+.btn-clean:hover{
+    background:inherit;
+    transform:none;
+}
+
+/* ALERT */
+.alert-info{
+    background:#eef9fb;
+    border:none;
+    color:var(--text-dark);
 }
 
 /* MOBILE */
-@media (max-width: 768px){
+@media (max-width:768px){
     .btn-mobile-full{
         width:100%;
-        text-align:center;
     }
 }
 </style>
 
 <!-- HEADER -->
-<div class="mb-3 d-flex flex-md-row flex-column align-items-md-center">
-    
-    <h5 class="fw-semibold mb-2 mb-md-0">
+<div class="mb-4">
+    <div class="page-title">
+        <i class="fa-solid fa-user-edit me-2"></i>
         Edit User
-    </h5>
-
+    </div>
 </div>
 
 <div class="custom-card">
 
-    <form action="{{ route('users.update', $user) }}" method="POST">
+    <form action="{{ route('users.update', $user) }}" method="POST" id="editUserForm">
         @csrf
         @method('PUT')
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-primary text-white fw-bold">
-                <i class="fa-solid fa-user-edit me-2"></i>
-                Edit User
+        <div class="row">
+            <div class="col-md-8">
+
+                <!-- NID -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">NID Karyawan</label>
+                    <input type="text"
+                        class="form-control @error('nid') is-invalid @enderror"
+                        id="nid"
+                        name="nid"
+                        value="{{ old('nid', $user->nid) }}"
+                        required
+                        placeholder="Contoh: 7503018JA">
+
+                    <div id="nid-loading" class="mt-2 text-muted d-none">
+                        <i class="fa-solid fa-spinner fa-spin me-1"></i>
+                        Mencari data...
+                    </div>
+
+                    <div id="nid-error" class="text-danger small mt-1 d-none"></div>
+                </div>
+
+                <!-- NAMA -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Nama</label>
+                    <input type="text"
+                        class="form-control"
+                        id="name"
+                        name="name"
+                        value="{{ old('name', $user->name) }}"
+                        readonly>
+                </div>
+
+                <!-- DIVISI -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Fungsi</label>
+                    <input type="text"
+                        class="form-control"
+                        id="divisi"
+                        readonly
+                        placeholder="Auto-fill dari NID">
+                </div>
+
+                <!-- ROLE -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Role</label>
+                    <select class="form-control @error('role') is-invalid @enderror"
+                        name="role"
+                        required>
+
+                        <option value="">-- Pilih Role --</option>
+
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->name }}"
+                                {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                                {{ ucfirst(str_replace('tim', 'Tim ', $role->name)) }}
+                            </option>
+                        @endforeach
+
+                    </select>
+                </div>
+
+                <!-- INFO -->
+                <div class="alert alert-info small mb-4">
+                    <i class="fa-solid fa-info-circle me-2"></i>
+                    <strong>Catatan:</strong> 
+                    Password akan otomatis di-generate dari NID yang Anda input. 
+                    Jika ingin mengubah NID, data nama dan bidang akan otomatis terupdate.
+                </div>
+
+                <!-- BUTTON -->
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit" class="btn btn-warning btn-clean btn-mobile-full">
+                        <i class="fa-solid fa-save me-1"></i> Update
+                    </button>
+
+                    <a href="{{ route('users.index') }}"
+                        class="btn btn-danger btn-clean btn-mobile-full">
+                        Batal
+                    </a>
+                </div>
+
             </div>
             <div class="card-body">
                 <form action="{{ route('users.update', $user) }}" method="POST" id="editUserForm">
@@ -173,8 +259,6 @@
             @enderror
         </div>
 
-        <!-- BUTTON -->
-
     </form>
 
 </div>
@@ -183,61 +267,47 @@
 document.getElementById('nid').addEventListener('blur', function() {
     const nid = this.value.trim().toUpperCase();
     this.value = nid;
+
     const loading = document.getElementById('nid-loading');
     const nameInput = document.getElementById('name');
     const divisiInput = document.getElementById('divisi');
     const errorDisplay = document.getElementById('nid-error');
-    
-    if (!nid) {
-        nameInput.value = '';
-        divisiInput.value = '';
-        errorDisplay.classList.add('d-none');
-        return;
-    }
+
+    if (!nid) return;
 
     loading.classList.remove('d-none');
     errorDisplay.classList.add('d-none');
 
     fetch(`{{ route('register.getNidData') }}?nid=${encodeURIComponent(nid)}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(res => res.json())
         .then(data => {
             loading.classList.add('d-none');
-            
-            if (data.error) {
+
+            if(data.success){
+                nameInput.value = data.name;
+                divisiInput.value = data.divisi;
+            }else{
                 nameInput.value = '';
                 divisiInput.value = '';
                 errorDisplay.textContent = data.error;
                 errorDisplay.classList.remove('d-none');
-            } else if (data.success) {
-                nameInput.value = data.name;
-                divisiInput.value = data.divisi;
-                errorDisplay.classList.add('d-none');
             }
         })
-        .catch(error => {
+        .catch(() => {
             loading.classList.add('d-none');
-            console.error('Error:', error);
-            nameInput.value = '';
-            divisiInput.value = '';
-            errorDisplay.textContent = 'Terjadi kesalahan saat mengambil data NID';
+            errorDisplay.textContent = 'Terjadi kesalahan saat mengambil data';
             errorDisplay.classList.remove('d-none');
         });
 });
 
-// Validasi form sebelum submit
-document.getElementById('editUserForm').addEventListener('submit', function(e) {
-    const nameInput = document.getElementById('name');
-    if (!nameInput.value.trim()) {
+// VALIDASI
+document.getElementById('editUserForm').addEventListener('submit', function(e){
+    if(!document.getElementById('name').value){
         e.preventDefault();
-        alert('Silakan isi NID terlebih dahulu dan tunggu nama auto-fill');
+        alert('Silakan isi NID terlebih dahulu');
         document.getElementById('nid').focus();
-        return false;
     }
 });
 </script>
+
 @endsection

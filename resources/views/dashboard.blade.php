@@ -34,8 +34,6 @@
             flex-shrink: 0;
         }
 
-        /* TEXT */
-
         .stat-title {
             font-size: 13px;
             font-weight: 600;
@@ -57,8 +55,6 @@
             margin-top: 3px;
         }
 
-        /* ICON GRADIENT */
-
         .icon-blue {
             background: linear-gradient(135deg, #42a5f5, #1e88e5);
         }
@@ -79,8 +75,6 @@
             background: linear-gradient(135deg, #546e7a, #37474f);
         }
 
-        /* ================= BUTTON ================= */
-
         .btn-modern {
             border-radius: 8px;
             font-weight: 500;
@@ -94,8 +88,6 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
-        /* ================= TABLE ================= */
-
         .table thead {
             background: #f8f9fa;
             font-weight: 600;
@@ -105,15 +97,11 @@
             background: #f1f3f5;
         }
 
-        /* ================= CARD HEADER ================= */
-
         .card-header {
             font-weight: 600;
             background: #fff;
             border-bottom: 1px solid #eee;
         }
-
-        /* ================= QUICK ACTION ================= */
 
         .quick-btn {
             text-align: left;
@@ -121,8 +109,6 @@
             padding: 10px 14px;
             font-weight: 500;
         }
-
-        /* ================= RESPONSIVE ================= */
 
         @media (max-width:768px) {
 
@@ -149,77 +135,46 @@
 
         <div class="row g-4 mb-4">
 
-            <!-- TOTAL BARANG -->
-
             <div class="col-lg-4 col-md-6 col-12">
-
                 <div class="stat-card d-flex align-items-center">
-
                     <div class="stat-icon icon-blue me-3">
                         <i class="fa-solid fa-box"></i>
                     </div>
-
                     <div>
                         <div class="stat-title">Total Barang</div>
-                        <div class="stat-value">
-                            {{ $totalBarang }} Item
-                        </div>
-                        <div class="stat-desc">
-                            Total seluruh inventaris
-                        </div>
+                        <div class="stat-value">{{ $totalBarang }} Item</div>
+                        <div class="stat-desc">Total seluruh inventaris</div>
                     </div>
-
                 </div>
-
             </div>
 
             <!-- TOTAL RUANG -->
             @if(!auth()->user()->hasRole('user'))
             <div class="col-lg-4 col-md-6 col-12">
-
                 <div class="stat-card d-flex align-items-center">
-
                     <div class="stat-icon icon-yellow me-3">
                         <i class="fa-solid fa-door-open"></i>
                     </div>
-
                     <div>
                         <div class="stat-title">Total Ruangan</div>
-                        <div class="stat-value">
-                            {{ $totalRuang }} Ruang
-                        </div>
-                        <div class="stat-desc">
-                            Ruang yang terdaftar
-                        </div>
+                        <div class="stat-value">{{ $totalRuang }} Ruang</div>
+                        <div class="stat-desc">Ruang yang terdaftar</div>
                     </div>
-
                 </div>
-
             </div>
             @endif
 
-            <!-- BARANG BAIK -->
-
             <div class="col-lg-4 col-md-6 col-12">
-
                 <div class="stat-card d-flex align-items-center">
-
                     <div class="stat-icon icon-green me-3">
                         <i class="fa-solid fa-check"></i>
                     </div>
-
                     <div>
                         <div class="stat-title">Kondisi Baik</div>
-                        <div class="stat-value">
-                            {{ $barangBaik }} Item
-                        </div>
-                        <div class="stat-desc">
-                            Siap digunakan
-                        </div>
+                        <div class="stat-value">{{ $barangBaik }} Item</div>
+                        <div class="stat-desc">Siap digunakan</div>
                     </div>
-
                 </div>
-
             </div>
 
         </div>
@@ -228,59 +183,37 @@
 
         <div class="row g-4 mb-4">
 
-            <!-- PERLU PERBAIKAN -->
-
             <div class="col-lg-6 col-md-6 col-12">
-
                 <div class="stat-card d-flex align-items-center">
-
                     <div class="stat-icon icon-red me-3">
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                     </div>
-
                     <div>
                         <div class="stat-title">Perlu Perbaikan</div>
-                        <div class="stat-value">
-                            {{ $barangPerbaikan }} Item
-                        </div>
-                        <div class="stat-desc">
-                            Menunggu proses perbaikan
-                        </div>
+                        <div class="stat-value">{{ $barangPerbaikan }} Item</div>
+                        <div class="stat-desc">Menunggu proses perbaikan</div>
                     </div>
-
                 </div>
-
             </div>
 
-            <!-- BARANG RUSAK -->
-
             <div class="col-lg-6 col-md-6 col-12">
-
                 <div class="stat-card d-flex align-items-center">
-
                     <div class="stat-icon icon-dark me-3">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                     </div>
-
                     <div>
                         <div class="stat-title">Barang Rusak</div>
-                        <div class="stat-value">
-                            {{ $barangRusak }} Item
-                        </div>
-                        <div class="stat-desc">
-                            Tidak dapat digunakan
-                        </div>
+                        <div class="stat-value">{{ $barangRusak }} Item</div>
+                        <div class="stat-desc">Tidak dapat digunakan</div>
                     </div>
-
                 </div>
-
             </div>
 
         </div>
 
         <!-- ================= TABEL + AKSI ================= -->
 
-        <div class="row g-4">
+        <div class="row g-4 align-items-start">
 
             <!-- TABEL -->
 
@@ -307,7 +240,6 @@
                             <table class="table table-hover">
 
                                 <thead>
-
                                     <tr>
                                         <th>Nama Item</th>
                                         <th>Jenis</th>
@@ -315,32 +247,18 @@
                                         <th>Status</th>
                                         <th>Tanggal</th>
                                     </tr>
-
                                 </thead>
 
                                 <tbody>
                                     @foreach($barangTerbaru as $barang)
-
                                         <tr>
-
                                             <td>{{ $barang->nama_barang }}</td>
-
                                             <td>{{ $barang->subjenis->nama_subjenis ?? '-' }}</td>
-
                                             <td>{{ $barang->ruang->nama_ruang ?? '-' }}</td>
-
-                                            <td>
-                                                <span class="badge bg-success">Aktif</span>
-                                            </td>
-
-                                            <td>
-                                                {{ $barang->created_at->format('d M Y') }}
-                                            </td>
-
+                                            <td><span class="badge bg-success">Aktif</span></td>
+                                            <td>{{ $barang->created_at->format('d M Y') }}</td>
                                         </tr>
-
                                     @endforeach
-
                                 </tbody>
 
                             </table>
@@ -353,11 +271,11 @@
 
             </div>
 
-            <!-- AKSI CEPAT -->
+            <!-- AKSI CEPAT (FIXED) -->
 
-            <div class="col-lg-4 col-12">
+            <div class="col-lg-4 col-12 d-flex align-items-start">
 
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-0 shadow-sm w-100">
 
                     <div class="card-header">
                         <i class="fa-solid fa-bolt me-2 text-warning"></i>
