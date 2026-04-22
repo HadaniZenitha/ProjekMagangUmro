@@ -90,7 +90,6 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'nid' => ['required', 'string', 'max:20', 'unique:users,nid', 'regex:/^[a-zA-Z0-9]+$/'],
-            'role' => ['required', 'string', 'exists:roles,name'],
         ]);
     }
 
@@ -107,13 +106,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'nid' => $data['nid'],
             'password' => Hash::make($data['nid']),
-            'role' => $data['role'],
+            'role' => 'user',
         ]);
 
-        // Assign role
-        if ($data['role']) {
-            $user->assignRole($data['role']);
-        }
+        // Assign role user secara otomatis
+        $user->assignRole('user');
 
         return $user;
     }

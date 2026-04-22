@@ -264,6 +264,10 @@ class BarangController extends Controller
 
     public function destroy(Barang $barang)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         // 1. Cek apakah barang memiliki foto
         if ($barang->foto) {
             // 2. Hapus file foto dari storage public

@@ -48,19 +48,13 @@
 </style>
 
 <div class="container-fluid">
-
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
-        <h5 class="fw-bold mb-0">Data Item Sewa</h5>
-        <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile-full">
-            <i class="fa-solid fa-plus me-1"></i> Tambah Item
-        </a>
+    <div class="d-flex justify-content-end mb-3">
+        @if(!auth()->user()->hasRole('user'))
+            <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile">
+                <i class="fa-solid fa-plus me-1"></i> Tambah Item
+            </a>
+        @endif
     </div>
-
-    @if(session('success'))
-        <div class="alert alert-success shadow-sm border-0">
-            {{ session('success') }}
-        </div>
-    @endif
 
     <form method="GET" action="{{ route('barang-sewa.index') }}">
         <div class="card filter-card shadow-sm mb-4">
@@ -187,28 +181,32 @@
                                     <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
                                         <i class="fa-solid fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </a>
-                                    <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST" class="d-inline">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    @if(!auth()->user()->hasRole('user'))
+                                        <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
+                                        <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
-                                <i class="fa-solid fa-box-open fa-3x mb-3 d-block"></i>
-                                Belum ada data item sewa yang ditemukan.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    <i class="fa-solid fa-box-open fa-2x mb-2 d-block"></i>
+                                    Data Item sewa belum tersedia
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
