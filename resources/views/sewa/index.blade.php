@@ -19,15 +19,14 @@
     padding: 6px 14px;
 }
 
-/* ===== TABLE FIX ALIGNMENT ===== */
-.table-fix {
-    table-layout: fixed;
-    width: 100%;
+/* HEADER TETAP TENGAH */
+.table-fix th {
+    text-align: center;
 }
 
-.table-fix th,
+/* ISI RATA KIRI */
 .table-fix td {
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
 }
 
@@ -231,67 +230,90 @@
 
                 <tbody>
                     @forelse($data as $d)
-                        <tr>
-                            <td class="text-center">
-                                <span class="badge bg-dark">{{ $d->kode_barang }}</span>
-                            </td>
-                            <td>
-                                <div class="fw-bold">{{ $d->nama_barang }}</div>
-                                <div class="small text-muted d-md-none">
-                                    {{ $d->ruang->nama_ruang ?? '-' }} | {{ $d->pic->nama_pic ?? '-' }}
-                                </div>
-                                <div class="small text-primary d-none d-md-block">{{ $d->fungsi ?? '-' }}</div>
-                            </td>
-                            <td class="d-none d-md-table-cell text-center">{{ $d->pic->nama_pic ?? '-' }}</td>
-                            <td class="d-none d-md-table-cell text-center">{{ $d->ruang->nama_ruang ?? '-' }}</td>
-                            <td class="text-center fw-semibold">{{ $d->tahun }}</td>
-                            <td class="text-center">
-                                @if($d->kondisi == 'Baik')
-                                    <span class="badge bg-success badge-status">Baik</span>
-                                @elseif($d->kondisi == 'Perlu Perbaikan')
-                                    <span class="badge bg-warning text-dark badge-status">Perlu Perbaikan</span>
-                                @else
-                                    <span class="badge bg-danger badge-status">Rusak</span>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                <div class="bg-light p-1 d-inline-block border rounded">
-                                    {!! QrCode::size(45)->generate($d->kode_barang) !!}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex justify-content-center gap-1">
-                                    <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
-                                        <i class="fa-solid fa-eye"></i>
+                    <tr>
+
+                        {{-- KODE --}}
+                        <td class="text-center">
+                            <span class="badge bg-dark">
+                                {{ $d->kode_barang }}
+                            </span>
+                        </td>
+
+                        {{-- PIC --}}
+                        <td>
+                            {{ $d->pic->nama_pic ?? '-' }}
+                        </td>
+
+                        {{-- FUNGSI --}}
+                        <td>
+                            {{ $d->divisi->nama_divisi ?? '-' }}
+                        </td>
+
+                        {{-- NAMA ITEM --}}
+                        <td>
+                            {{ $d->nama_barang }}
+                        </td>
+
+                        {{-- LOKASI --}}
+                        <td>
+                            {{ $d->ruang->nama_ruang ?? '-' }}
+                        </td>
+
+                        {{-- TAHUN --}}
+                        <td class="text-center fw-semibold">
+                            {{ $d->tahun }}
+                        </td>
+
+                        {{-- KONDISI --}}
+                        <td>
+                            @if($d->kondisi == 'Baik')
+                                <span class="badge bg-success">Baik</span>
+                            @elseif($d->kondisi == 'Perlu Perbaikan')
+                                <span class="badge bg-warning text-dark">Perlu Perbaikan</span>
+                            @else
+                                <span class="badge bg-danger">Rusak</span>
+                            @endif
+                        </td>
+
+                        {{-- AKSI --}}
+                        <td>
+                            <div class="d-flex justify-content-center gap-1">
+
+                                <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+
+                                @if(!auth()->user()->hasRole('user'))
+                                    <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
+                                        <i class="fa-solid fa-pen"></i>
                                     </a>
-                                    @if(!auth()->user()->hasRole('user'))
-                                        <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </a>
-                                        <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center text-muted py-4">
-                                    <i class="fa-solid fa-box-open fa-2x mb-2 d-block"></i>
-                                    Data Item sewa belum tersedia
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+
+                                    <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                @endif
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">
+                            Data Item sewa belum tersedia
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+
+            </table>
         </div>
     </div>
+</div>
 
     {{-- PAGINATION --}}
     <div class="mt-3">

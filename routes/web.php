@@ -34,7 +34,7 @@ Route::get('/register/get-nid-data', [RegisterController::class, 'getNidData'])
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
 // =============================================
-// ROUTES EXPORT & UTILITY
+// ROUTES EXPORT & UTILITY Item Inventaris
 // =============================================
 Route::get('/barang/export-excel', [BarangController::class, 'exportExcel'])
     ->name('barang.exportExcel');
@@ -48,6 +48,18 @@ Route::get('/barang/export-preview', [BarangController::class, 'exportPreview'])
 Route::get('/barang/export', [BarangController::class, 'export'])
     ->name('barang.export');
     
+// =============================================
+// ROUTES EXPORT BARANG SEWA
+// =============================================
+Route::get('/barang-sewa/export-preview', [SewaController::class, 'exportPreview'])
+    ->name('barang-sewa.exportPreview');
+
+Route::get('/barang-sewa/export-pdf', [SewaController::class, 'exportPdf'])
+    ->name('barang-sewa.exportPdf');
+
+Route::get('/barang-sewa/export-excel', [SewaController::class, 'exportExcel'])
+    ->name('barang-sewa.exportExcel');
+
 // =============================================
 // ROUTES YANG MEMBUTUHKAN AUTHENTICATION
 // =============================================
