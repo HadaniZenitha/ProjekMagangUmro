@@ -109,7 +109,8 @@
             <div class="card border-0 shadow-sm mb-4 py-4 text-center">
                 <h6 class="fw-bold mb-3">QR Code Identifikasi</h6>
                 <div class="p-3 bg-white d-inline-block rounded border shadow-sm mb-2 mx-auto">
-                    {!! QrCode::size(150)->generate(route('barang.scan', $barang->kode_barang)) !!}
+                    {!! QrCode::size(150)->generate(url('/scan-redirect/' . $barang->kode_barang)) !!}
+                    {{-- {!! QrCode::size(150)->generate(route('barang.scan', $barang->kode_barang)) !!} --}}
                 </div>
                 <p class="text-muted small mb-0 px-3">Gunakan untuk tracking aset secara cepat.</p>
             </div>
@@ -222,7 +223,7 @@
                                     @endphp
                                     <div class="d-flex align-items-center">
                                         <span class="badge rounded-pill bg-{{ $color }}" style="width: 8px; height: 8px; padding: 0; margin-right: 8px;"></span>
-                                        <span class="small fw-medium text-{{ $color }}">
+                                        <span class="badge rounded-pill text-{{ $color }}">
                                             {{ strtoupper($history->kondisi) }}
                                         </span>
                                     </div>

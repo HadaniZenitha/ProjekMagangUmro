@@ -34,6 +34,21 @@ Route::get('/register/get-nid-data', [RegisterController::class, 'getNidData'])
 Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
 // =============================================
+// ROUTES EXPORT & UTILITY
+// =============================================
+Route::get('/barang/export-excel', [BarangController::class, 'exportExcel'])
+    ->name('barang.exportExcel');
+
+Route::get('/barang/export-pdf', [BarangController::class, 'exportPdf'])
+    ->name('barang.exportPdf');
+
+Route::get('/barang/export-preview', [BarangController::class, 'exportPreview'])
+    ->name('barang.exportPreview');
+
+Route::get('/barang/export', [BarangController::class, 'export'])
+    ->name('barang.export');
+    
+// =============================================
 // ROUTES YANG MEMBUTUHKAN AUTHENTICATION
 // =============================================
 Route::middleware(['auth'])->group(function () {
@@ -70,32 +85,26 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-// =============================================
-// ROUTES EXPORT & UTILITY
-// =============================================
-Route::get('/barang/export-excel', [BarangController::class, 'exportExcel'])
-    ->name('barang.exportExcel');
-
-Route::get('/barang/export-pdf', [BarangController::class, 'exportPdf'])
-    ->name('barang.exportPdf');
-
-Route::get('/barang/export-preview', [BarangController::class, 'exportPreview'])
-    ->name('barang.exportPreview');
-
-Route::get('/barang/export', [BarangController::class, 'export'])
-    ->name('barang.export');
 
 // =============================================
 // SCAN BARANG
 // =============================================
+
+// 1. HALAMAN SCANNER
 Route::get('/scan', [BarangController::class, 'scanPage'])
-    ->name('barang.scan')
+    ->name('scan.page')
     ->middleware('auth');
 
+// 2. REDIRECT DARI QR (TIDAK PERLU AUTH)
+Route::get('/scan-redirect/{kode}', function ($kode) {
+    return redirect()->route('scan.process', $kode);
+});
+
+// 3. PROSES HASIL SCAN (DETAIL BARANG)
 Route::get('/scan/{kode}', [BarangController::class, 'scan'])
-    ->name('barang.scan.process')
+    ->name('scan.process')
     ->where('kode', '.*')
-    ->middleware(['auth', 'role:superadmin|timinvetarisasi']);
+    ->middleware(['auth', 'role:superadmin|timinventarisasi|user']);
 
 // Cetak & Barcode
 Route::get('/barang/{barang}/cetak', [BarangController::class, 'cetak'])

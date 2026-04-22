@@ -102,7 +102,7 @@
                     <div class="mb-3">
                         <label for="nid" class="form-label fw-bold">NID Karyawan <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('nid') is-invalid @enderror" 
-                            id="nid" name="nid" value="{{ old('nid', $user->nid) }}" required autocomplete="off"
+                            id="nid" name="nid" value="{{ old('nid', $user->nid) }}" required autocomplete="on"
                             placeholder="Contoh: 7503018JA">
                         <div id="nid-loading" class="mt-2 text-muted d-none">
                             <i class="fa-solid fa-spinner fa-spin me-1"></i>Mencari NID...
