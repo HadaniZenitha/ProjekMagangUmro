@@ -6,31 +6,61 @@
 @section('content')
 
 <style>
-    /* ===== GLOBAL STYLE ===== */
-    .custom-card {
-        border-radius: 14px;
-        background: #ffffff;
-        border: 1px solid #eaeaea;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-    }
+/* ===== CARD ===== */
+.filter-card {
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
 
-    .filter-card {
-        border-radius: 12px;
-        border: 1px solid #eee;
-    }
+/* ===== BUTTON ===== */
+.btn-pro {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 6px 14px;
+}
 
-    /* ===== BUTTONS ===== */
-    .btn-pro {
-        border-radius: 8px;
-        font-weight: 500;
-        padding: 6px 14px;
-        transition: all 0.2s ease;
-    }
+/* HEADER TETAP TENGAH */
+.table-fix th {
+    text-align: center;
+}
 
-    .btn-pro:hover {
-        transform: translateY(-1px);
-    }
+/* ISI RATA KIRI */
+.table-fix td {
+    text-align: left;
+    vertical-align: middle;
+}
 
+/* ===== WIDTH KOLOM (PENTING BANGET) ===== */
+.col-kode   { width: 90px; }
+.col-pic    { width: 200px; }
+.col-fungsi { width: 180px; }
+.col-nama   { width: 160px; }
+.col-lokasi { width: 150px; }
+.col-tahun  { width: 80px; }
+.col-kondisi{ width: 120px; }
+.col-aksi   { width: 130px; }
+
+/* ===== TEXT CONTROL ===== */
+.text-wrap {
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* ===== AKSI BUTTON ===== */
+.aksi-group {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.aksi-group .btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
     .btn-filter-action {
         min-height: 38px;
         display: inline-flex;
@@ -48,43 +78,97 @@
         font-size: 12px;
     }
 
-    /* ===== MOBILE RESPONSIVE ===== */
-    @media (max-width: 768px) {
-        .btn-mobile-full { width: 100%; text-align: center; }
-        .table td, .table th { font-size: 13px; }
+/* ===== BUTTON COLOR FIX ===== */
+.btn-info {
+    background-color: #0dcaf0;
+    border: none;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border: none;
+    color: #000;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .btn-mobile {
+        width: 100%;
     }
+}
 </style>
 
 <div class="container-fluid">
-    <div class="d-flex justify-content-end mb-3">
-        @if(!auth()->user()->hasRole('user'))
-            <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Item
-            </a>
-        @endif
+
+    {{-- HEADER --}}
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
+        <h5 class="fw-bold mb-0">Data Item Sewa</h5>
+
+        <div class="d-flex flex-wrap gap-2">
+            @if(!auth()->user()->hasRole('user'))
+                <a href="{{ route('barang-sewa.create') }}" class="btn btn-warning btn-pro btn-mobile">
+                    <i class="fa-solid fa-plus me-1"></i> Tambah Item
+                </a>
+            @endif
+
+            <button class="btn btn-success btn-pro btn-mobile" data-bs-toggle="modal" data-bs-target="#modalImport">
+                <i class="fas fa-file-excel"></i> Import Excel
+            </button>
+        </div>
     </div>
 
+    {{-- ALERT --}}
+    @if(session('success'))
+        <div class="alert alert-success shadow-sm">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- FILTER --}}
     <form method="GET" action="{{ route('barang-sewa.index') }}">
-        <div class="card filter-card shadow-sm mb-4">
+        <div class="card filter-card shadow-sm mb-3">
             <div class="card-body">
-                <div class="row g-3">
-                    {{-- Search --}}
-                    <div class="col-lg-12">
-                        <label class="form-label small fw-bold">Cari Item</label>
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-lg-6">
+                        <label class="form-label small fw-semibold mb-1">Cari Item</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0">
+                            <span class="input-group-text bg-white">
                                 <i class="fa-solid fa-magnifying-glass text-muted"></i>
                             </span>
-                            <input type="text" name="search" class="form-control border-start-0" 
-                                   placeholder="Cari kode atau nama barang..." value="{{ request('search') }}">
+                            <input type="text" name="search" class="form-control"
+                                placeholder="Cari kode / nama barang..." value="{{ request('search') }}">
                         </div>
                     </div>
 
-                    {{-- Dropdown Filters --}}
-                    <div class="col-lg-3 col-md-6">
-                        <label class="form-label small fw-bold">Ruangan</label>
+                    <div class="col-lg-3 col-md-6 d-flex">
+                        <a href="{{ route('barang-sewa.exportPreview', request()->query()) }}"
+                            class="btn btn-info btn-pro w-100">
+                            <i class="fa-solid fa-eye"></i> Preview Excel
+                        </a>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 d-flex">
+                        <a href="{{ route('barang-sewa.exportPdf', request()->query()) }}"
+                            class="btn btn-danger btn-pro w-100">
+                            <i class="fa-regular fa-file-pdf"></i> Export PDF
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="row g-3 mt-2 align-items-end">
+
+                    <div class="col-lg-2 col-md-6">
+                        <label class="form-label small fw-semibold mb-1">Ruangan</label>
                         <select name="ruang" class="form-select">
-                            <option value="">Semua Ruangan</option>
+                            <option value="">Semua</option>
                             @foreach($ruangs as $r)
                                 <option value="{{ $r->id }}" {{ request('ruang') == $r->id ? 'selected' : '' }}>
                                     {{ $r->nama_ruang }}
@@ -94,9 +178,9 @@
                     </div>
 
                     <div class="col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold">PIC</label>
+                        <label class="form-label small fw-semibold mb-1">PIC</label>
                         <select name="pic" class="form-select">
-                            <option value="">Semua PIC</option>
+                            <option value="">Semua</option>
                             @foreach($pics as $p)
                                 <option value="{{ $p->id }}" {{ request('pic') == $p->id ? 'selected' : '' }}>
                                     {{ $p->nama_pic }}
@@ -106,22 +190,22 @@
                     </div>
 
                     <div class="col-lg-2 col-md-6">
-                        <label class="form-label small fw-bold">Status</label>
+                        <label class="form-label small fw-semibold mb-1">Status</label>
                         <select name="status" class="form-select">
-                            <option value="">Semua Status</option>
+                            <option value="">Semua</option>
                             <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Aktif</option>
                             <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Nonaktif</option>
                         </select>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
-                        <label class="form-label small fw-bold">Rentang Tahun</label>
+                        <label class="form-label small fw-semibold mb-1">Tahun</label>
                         <div class="input-group">
-                            <input type="number" name="tahun_awal" class="form-control" 
-                                   value="{{ request('tahun_awal', date('Y') - 4) }}">
-                            <span class="input-group-text"> s/d </span>
-                            <input type="number" name="tahun_akhir" class="form-control" 
-                                   value="{{ request('tahun_akhir', date('Y')) }}">
+                            <input type="number" name="tahun_awal" class="form-control text-center"
+                                value="{{ request('tahun_awal', date('Y') - 4) }}">
+                            <span class="input-group-text">-</span>
+                            <input type="number" name="tahun_akhir" class="form-control text-center"
+                                value="{{ request('tahun_akhir', date('Y')) }}">
                         </div>
                     </div>
 
@@ -134,97 +218,120 @@
                             <i class="fa-solid fa-rotate-left"></i> Reset
                         </a>
                     </div>
+
                 </div>
             </div>
         </div>
     </form>
 
-    <div class="card custom-card">
+    {{-- TABLE --}}
+    <div class="card shadow-sm border-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 table-fix">
+
                 <thead class="table-light">
-                    <tr class="text-center small text-uppercase fw-bold text-muted">
-                        <th width="100">Kode</th>
-                        <th class="text-start">Nama Item</th>
-                        <th class="d-none d-md-table-cell">PIC</th>
-                        <th class="d-none d-md-table-cell">Lokasi</th>
-                        <th>Tahun</th>
-                        <th>Kondisi</th>
-                        <th>QR Code</th>
-                        <th width="150">Aksi</th>
+                    <tr class="small text-uppercase text-muted">
+                        <th class="col-kode">Kode</th>
+                        <th class="col-pic">PIC</th>
+                        <th class="col-fungsi">Fungsi</th>
+                        <th class="col-nama">Nama Item</th>
+                        <th class="col-lokasi">Lokasi</th>
+                        <th class="col-tahun">Tahun</th>
+                        <th class="col-kondisi">Kondisi</th>
+                        <th class="col-aksi">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @forelse($data as $d)
-                        <tr>
-                            <td class="text-center">
-                                <span class="badge bg-dark">{{ $d->kode_barang }}</span>
-                            </td>
-                            <td>
-                                <div class="fw-bold">{{ $d->nama_barang }}</div>
-                                <div class="small text-muted d-md-none">
-                                    {{ $d->ruang->nama_ruang ?? '-' }} | {{ $d->pic->nama_pic ?? '-' }}
-                                </div>
-                                <div class="small text-primary d-none d-md-block">{{ $d->fungsi ?? '-' }}</div>
-                            </td>
-                            <td class="d-none d-md-table-cell text-center">{{ $d->pic->nama_pic ?? '-' }}</td>
-                            <td class="d-none d-md-table-cell text-center">{{ $d->ruang->nama_ruang ?? '-' }}</td>
-                            <td class="text-center fw-semibold">{{ $d->tahun }}</td>
-                            <td class="text-center">
-                                @if($d->kondisi == 'Baik')
-                                    <span class="badge bg-success badge-status">Baik</span>
-                                @elseif($d->kondisi == 'Perlu Perbaikan')
-                                    <span class="badge bg-warning text-dark badge-status">Perlu Perbaikan</span>
-                                @else
-                                    <span class="badge bg-danger badge-status">Rusak</span>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                <div class="bg-light p-1 d-inline-block border rounded">
-                                    {!! QrCode::size(45)->generate($d->kode_barang) !!}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex justify-content-center gap-1">
-                                    <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
-                                        <i class="fa-solid fa-eye"></i>
+                    <tr>
+
+                        {{-- KODE --}}
+                        <td class="text-center">
+                            <span class="badge bg-dark">
+                                {{ $d->kode_barang }}
+                            </span>
+                        </td>
+
+                        {{-- PIC --}}
+                        <td>
+                            {{ $d->pic->nama_pic ?? '-' }}
+                        </td>
+
+                        {{-- FUNGSI --}}
+                        <td>
+                            {{ $d->divisi->nama_divisi ?? '-' }}
+                        </td>
+
+                        {{-- NAMA ITEM --}}
+                        <td>
+                            {{ $d->nama_barang }}
+                        </td>
+
+                        {{-- LOKASI --}}
+                        <td>
+                            {{ $d->ruang->nama_ruang ?? '-' }}
+                        </td>
+
+                        {{-- TAHUN --}}
+                        <td class="text-center fw-semibold">
+                            {{ $d->tahun }}
+                        </td>
+
+                        {{-- KONDISI --}}
+                        <td>
+                            @if($d->kondisi == 'Baik')
+                                <span class="badge bg-success">Baik</span>
+                            @elseif($d->kondisi == 'Perlu Perbaikan')
+                                <span class="badge bg-warning text-dark">Perlu Perbaikan</span>
+                            @else
+                                <span class="badge bg-danger">Rusak</span>
+                            @endif
+                        </td>
+
+                        {{-- AKSI --}}
+                        <td>
+                            <div class="d-flex justify-content-center gap-1">
+
+                                <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+
+                                @if(!auth()->user()->hasRole('user'))
+                                    <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
+                                        <i class="fa-solid fa-pen"></i>
                                     </a>
-                                    @if(!auth()->user()->hasRole('user'))
-                                        <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </a>
-                                        <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center text-muted py-4">
-                                    <i class="fa-solid fa-box-open fa-2x mb-2 d-block"></i>
-                                    Data Item sewa belum tersedia
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+
+                                    <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                @endif
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">
+                            Data Item sewa belum tersedia
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+
+            </table>
         </div>
     </div>
+</div>
 
-    <div class="d-flex justify-content-between align-items-center mt-4">
-        <div class="small text-muted">
-            Menampilkan {{ $data->firstItem() }} sampai {{ $data->lastItem() }} dari {{ $data->total() }} data
-        </div>
-        <div>
-            {{ $data->appends(request()->query())->links('pagination::bootstrap-5') }}
-        </div>
+    {{-- PAGINATION --}}
+    <div class="mt-3">
+        {{ $data->links('pagination::bootstrap-5') }}
     </div>
 
 </div>

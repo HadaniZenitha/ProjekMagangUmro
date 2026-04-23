@@ -474,5 +474,6 @@ class BarangController extends Controller
     {
         return view('barang.barcode', compact('kode'));
     }
+    
 
 }

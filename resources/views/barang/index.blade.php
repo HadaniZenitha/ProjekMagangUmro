@@ -135,6 +135,7 @@
 					<a href="{{ route('barang.create') }}" class="btn btn-warning btn-pro">
 						<i class="fa-solid fa-plus"></i> Tambah Item
 					</a>
+				@endif
 
 					<button class="btn btn-success btn-pro" data-bs-toggle="modal" data-bs-target="#modalImport">
 						<i class="fas fa-file-excel"></i> Import Excel
