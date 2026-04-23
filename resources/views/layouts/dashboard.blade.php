@@ -164,7 +164,16 @@
             transition: transform 0.3s;
             font-size: 0.7rem !important;
             margin-left: auto;
-            margin-right: 15px;
+            margin-right: 12px;
+            width: 12px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .nav-link-collapse > a > i:last-child {
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
         }
 
         .nav-link-collapse:not(.collapsed) .rotate-icon {
@@ -484,7 +493,7 @@
             @endif
 
             <!-- Inventaris -->
-            <div class="nav-link-collapse {{ request()->routeIs(['barang.*']) ? '' : 'collapsed' }}"
+            <div class="nav-link-collapse {{ request()->routeIs(['barang.*','barang-sewa.*']) ? '' : 'collapsed' }}"
                 data-bs-toggle="collapse" data-bs-target="#menuInventaris">
                 <a href="javascript:void(0)">
                     INVENTARIS
@@ -492,11 +501,11 @@
                     <i class="fa-solid fa-box"></i>
                 </a>
             </div>
-            <div class="collapse {{ request()->routeIs(['barang.*']) ? 'show' : '' }} sub-menu" id="menuInventaris">
+            <div class="collapse {{ request()->routeIs(['barang.*','barang-sewa.*']) ? 'show' : '' }} sub-menu" id="menuInventaris">
                 <a href="{{ route('barang.index') }}" class="{{ request()->routeIs('barang.*') ? 'active-sub' : '' }}">
                     ITEM INVENTARISASI <i class="fa-solid fa-database"></i>
                 </a>
-                <a href="{{ route('barang-sewa.index') }}">ITEM SEWA<i class="fa-solid fa-list-check"></i></a>
+                <a href="{{ route('barang-sewa.index') }}" class="{{ request()->routeIs('barang-sewa.*') ? 'active-sub' : '' }}">ITEM SEWA<i class="fa-solid fa-list-check"></i></a>
             </div>
 
             <!-- Management Akun (Only for Superadmin) -->

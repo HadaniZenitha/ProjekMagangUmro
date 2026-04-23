@@ -31,6 +31,14 @@
         transform: translateY(-1px);
     }
 
+    .btn-filter-action {
+        min-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+
     /* ===== TABLE & BADGE ===== */
     .table td { vertical-align: middle; }
     
@@ -119,10 +127,10 @@
 
                     {{-- Action Buttons --}}
                     <div class="col-lg-2 col-md-12 d-flex align-items-end gap-2">
-                        <button type="submit" class="btn btn-primary btn-pro w-100">
+                        <button type="submit" class="btn btn-primary btn-pro btn-filter-action flex-fill">
                             <i class="fa-solid fa-filter"></i> Filter
                         </button>
-                        <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary btn-pro w-100">
+                        <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary btn-pro btn-filter-action flex-fill">
                             <i class="fa-solid fa-rotate-left"></i> Reset
                         </a>
                     </div>
