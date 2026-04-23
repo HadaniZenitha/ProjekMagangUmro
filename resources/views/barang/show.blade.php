@@ -113,8 +113,8 @@
             <div class="card border-0 shadow-sm mb-4 py-4 text-center">
                 <h6 class="fw-bold mb-3">QR Code Identifikasi</h6>
                 <div class="p-3 bg-white d-inline-block rounded border shadow-sm mb-2 mx-auto">
-                    {!! QrCode::size(150)->generate(url('/scan-redirect/' . $barang->kode_barang)) !!}
-                    {{-- {!! QrCode::size(150)->generate(route('barang.scan', $barang->kode_barang)) !!} --}}
+                    {{-- {!! QrCode::size(150)->generate(url('/scan-redirect/' . $barang->kode_barang)) !!} --}}
+                    {!! QrCode::size(150)->generate(route('scan.process', $barang->kode_barang)) !!}
                 </div>
                 <p class="text-muted small mb-0 px-3">Gunakan untuk tracking aset secara cepat.</p>
             </div>

@@ -140,7 +140,7 @@
 					<button class="btn btn-success btn-pro" data-bs-toggle="modal" data-bs-target="#modalImport">
 						<i class="fas fa-file-excel"></i> Import Excel
 					</button>
-
+				@endif
 				<a href="{{ route('scan.page') }}" class="btn btn-dark btn-pro">
 					<i class="fa-solid fa-qrcode"></i> Scan QR
 				</a>

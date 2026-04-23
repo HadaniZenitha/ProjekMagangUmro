@@ -61,6 +61,22 @@
     align-items: center;
     justify-content: center;
 }
+    .btn-filter-action {
+        min-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+
+    /* ===== TABLE & BADGE ===== */
+    .table td { vertical-align: middle; }
+    
+    .badge-status {
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+    }
 
 /* ===== BUTTON COLOR FIX ===== */
 .btn-info {
@@ -193,15 +209,13 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-auto col-md-6 d-flex">
-                        <button class="btn btn-primary btn-pro w-100">
-                            <i class="fa-solid fa-filter me-1"></i> Filter
+                    {{-- Action Buttons --}}
+                    <div class="col-lg-2 col-md-12 d-flex align-items-end gap-2">
+                        <button type="submit" class="btn btn-primary btn-pro btn-filter-action flex-fill">
+                            <i class="fa-solid fa-filter"></i> Filter
                         </button>
-                    </div>
-
-                    <div class="col-lg-auto col-md-6 d-flex">
-                        <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary btn-pro w-100">
-                            <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                        <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary btn-pro btn-filter-action flex-fill">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
                         </a>
                     </div>
 

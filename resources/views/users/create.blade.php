@@ -3,241 +3,170 @@
 @section('title', 'Tambah User')
 
 @section('content')
-
-<style>
-:root{
-    --bg-sidebar: #309FB0;
-    --pln-yellow: #FACC15;
-    --pln-red: #E57373;
-    --menu-bg: #B2D8DB;
-    --menu-active: #D1E9EB;
-    --text-dark: #1F3A56;
-}
-
-/* CARD */
-.custom-card{
-    border-radius:16px;
-    background:#ffffff;
-    padding:28px;
-    border:none;
-    box-shadow:0 8px 24px rgba(0,0,0,0.06);
-}
-
-/* HEADER */
-.page-title{
-    font-size:20px;
-    font-weight:600;
-    color:var(--text-dark);
-}
-
-/* INPUT */
-.form-control{
-    border-radius:10px;
-    padding:10px 12px;
-    border:1px solid #e5e7eb;
-}
-
-.form-control:focus{
-    border-color:var(--bg-sidebar);
-    box-shadow:0 0 0 2px rgba(48,159,176,0.15);
-}
-
-/* BUTTON */
-.btn-clean{
-    border-radius:10px;
-    font-weight:500;
-    padding:8px 16px;
-    transition:all 0.2s ease;
-}
-
-/* SIMPAN */
-.btn-warning.btn-clean{
-    background:var(--pln-yellow);
-    border:none;
-    color:#000;
-}
-
-.btn-warning.btn-clean:hover{
-    background:#fbbf24;
-}
-
-/* BATAL (MERAH TANPA HOVER) */
-.btn-danger.btn-clean{
-    background:#ef4444;
-    border:none;
-    color:#fff;
-    box-shadow:none;
-}
-
-/* MATIKAN SEMUA EFEK HOVER */
-.btn-danger.btn-clean:hover{
-    background:#ef4444;
-    transform:none;
-}
-
-/* ALERT */
-.alert-info{
-    background:#eef9fb;
-    border:none;
-    color:#1F3A56;
-}
-
-/* LOADING TEXT */
-#nid-loading{
-    font-size:13px;
-}
-
-/* MOBILE */
-@media (max-width:768px){
-    .btn-mobile-full{
-        width:100%;
-    }
-}
-</style>
-
-<!-- HEADER -->
-<div class="mb-4">
-    <div class="page-title">
-        <i class="fa-solid fa-user-plus me-2"></i>
-        Tambah User Baru
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">Tambah User</h5>
 </div>
 
-<div class="custom-card">
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-    <form action="{{ route('users.store') }}" method="POST" id="createUserForm">
-        @csrf
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <form action="{{ route('users.store') }}" method="POST" id="createUserForm">
+            @csrf
 
-        <div class="row">
-
-            <!-- LEFT -->
-            <div class="col-md-8">
-
-                <!-- NID -->
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">NID Karyawan</label>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nid" class="form-label fw-semibold">NID Karyawan <span class="text-danger">*</span></label>
                     <input type="text"
                         class="form-control @error('nid') is-invalid @enderror"
                         id="nid"
                         name="nid"
                         value="{{ old('nid') }}"
-                        placeholder="Contoh: 7503018JA"
-                        required>
-
+                        required
+                        autocomplete="off"
+                        placeholder="Contoh: 7503018JA">
                     <div id="nid-loading" class="mt-2 text-muted d-none">
-                        <i class="fa-solid fa-spinner fa-spin me-1"></i>
-                        Mencari data...
+                        <i class="fa-solid fa-spinner fa-spin me-1"></i>Mencari NID...
                     </div>
-
-                    <div id="nid-error" class="text-danger small mt-1 d-none"></div>
+                    <div id="nid-error" class="mt-2 text-danger small d-none"></div>
+                    @error('nid')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
-                <!-- NAMA -->
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Nama</label>
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label fw-semibold">Nama <span class="text-danger">*</span></label>
                     <input type="text"
-                        class="form-control"
+                        class="form-control @error('name') is-invalid @enderror"
                         id="name"
                         name="name"
+                        value="{{ old('name') }}"
+                        required
                         readonly
-                        placeholder="Auto-fill dari NID">
+                        placeholder="Nama Lengkap (Auto-fill dari NID)">
+                    @error('name')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
                 </div>
+            </div>
 
-                <!-- DIVISI -->
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Bidang</label>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="divisi" class="form-label fw-semibold">Bidang</label>
                     <input type="text"
                         class="form-control"
                         id="divisi"
                         readonly
-                        placeholder="Auto-fill dari NID">
+                        placeholder="Bidang (Auto-fill dari NID)">
                 </div>
 
-                <!-- ROLE -->
-                <div class="mb-4">
-                    <label class="form-label fw-semibold">Role</label>
-                    <select class="form-control @error('role') is-invalid @enderror"
-                        name="role"
-                        required>
-
+                <div class="col-md-6 mb-4">
+                    <label for="role" class="form-label fw-semibold">Role <span class="text-danger">*</span></label>
+                    <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
                         <option value="">-- Pilih Role --</option>
-
                         @foreach ($roles as $role)
-                            <option value="{{ $role->name }}">
+                            <option value="{{ $role->name }}" {{ old('role') == $role->name ? 'selected' : '' }}>
                                 {{ ucfirst(str_replace('tim', 'Tim ', $role->name)) }}
                             </option>
                         @endforeach
-
                     </select>
+                    @error('role')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
                 </div>
-
-                <!-- INFO -->
-                <div class="alert alert-info small mb-4">
-                    Password otomatis dibuat dari NID
-                </div>
-
-                <!-- BUTTON -->
-                <div class="d-flex gap-2 flex-wrap">
-                    <button type="submit" class="btn btn-warning btn-clean btn-mobile-full">
-                        <i class="fa-solid fa-save me-1"></i> Simpan
-                    </button>
-
-                    <a href="{{ route('users.index') }}"
-                        class="btn btn-danger btn-clean btn-mobile-full">
-                        Batal
-                    </a>
-                </div>
-
             </div>
 
-        </div>
+            <div class="alert alert-info small mb-4">
+                <i class="fa-solid fa-info-circle me-2"></i>
+                <strong>Catatan:</strong> Password akan otomatis di-generate dari NID yang Anda input
+            </div>
 
-    </form>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fa-solid fa-save me-1"></i> Simpan
+                </button>
+                <a href="{{ route('users.index') }}" class="btn btn-danger">
+                    Batal
+                </a>
+            </div>
 
+            @error('roles')
+                <div class="text-danger small mt-2">{{ $message }}</div>
+            @enderror
+        </form>
+    </div>
 </div>
 
 <script>
-document.getElementById('nid').addEventListener('blur', function() {
-    const nid = this.value.trim().toUpperCase();
-    this.value = nid;
+document.addEventListener('DOMContentLoaded', function() {
+    const nidInput = document.getElementById('nid');
+    const createUserForm = document.getElementById('createUserForm');
 
-    const loading = document.getElementById('nid-loading');
-    const nameInput = document.getElementById('name');
-    const divisiInput = document.getElementById('divisi');
-    const errorDisplay = document.getElementById('nid-error');
+    nidInput.addEventListener('blur', function() {
+        const nid = this.value.trim().toUpperCase();
+        this.value = nid;
+        const loading = document.getElementById('nid-loading');
+        const nameInput = document.getElementById('name');
+        const divisiInput = document.getElementById('divisi');
+        const errorDisplay = document.getElementById('nid-error');
 
-    if (!nid) return;
+        if (!nid) {
+            nameInput.value = '';
+            divisiInput.value = '';
+            errorDisplay.classList.add('d-none');
+            return;
+        }
 
-    loading.classList.remove('d-none');
+        loading.classList.remove('d-none');
+        errorDisplay.classList.add('d-none');
 
-    fetch(`{{ route('register.getNidData') }}?nid=${nid}`)
-        .then(res => res.json())
-        .then(data => {
-            loading.classList.add('d-none');
+        fetch(`{{ route('register.getNidData') }}?nid=${encodeURIComponent(nid)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                loading.classList.add('d-none');
 
-            if(data.success){
-                nameInput.value = data.name;
-                divisiInput.value = data.divisi;
-            }else{
+                if (data.error) {
+                    nameInput.value = '';
+                    divisiInput.value = '';
+                    errorDisplay.textContent = data.error;
+                    errorDisplay.classList.remove('d-none');
+                } else if (data.success) {
+                    nameInput.value = data.name;
+                    divisiInput.value = data.divisi;
+                    errorDisplay.classList.add('d-none');
+                }
+            })
+            .catch(error => {
+                loading.classList.add('d-none');
+                console.error('Error:', error);
                 nameInput.value = '';
                 divisiInput.value = '';
-                errorDisplay.textContent = data.error;
+                errorDisplay.textContent = 'Terjadi kesalahan saat mengambil data NID';
                 errorDisplay.classList.remove('d-none');
-            }
-        })
-        .catch(() => {
-            loading.classList.add('d-none');
-            errorDisplay.textContent = 'Terjadi kesalahan';
-            errorDisplay.classList.remove('d-none');
-        });
-});
+            });
+    });
 
-// VALIDASI
-document.getElementById('createUserForm').addEventListener('submit', function(e){
-    if(!document.getElementById('name').value){
-        e.preventDefault();
-        alert('Isi NID dulu ya');
-    }
+    createUserForm.addEventListener('submit', function(e) {
+        const nameInput = document.getElementById('name');
+        if (!nameInput.value.trim()) {
+            e.preventDefault();
+            alert('Silakan isi NID terlebih dahulu dan tunggu nama auto-fill');
+            nidInput.focus();
+        }
+    });
 });
 </script>
 
