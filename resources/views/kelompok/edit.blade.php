@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Kelompok Barang')
-@section('page-title', 'Edit Kelompok Barang')
+@section('title', 'Edit Kelompok Item')
+@section('page-title', 'Edit Kelompok Item')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Edit Kelompok Barang</h5>
+    <h5 class="fw-bold mb-0">Edit Kelompok Item</h5>
     <a href="{{ route('kelompok.index') }}">
     </a>
 </div>

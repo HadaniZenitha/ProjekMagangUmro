@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Master Kelompok Barang')
+@section('title', 'Master Kelompok Item')
 
 @section('content')
 
@@ -50,7 +50,7 @@
 <div class="mb-3 d-flex flex-md-row flex-column align-items-md-center">
     
     <h5 class="fw-semibold mb-2 mb-md-0">
-        Master Kelompok Barang
+        Master Kelompok Item
     </h5>
 
     <a href="{{ route('kelompok.create') }}" 
@@ -126,7 +126,7 @@
                 @empty
                 <tr>
                     <td colspan="4" class="text-center text-muted py-3">
-                        Belum ada data kelompok barang.
+                        Belum ada data kelompok Item.
                     </td>
                 </tr>
                 @endforelse

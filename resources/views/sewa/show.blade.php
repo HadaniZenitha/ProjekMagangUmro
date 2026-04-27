@@ -9,7 +9,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold mb-0">Detail Item</h4>
 
+<<<<<<< HEAD
         <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary shadow-sm">
+=======
+        <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary btn-clean shadow-sm">
+>>>>>>> 8cb9dacdc445a39df85aa0da8fbf1114886014c7
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
     </div>
@@ -118,9 +122,6 @@
 <!-- BUTTONS OUTSIDE BORDER -->
 <div class="mt-3 d-flex justify-content-between align-items-center gap-2">
 
-    <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary px-3">
-        <i class="fa-solid fa-arrow-left me-1"></i> Kembali
-    </a>
     {{-- <a href="{{ route('barang-sewa.cetak', $sewa->id) }}" class="btn btn-primary px-3">
         <i class="fa-solid fa-print me-1"></i> Cetak Stiker
     </a> --}}

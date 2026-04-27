@@ -18,41 +18,15 @@ class BarangController extends Controller
 
     public function index(Request $request)
     {
-        $query = Barang::with(['divisi', 'ruang', 'pic'])->latest('updated_at');
-
-        if ($request->search) {
-            $query->where(function ($q) use ($request) {
-                $q->where('nama_barang', 'like', '%' . $request->search . '%')
-                    ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
-            });
-        }
-
-        if ($request->divisi) {
-            $query->where('divisi_id', $request->divisi);
-        }
-
-        if ($request->pic) {
-            $query->where('pic_id', $request->pic);
-        }
-
-        if ($request->ruang) {
-            $query->where('ruang_id', $request->ruang);
-        }
-
-        if ($request->tahun_awal && $request->tahun_akhir) {
-            $query->whereBetween('tahun_perolehan', [
-                $request->tahun_awal,
-                $request->tahun_akhir
-            ]);
-        }
-
-        if ($request->status !== null && $request->status !== '') {
-            $query->where('is_active', $request->status);
-        }
+        $query = $this->buildFilterQuery($request)->latest('updated_at');
 
         $barangs = $query->paginate(15)->withQueryString();
 
         $divisis = Divisi::orderBy('nama_divisi')->get();
+
+        $subjenisList = SubJenisBarang::select('id', 'kode_subjenis', 'nama_subjenis')
+            ->orderBy('kode_subjenis')
+            ->get();
 
         $pics = Pic::with('divisi')
             ->where('is_active', true)
@@ -71,6 +45,7 @@ class BarangController extends Controller
         return view('barang.index', compact(
             'barangs',
             'divisis',
+            'subjenisList',
             'pics',
             'ruangs',
             'barangList'
@@ -80,6 +55,10 @@ class BarangController extends Controller
 
     public function create()
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $divisis = Divisi::where('is_active', true)->get();
 
         $ruangs = Ruang::where('is_active', true)->get();
@@ -104,19 +83,47 @@ class BarangController extends Controller
 
     public function store(Request $request)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $request->validate([
-            'divisi_id' => 'required|exists:divisis,id',
-            'ruang_id' => 'required|exists:ruangs,id',
+            'divisi_id'           => 'nullable|exists:divisis,id',
+            'ruang_id'            => 'required|exists:ruangs,id',
             'sub_jenis_barang_id' => 'required|exists:sub_jenis_barangs,id',
-            'pic_id' => 'required|exists:pics,id',
-            'nama_barang' => 'required|string|max:255',
-            'tahun_perolehan' => 'required|integer',
-            'kondisi' => 'required|in:baik,perlu perbaikan,rusak',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'pic_id'              => 'nullable|exists:pics,id',
+            'nama_barang'         => 'required|string|max:255',
+            'tahun_perolehan'     => 'required|integer',
+            'kondisi'             => 'required|in:baik,perlu perbaikan,rusak',
+            'foto'                => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $divisi = Divisi::findOrFail($request->divisi_id);
-        $ruang = Ruang::findOrFail($request->ruang_id);
+        // 1. Ambil data Ruangan beserta relasi PIC dan Divisi-nya
+        // Asumsi: Di model Ruang ada relasi 'pic', dan di model Pic ada relasi 'divisi'
+        $ruang = Ruang::with('pic.divisi')->findOrFail($request->ruang_id);
+    
+        // 2. Logika Otomatisasi PIC
+        $finalPicId = $request->pic_id;
+        if (empty($finalPicId)) {
+            $finalPicId = $ruang->pic_id;
+        }
+    
+        // 3. Logika Otomatisasi Divisi
+        $finalDivisiId = $request->divisi_id;
+        if (empty($finalDivisiId)) {
+            // Ambil divisi dari PIC yang terpilih (baik dari input maupun dari default ruangan)
+            if (!empty($finalPicId)) {
+                $picTerkait = Pic::find($finalPicId);
+                $finalDivisiId = $picTerkait->divisi_id;
+            }
+        }
+    
+        // Validasi Akhir: Jika setelah dicek otomatis tetap kosong (misal ruangan belum diset PIC-nya)
+        if (empty($finalPicId) || empty($finalDivisiId)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Gagal otomatisasi: Mohon pilih Divisi & PIC secara manual karena data default ruangan tidak lengkap.');
+        }
 
         $subjenis = SubJenisBarang::with('jenis.kelompok')
             ->findOrFail($request->sub_jenis_barang_id);
@@ -131,10 +138,10 @@ class BarangController extends Controller
         $formatUrutan = str_pad($urutanBaru, 2, '0', STR_PAD_LEFT);
 
         $kodeBarang =
-            $kelompok->kode_kelompok . '/' .
-            $subjenis->kode_subjenis . '/' .
-            $formatUrutan . '/' .
-            $tahun . '/' .
+            $kelompok->kode_kelompok . ' / ' .
+            $subjenis->kode_subjenis . ' / ' .
+            $formatUrutan . ' / ' .
+            $tahun . ' / ' .
             $ruang->nama_ruang;
 
         // Handle upload foto dengan nama sesuai kode barang
@@ -150,17 +157,18 @@ class BarangController extends Controller
         }
 
         Barang::create([
-            'divisi_id' => $divisi->id,
-            'ruang_id' => $request->ruang_id,
+            'divisi_id'           => $finalDivisiId,
+            'ruang_id'            => $request->ruang_id,
             'sub_jenis_barang_id' => $request->sub_jenis_barang_id,
-            'pic_id' => $request->pic_id,
-            'kode_barang' => $kodeBarang,
-            'nama_barang' => $request->nama_barang,
-            'tahun_perolehan' => $request->tahun_perolehan,
-            'kondisi' => $request->kondisi,
-            'urutan' => $urutanBaru,
-            'is_active' => true,
-            'foto' => $fotoPath,
+            'pic_id'              => $finalPicId,
+            'kode_barang'         => $kodeBarang,
+            'nama_barang'         => $request->nama_barang,
+            'tahun_perolehan'     => $request->tahun_perolehan,
+            'kondisi'             => $request->kondisi,
+            'urutan'              => $urutanBaru,
+            'is_active'           => true,
+            'foto'                => $fotoPath,
+            'catatan_nonaktif'    => $request->catatan_nonaktif ?? null,
         ]);
 
         return redirect()->route('barang.index')
@@ -176,6 +184,10 @@ class BarangController extends Controller
 
     public function edit(Barang $barang)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $divisis = Divisi::all();
 
         $ruangs = Ruang::all();
@@ -201,13 +213,17 @@ class BarangController extends Controller
 
     public function update(Request $request, Barang $barang)
     {
-        // VALIDASI (TANPA is_active BIAR TIDAK ERROR)
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'pic_id' => 'required|exists:pics,id',
-            'ruang_id' => 'required|exists:ruangs,id',
-            'kondisi' => 'required|in:baik,perlu perbaikan,rusak',
-            'is_active' => 'required|boolean',
+            'nama_barang'     => 'required|string|max:255',
+            'divisi_id'       => 'required|exists:divisis,id',
+            'pic_id'          => 'required|exists:pics,id',
+            'ruang_id'        => 'required|exists:ruangs,id',
+            'kondisi'         => 'required|in:baik,perlu perbaikan,rusak',
+            'is_active'       => 'required|boolean',
             'tahun_perolehan' => 'required|integer',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'catatan_nonaktif' => 'nullable|string',
@@ -231,15 +247,15 @@ class BarangController extends Controller
         }
 
         $barang->update([
-            'nama_barang' => $request->nama_barang,
-            'pic_id' => $request->pic_id,
-            'tahun_perolehan' => $request->tahun_perolehan,
-            'kondisi' => $request->kondisi,
-            'ruang_id' => $request->ruang_id,
-            'is_active' => $request->is_active,
-            'foto' => $fotoPath,
-            'catatan_nonaktif' => $request->is_active == 1 ? null : $request->catatan_nonaktif,
-            'tahun_perolehan' => $request->tahun_perolehan,
+            'nama_barang'         => $request->nama_barang,
+            'divisi_id'           => $request->divisi_id,
+            'pic_id'              => $request->pic_id,
+            'tahun_perolehan'     => $request->tahun_perolehan,
+            'kondisi'             => $request->kondisi,
+            'ruang_id'            => $request->ruang_id,
+            'is_active'           => $request->is_active,
+            'foto'                => $fotoPath,
+            'catatan_nonaktif'    => $request->is_active == 1 ? null : $request->catatan_nonaktif,
         ]);
 
         return redirect()->route('barang.index')
@@ -248,6 +264,10 @@ class BarangController extends Controller
 
     public function destroy(Barang $barang)
     {
+        if (auth()->user()->hasRole('user')) {
+            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+        }
+
         // 1. Cek apakah barang memiliki foto
         if ($barang->foto) {
             // 2. Hapus file foto dari storage public
@@ -296,7 +316,7 @@ class BarangController extends Controller
 
         return Excel::download(
             new BarangExport($data),
-            'laporan_barang.xlsx'
+            'laporan_inventaris_' . date('Ymd_His') . '.xlsx'
         );
     }
 
@@ -325,20 +345,6 @@ class BarangController extends Controller
         // Proses mapping kondisi per tahun
         $processedData = $barangs->map(function ($barang) use ($tahunRange, $tahunSekarang) {
             $kondisiPerTahun = array_fill_keys($tahunRange, '-');
-
-            // Isi dari history (prioritas utama)
-            // foreach ($barang->barangHistories as $history) {
-            //     $tahunHistory = (int) $history->tanggal_perubahan->format('Y');
-
-            //     if (isset($kondisiPerTahun[$tahunHistory])) {
-            //         $kondisiPerTahun[$tahunHistory] = ucfirst($history->kondisi);
-            //     }
-
-            //     // Jika history menyimpan tahun_perolehan yang berbeda, gunakan juga
-            //     if ($history->tahun_perolehan && isset($kondisiPerTahun[$history->tahun_perolehan])) {
-            //         $kondisiPerTahun[$history->tahun_perolehan] = ucfirst($history->kondisi);
-            //     }
-            // }
 
             foreach ($barang->barangHistories as $history) {
                 $tahun = (int) $history->tahun_perolehan;
@@ -419,10 +425,23 @@ class BarangController extends Controller
     }
 
 
-    private function buildFilterQuery($request)
+    private function buildFilterQuery(Request $request)
     {
-        $query = Barang::with(['divisi', 'pic', 'ruang']);
+        $query = Barang::with(['divisi', 'pic', 'ruang', 'subjenis']);
 
+        // Fungsi Pencarian Teks
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_barang', 'like', "%{$search}%")
+                  ->orWhere('kode_barang', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('subjenis')) {
+            $query->where('sub_jenis_barang_id', $request->subjenis);
+        }
+        
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
         }
@@ -433,10 +452,6 @@ class BarangController extends Controller
 
         if ($request->ruang) {
             $query->where('ruang_id', $request->ruang);
-        }
-
-        if ($request->tahun) {
-            $query->where('tahun_perolehan', $request->tahun);
         }
 
         if ($request->status !== null && $request->status !== '') {
@@ -459,5 +474,6 @@ class BarangController extends Controller
     {
         return view('barang.barcode', compact('kode'));
     }
+    
 
 }

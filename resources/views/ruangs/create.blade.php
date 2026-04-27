@@ -71,7 +71,7 @@
                         </option>
                     @endforeach
                 </select>
-                <small class="text-muted">PIC ini akan otomatis digunakan saat membuat barang di ruangan ini.</small>
+                <small class="text-muted">PIC ini akan otomatis digunakan saat membuat item di ruangan ini.</small>
             </div>
 
             <div class="d-flex gap-2">

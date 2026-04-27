@@ -66,7 +66,7 @@
                         </option>
                     @endforeach
                 </select>
-                <small class="text-muted">PIC ini akan menjadi default saat membuat barang di ruangan ini.</small>
+                <small class="text-muted">PIC ini akan menjadi default saat membuat item di ruangan ini.</small>
             </div>
 
             <div class="mb-3">

@@ -100,7 +100,7 @@
         </table>
     @else
         <div class="no-data">
-            <p>Tidak ada data barang yang ditemukan untuk filter ini.</p>
+            <p>Tidak ada data Item yang ditemukan untuk filter ini.</p>
         </div>
     @endif
 

@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Sub Jenis Barang')
+@section('title', 'Tambah Sub Jenis Item')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Tambah Sub Jenis Barang</h5>
+    <h5 class="fw-bold mb-0">Tambah Sub Jenis Item</h5>
     <a href="{{ route('subjenis.index') }}">
     </a>
 </div>
@@ -27,9 +27,9 @@
             @csrf
 
             <div class="mb-3">
-                <label class="form-label">Jenis Barang</label>
+                <label class="form-label">Jenis Item</label>
                 <select name="jenis_barang_id" class="form-select" required>
-                    <option value="">-- Pilih Jenis Barang --</option>
+                    <option value="">-- Pilih Jenis Item --</option>
                     @foreach($jenisList as $j)
                         <option value="{{ $j->id }}">{{ $j->nama_jenis }}</option>
                     @endforeach

@@ -1,12 +1,12 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Jenis Barang')
-@section('page-title', 'Edit Jenis Barang')
+@section('title', 'Edit Jenis Item')
+@section('page-title', 'Edit Jenis Item')
 
 @section('content')
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Edit Jenis Barang</h5>
+    <h5 class="fw-bold mb-0">Edit Jenis Item</h5>
     <a href="{{ route('jenis.index') }}">
     </a>
 </div>
@@ -29,7 +29,7 @@
             @method('PUT')
 
             <div class="mb-3">
-                <label class="form-label">Kelompok Barang</label>
+                <label class="form-label">Kelompok Item</label>
                 <select name="kelompok_barang_id" class="form-select" required>
                     @foreach($kelompoks as $k)
                         <option value="{{ $k->id }}"

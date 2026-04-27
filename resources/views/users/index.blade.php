@@ -114,7 +114,7 @@
     <div class="card shadow-sm border-0">
         <div class="table-responsive">
             <table class="table table-bordered align-middle mb-0">
-                <thead class="table-light text-center">
+                <thead class="table-light">
                     <tr>
                         <th width="5%">No</th>
                         <th>Nama</th>

@@ -13,7 +13,7 @@ return new class extends Migration
 
             $table->string('kode_barang')->unique();
             $table->string('nama_barang');
-            $table->string('fungsi')->nullable();
+            $table->string('divisi_id')->nullable();
 
             $table->foreignId('pic_id')
                 ->constrained('pics')
