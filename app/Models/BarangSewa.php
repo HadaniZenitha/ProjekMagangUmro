@@ -11,7 +11,7 @@ class BarangSewa extends Model
     protected $fillable = [
         'kode_barang',
         'nama_barang',
-        'diviai_id', // ✅ UBAH dari fungsi
+        'divisi_id', 
         'pic_id',
         'ruang_id',
         'tahun',
