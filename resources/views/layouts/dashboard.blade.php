@@ -621,7 +621,7 @@
             <footer class="d-flex justify-content-between align-items-center mt-3">
 
                 <div class="text-muted small">
-                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhoul
+                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhaul
                 </div>
 
                 <div class="small text-muted">
@@ -1158,6 +1158,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Division Card -->
+                    <div class="col-12">
+                        <div style="background: linear-gradient(135deg, #FCE4EC 0%, #F3E5F5 100%); border-radius: 12px; padding: 15px; border: 1px solid #e0e0e0;">
+                            <div style="color: #c2185b; font-size: 14px; font-weight: 600; margin-bottom: 8px;">
+                                <i class="fa-solid fa-sitemap me-1"></i> Bidang
+                            </div>
+                            <div style="font-size: 18px; font-weight: 700; color: #880e4f;">
+                                {{ Auth::user()->divisi?->nama_divisi ?? 'Belum ditentukan' }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Join Date Card -->
@@ -1222,7 +1234,7 @@
                             required>
                     </div>
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label class="form-label fw-600" style="color: #1b3a4a; font-weight: 600;">Email</label>
                         <input type="email"
                             name="email"
@@ -1234,7 +1246,7 @@
                             onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'"
                             value="{{ Auth::user()->email }}"
                             required>
-                    </div>
+                    </div> -->
 
                     <div class="mb-4">
                         <label class="form-label fw-600" style="color: #1b3a4a; font-weight: 600;">Password Baru</label>
