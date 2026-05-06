@@ -149,7 +149,7 @@
             </div>
 
             <!-- TOTAL RUANG -->
-            @if(!auth()->user()->hasRole('user'))
+            @if(!auth()->user()->hasRole('user') && !auth()->user()->hasRole('timinventarisasi'))
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="stat-card d-flex align-items-center">
                     <div class="stat-icon icon-yellow me-3">
@@ -294,7 +294,7 @@
                             <i class="fa-solid fa-box"></i> Lihat Item
                         </a>
 
-                        @if(!auth()->user()->hasRole('user'))
+                        @if(!auth()->user()->hasRole('user') && !auth()->user()->hasRole('timinventarisasi'))
                             <a href="{{ route('ruangs.index') }}" class="btn btn-outline-warning quick-btn btn-modern">
                                 <i class="fa-solid fa-door-open"></i> Kelola Ruangan
                             </a>
