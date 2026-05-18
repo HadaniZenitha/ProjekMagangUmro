@@ -142,27 +142,10 @@ class SewaController extends Controller
             'kondisi'     => 'required'
         ]);
 
-        // Build base kode_barang from user input if provided, otherwise from existing
+        // Kode barang hanya berubah jika user mengedit field-nya secara manual.
         $inputKode = trim((string) $request->input('kode_barang', ''));
         $originalKode = trim((string) $sewa->kode_barang);
-
-        $baseKode = $inputKode !== '' ? $inputKode : $originalKode;
-
-        // If ruang changed, always update the last segment of the base kode to the new room
-        if ($sewa->ruang_id != $request->ruang_id) {
-            $newRuang = Ruang::find($request->ruang_id)->nama_ruang ?? null;
-            if ($newRuang) {
-                if (str_contains($baseKode, ' / ')) {
-                    $parts = explode(' / ', $baseKode);
-                    $parts[count($parts) - 1] = $newRuang;
-                    $baseKode = implode(' / ', $parts);
-                } else {
-                    $baseKode = $baseKode . ' / ' . $newRuang;
-                }
-            }
-        }
-
-        $newKode = $baseKode;
+        $newKode = $inputKode !== '' ? $inputKode : $originalKode;
 
         $sewa->update([
             'nama_barang' => $request->nama_barang,
