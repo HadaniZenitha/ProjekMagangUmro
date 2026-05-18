@@ -98,9 +98,9 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Kondisi Item</label>
                             <select name="kondisi" class="form-select text-capitalize">
-                                @php $kondisis = ['baik', 'perlu perbaikan', 'rusak']; @endphp
+                                @php $kondisis = ['Baik', 'Perlu Perbaikan', 'Rusak']; @endphp
                                 @foreach($kondisis as $k)
-                                <option value="{{ $k }}" {{ strtolower($barang->kondisi) == $k ? 'selected' : '' }}>
+                                <option value="{{ $k }}" {{($barang->kondisi) == $k ? 'selected' : '' }}>
                                     {{ ucfirst($k) }}
                                 </option>
                                 @endforeach

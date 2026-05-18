@@ -33,13 +33,14 @@
             <div class="mb-3">
                 <label class="form-label fw-semibold">Kode Item</label>
                 <input type="text"
+                       name="kode_barang"
                        class="form-control"
-                       value="{{ $sewa->kode_barang }}"
-                       readonly>
+                       value="{{ old('kode_barang', $sewa->kode_barang) }}"
+                       required>
             </div>
 
             {{-- Nama Barang --}}
-            <div class="mb-3">
+            <div class="mb-3"> 
                 <label class="form-label fw-semibold">Nama Item <span class="text-danger">*</span></label>
                 <input type="text"
                        name="nama_barang"

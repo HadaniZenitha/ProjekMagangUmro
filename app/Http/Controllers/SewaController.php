@@ -115,7 +115,9 @@ class SewaController extends Controller
             ->orderBy('nama_pic')
             ->get();
 
-        return view('sewa.edit', compact('sewa', 'divisis', 'pics', 'ruangs'));
+        $selectedDivisi = Divisi::find($sewa->divisi_id);
+
+        return view('sewa.edit', compact('sewa', 'divisis', 'pics', 'ruangs', 'selectedDivisi'));
     }
 
     public function show(BarangSewa $sewa)
@@ -131,6 +133,7 @@ class SewaController extends Controller
         }
 
         $request->validate([
+            'kode_barang' => 'required|string|unique:barang_sewa,kode_barang,' . $sewa->id,
             'nama_barang' => 'required',
             'divisi_id'   => 'required|exists:divisis,id',
             'pic_id'      => 'required|exists:pics,id',
@@ -139,6 +142,28 @@ class SewaController extends Controller
             'kondisi'     => 'required'
         ]);
 
+        // Build base kode_barang from user input if provided, otherwise from existing
+        $inputKode = trim((string) $request->input('kode_barang', ''));
+        $originalKode = trim((string) $sewa->kode_barang);
+
+        $baseKode = $inputKode !== '' ? $inputKode : $originalKode;
+
+        // If ruang changed, always update the last segment of the base kode to the new room
+        if ($sewa->ruang_id != $request->ruang_id) {
+            $newRuang = Ruang::find($request->ruang_id)->nama_ruang ?? null;
+            if ($newRuang) {
+                if (str_contains($baseKode, ' / ')) {
+                    $parts = explode(' / ', $baseKode);
+                    $parts[count($parts) - 1] = $newRuang;
+                    $baseKode = implode(' / ', $parts);
+                } else {
+                    $baseKode = $baseKode . ' / ' . $newRuang;
+                }
+            }
+        }
+
+        $newKode = $baseKode;
+
         $sewa->update([
             'nama_barang' => $request->nama_barang,
             'divisi_id'   => $request->divisi_id,
@@ -146,6 +171,7 @@ class SewaController extends Controller
             'ruang_id'    => $request->ruang_id,
             'tahun'       => $request->tahun,
             'kondisi'     => $request->kondisi,
+            'kode_barang' => $newKode,
         ]);
 
         return redirect()->route('barang-sewa.index')

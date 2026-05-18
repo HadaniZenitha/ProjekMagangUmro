@@ -61,13 +61,7 @@
     align-items: center;
     justify-content: center;
 }
-    .btn-filter-action {
-        min-height: 38px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        white-space: nowrap;
-    }
+
 
     /* ===== TABLE & BADGE ===== */
     .table td { vertical-align: middle; }
@@ -209,12 +203,16 @@
                         </div>
                     </div>
 
-                    {{-- Action Buttons --}}
-                    <div class="col-lg-2 col-md-12 d-flex align-items-end gap-2">
-                        <button type="submit" class="btn btn-primary btn-pro btn-filter-action flex-fill">
+                    {{-- FILTER --}}
+                    <div class="col-lg-auto col-md-4 d-flex">
+                        <button type="submit" class="btn btn-primary btn-pro w-100">
                             <i class="fa-solid fa-filter"></i> Filter
                         </button>
-                        <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary btn-pro btn-filter-action flex-fill">
+                    </div>
+
+                    {{-- RESET --}}
+                    <div class="col-lg-auto col-md-4 d-flex">
+                        <a href="{{ route('barang-sewa.index') }}" class="btn btn-secondary btn-pro w-100">
                             <i class="fa-solid fa-rotate-left"></i> Reset
                         </a>
                     </div>
@@ -327,7 +325,6 @@
             </table>
         </div>
     </div>
-</div>
 
     {{-- PAGINATION --}}
     <div class="mt-3">
