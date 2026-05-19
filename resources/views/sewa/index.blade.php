@@ -245,7 +245,7 @@
                     <tr>
 
                         {{-- KODE --}}
-                        <td class="text-center">
+                        <td class="text-left">
                             <span class="badge bg-dark">
                                 {{ $d->kode_barang }}
                             </span>
