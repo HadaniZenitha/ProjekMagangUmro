@@ -143,6 +143,7 @@
 				<a href="{{ route('scan.page') }}" class="btn btn-dark btn-pro">
 					<i class="fa-solid fa-qrcode"></i> Scan QR
 				</a>
+				@endif
 			</div>
 		</div>
 
