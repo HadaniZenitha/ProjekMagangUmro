@@ -11,7 +11,7 @@ class BarangSewa extends Model
     protected $fillable = [
         'kode_barang',
         'nama_barang',
-        'divisi_id', 
+        'divisi_id',
         'pic_id',
         'ruang_id',
         'tahun',
@@ -36,5 +36,9 @@ class BarangSewa extends Model
     public function divisi()
     {
         return $this->belongsTo(Divisi::class, 'divisi_id');
+    }
+    public function histories()
+    {
+        return $this->hasMany(BarangSewaHistory::class)->latest('tanggal_perubahan');
     }
 }

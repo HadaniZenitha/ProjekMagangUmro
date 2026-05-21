@@ -46,7 +46,7 @@ Route::get('/barang/export-preview', [BarangController::class, 'exportPreview'])
 
 Route::get('/barang/export', [BarangController::class, 'export'])
     ->name('barang.export');
-    
+
 // =============================================
 // ROUTES EXPORT BARANG SEWA
 // =============================================
@@ -58,7 +58,18 @@ Route::get('/barang-sewa/export-pdf', [SewaController::class, 'exportPdf'])
 
 Route::get('/barang-sewa/export-excel', [SewaController::class, 'exportExcel'])
     ->name('barang-sewa.exportExcel');
+Route::prefix('barang-sewa')->group(function () {
 
+    Route::get('/{id}/history', [SewaController::class, 'history'])
+        ->name('barang-sewa.history');
+
+    Route::get('/{id}/mutasi', [SewaController::class, 'mutasi'])
+        ->name('barang-sewa.mutasi');
+
+    Route::post('/{id}/mutasi', [SewaController::class, 'prosesMutasi'])
+        ->name('barang-sewa.mutasi.proses');
+
+});
 // =============================================
 // ROUTES YANG MEMBUTUHKAN AUTHENTICATION
 // =============================================
@@ -107,9 +118,9 @@ Route::get('/scan', [BarangController::class, 'scanPage'])
     ->middleware('auth');
 
 // 2. REDIRECT DARI QR (TIDAK PERLU AUTH)
-// Route::get('/scan-redirect/{kode}', function ($kode) {
-//     return redirect()->route('scan.process', $kode);
-// });
+Route::get('/scan-redirect/{kode}', function ($kode) {
+    return redirect()->route('scan.process', $kode);
+});
 
 // 3. PROSES HASIL SCAN (DETAIL BARANG)
 Route::get('/scan/{kode}', [BarangController::class, 'scan'])

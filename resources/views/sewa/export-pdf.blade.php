@@ -11,9 +11,10 @@
             margin: 20px;
         }
 
+        /* ===== HEADER (TIDAK DIUBAH) ===== */
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .header h3 {
@@ -26,6 +27,7 @@
             font-size: 10px;
         }
 
+        /* ===== TABLE ===== */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -35,42 +37,48 @@
             border: 1px solid #333;
         }
 
+        th {
+            background: #e9ecef;
+            text-align: center;
+            font-weight: bold;
+        }
+
         th, td {
             padding: 6px;
         }
 
-        th {
-            background: #f0f0f0;
-            text-align: center;
-        }
-
         td {
             vertical-align: middle;
+            line-height: 1.4;
         }
 
+        /* ===== ALIGNMENT ===== */
         .text-center {
             text-align: center;
         }
 
-        .baik {
-            color: green;
-            font-weight: bold;
+        .text-left {
+            text-align: left;
         }
 
-        .perbaikan {
-            color: orange;
-            font-weight: bold;
-        }
-
+        /* ===== KONDISI ===== */
+        .baik,
+        .perbaikan,
         .rusak {
-            color: red;
-            font-weight: bold;
+            color: black;
+            font-weight: normal;
         }
 
+        /* ===== FOOTER ===== */
         .footer {
-            margin-top: 30px;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .ttd {
+            width: 250px;
+            float: right;
             text-align: center;
-            font-size: 10px;
         }
 
         .no-data {
@@ -83,11 +91,12 @@
 
 <body>
 
+    <!-- HEADER (TETAP) -->
     <div class="header">
         <h3>LAPORAN ITEM SEWA</h3>
         <p>
-            Periode: {{ $tahun_awal ?? 'Semua' }} - {{ $tahun_akhir ?? date('Y') }} |
-            Dicetak: {{ date('d-F-Y H:i') }}
+            Periode: {{ $tahun_awal ?? 'Semua' }} - {{ $tahun_akhir ?? date('Y') }} <br>
+            Dicetak: {{ date('d/M/Y H:i') }}
         </p>
     </div>
 
@@ -111,14 +120,11 @@
             @foreach($data as $i => $d)
             <tr>
                 <td class="text-center">{{ $i + 1 }}</td>
-                <td>{{ $d->kode_barang }}</td>
-                <td>{{ $d->pic->nama_pic ?? '-' }}</td>
-
-                {{-- 🔥 FIX DI SINI --}}
-                <td>{{ $d->divisi->nama_divisi ?? '-' }}</td>
-
-                <td>{{ $d->nama_barang }}</td>
-                <td>{{ $d->ruang->nama_ruang ?? '-' }}</td>
+                <td class="text-left">{{ $d->kode_barang }}</td>
+                <td class="text-left">{{ $d->pic->nama_pic ?? '-' }}</td>
+                <td class="text-left">{{ $d->divisi->nama_divisi ?? '-' }}</td>
+                <td class="text-left">{{ $d->nama_barang }}</td>
+                <td class="text-left">{{ $d->ruang->nama_ruang ?? '-' }}</td>
                 <td class="text-center">{{ $d->tahun }}</td>
 
                 <td class="text-center">
@@ -141,14 +147,23 @@
         </div>
     @endif
 
+    <!-- FOOTER -->
     <div class="footer">
-        <p>
-            Mengetahui,<br><br><br><br>
-            ________________________<br>
-            (Nama & Jabatan)
+
+        <div class="ttd">
+            <p>
+                Mengetahui,<br><br><br><br>
+                ________________________<br>
+                (Nama & Jabatan)
+            </p>
+        </div>
+
+        <div style="clear: both;"></div>
+
+        <p style="text-align:center; font-size:10px;">
+            Dicetak oleh Sistem Inventaris - {{ date('d/m/Y') }}
         </p>
 
-        <p>Dicetak oleh Sistem Inventaris - {{ date('d/m/Y') }}</p>
     </div>
 
 </body>

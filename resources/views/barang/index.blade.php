@@ -48,9 +48,18 @@
 		}
 
 		/* Menyesuaikan Select2 agar serasi dengan Bootstrap 5 */
-		.select2-container .select2-selection--single { height: 38px !important; border: 1px solid #dee2e6 !important; }
-		.select2-container--default .select2-selection--single .select2-selection__rendered { line-height: 38px !important; }
-		.select2-container--default .select2-selection--single .select2-selection__arrow { height: 36px !important; }
+		.select2-container .select2-selection--single {
+			height: 38px !important;
+			border: 1px solid #dee2e6 !important;
+		}
+
+		.select2-container--default .select2-selection--single .select2-selection__rendered {
+			line-height: 38px !important;
+		}
+
+		.select2-container--default .select2-selection--single .select2-selection__arrow {
+			height: 36px !important;
+		}
 
 		.table-responsive {
 			overflow-x: auto;
@@ -209,14 +218,14 @@
 									<i class="fa-solid fa-magnifying-glass text-muted"></i>
 								</span>
 
-								<input list="barangOptions" id="barang-input" class="form-control"
-									placeholder="Cari berdasarkan kode atau nama item..." autocomplete="off">
+								<input type="text" name="search" value="{{ request('search') }}" class="form-control"
+									placeholder="Cari berdasarkan kode atau nama item...">
 
-								<datalist id="barangOptions">
+								<!-- <datalist id="barangOptions">
 									@foreach($barangList as $b)
 										<option data-id="{{ $b->id }}" value="{{ $b->kode_barang }} - {{ $b->nama_barang }}">
 									@endforeach
-								</datalist>
+								</datalist> -->
 							</div>
 
 							<input type="hidden" name="barang_id" id="barang-hidden">
@@ -244,17 +253,17 @@
 					<div class="row g-3 mt-2 align-items-end">
 
 						{{-- Filter Sub Jenis --}}
-	                    <div class="col-lg-3 col-md-6">
-	                        <label class="form-label small fw-bold text-muted">Sub Jenis</label>
-	                        <select name="subjenis" class="form-select select2">
-	                            <option value="">Semua Sub Jenis</option>
-	                            @foreach($subjenisList as $sj)
-	                                <option value="{{ $sj->id }}" {{ request('subjenis') == $sj->id ? 'selected' : '' }}>
-	                                    {{ $sj->kode_subjenis }} - {{ $sj->nama_subjenis }}
-	                                </option>
-	                            @endforeach
-	                        </select>
-	                    </div>
+						<div class="col-lg-3 col-md-6">
+							<label class="form-label small fw-bold text-muted">Sub Jenis</label>
+							<select name="subjenis" class="form-select select2">
+								<option value="">Semua Sub Jenis</option>
+								@foreach($subjenisList as $sj)
+									<option value="{{ $sj->id }}" {{ request('subjenis') == $sj->id ? 'selected' : '' }}>
+										{{ $sj->kode_subjenis }} - {{ $sj->nama_subjenis }}
+									</option>
+								@endforeach
+							</select>
+						</div>
 
 						{{-- RUANGAN --}}
 						<div class="col-lg-2 col-md-6">
@@ -345,12 +354,12 @@
 								<td>
 									<span class="badge bg-dark">{{ $b->kode_barang }}</span>
 								</td>
-								<td>{{ $b->pic->nama_pic ?? '-' }} 
-									@if($b->pic->is_active) - 
-								            <span class="badge-status bg-status-aktif">PIC Aktif</span>
-								        @else
-								            <span class="badge-status bg-status-nonaktif">PIC Nonaktif</span>
-								    @endif
+								<td>{{ $b->pic->nama_pic ?? '-' }}
+									@if($b->pic->is_active) -
+										<span class="badge-status bg-status-aktif">PIC Aktif</span>
+									@else
+										<span class="badge-status bg-status-nonaktif">PIC Nonaktif</span>
+									@endif
 								</td>
 								<td>{{ $b->nama_barang }}</td>
 								<td>{{ $b->ruang->nama_ruang ?? '-' }}</td>
@@ -454,30 +463,30 @@
 @section('scripts')
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			const input = document.getElementById('barang-input');
-			const hidden = document.getElementById('barang-hidden');
-			const options = document.getElementById('barangOptions').options;
+		// document.addEventListener("DOMContentLoaded", function () {
+		// 	const input = document.getElementById('barang-input');
+		// 	const hidden = document.getElementById('barang-hidden');
+		// 	const options = document.getElementById('barangOptions').options;
 
-			input.addEventListener('input', function () {
-				let selectedId = '';
+		// 	input.addEventListener('input', function () {
+		// 		let selectedId = '';
 
-				for (let i = 0; i < options.length; i++) {
-					if (options[i].value === this.value) {
-						selectedId = options[i].dataset.id;
-						break;
-					}
-				}
+		// 		for (let i = 0; i < options.length; i++) {
+		// 			if (options[i].value === this.value) {
+		// 				selectedId = options[i].dataset.id;
+		// 				break;
+		// 			}
+		// 		}
 
-				hidden.value = selectedId;
+		// 		hidden.value = selectedId;
+		// 	});
+		// });
+		$(document).ready(function () {
+			$('.select2').select2({
+				theme: 'classic',
+				width: '100%'
 			});
 		});
-		$(document).ready(function() {
-    	    $('.select2').select2({
-    	        theme: 'classic',
-    	        width: '100%'
-    	    });
-    	});
 	</script>
 
 @endsection

@@ -6,51 +6,51 @@
 @section('content')
 
 <style>
-/* ===== CARD ===== */
 .filter-card {
     border-radius: 12px;
     border: 1px solid #eee;
 }
 
-/* ===== BUTTON ===== */
 .btn-pro {
     border-radius: 8px;
     font-weight: 500;
     padding: 6px 14px;
 }
 
-/* HEADER TETAP TENGAH */
-.table-fix th {
-    text-align: center;
+/* ===== TABLE EXCEL STYLE ===== */
+.table-excel {
+    border: 1px solid #dee2e6;
 }
 
-/* ISI RATA KIRI */
-.table-fix td {
-    text-align: left;
+.table-excel th {
+    background: #f8f9fa;
+    text-align: center;
+    font-size: 15px; /* 🔥 diperbesar */
+    font-weight: 700;
+}
+
+.table-excel td {
+    font-size: 14.5px; /* 🔥 diperbesar */
     vertical-align: middle;
 }
 
-/* ===== WIDTH KOLOM (PENTING BANGET) ===== */
-.col-kode   { width: 90px; }
-.col-pic    { width: 200px; }
-.col-fungsi { width: 180px; }
-.col-nama   { width: 160px; }
-.col-lokasi { width: 150px; }
-.col-tahun  { width: 80px; }
-.col-kondisi{ width: 120px; }
-.col-aksi   { width: 130px; }
-
-/* ===== TEXT CONTROL ===== */
-.text-wrap {
-    white-space: normal;
-    word-break: break-word;
+/* ===== BADGE KODE ===== */
+.kode-badge {
+    background: #212529;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
 }
 
-/* ===== AKSI BUTTON ===== */
-.aksi-group {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
+/* ===== KONDISI TEXT ONLY ===== */
+.kondisi-baik
+.kondisi-perbaikan
+.kondisi-rusak  {
+    color: #000;
+    font-weight: 600;
 }
 
 .aksi-group .btn {
@@ -73,27 +73,12 @@
     }
 
 /* ===== BUTTON COLOR FIX ===== */
-.btn-info {
-    background-color: #0dcaf0;
-    border: none;
-}
+.btn-info { background-color: #0dcaf0; border: none; }
+.btn-warning { background-color: #ffc107; border: none; color: #000; }
+.btn-danger { background-color: #dc3545; border: none; }
 
-.btn-warning {
-    background-color: #ffc107;
-    border: none;
-    color: #000;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border: none;
-}
-
-/* ===== MOBILE ===== */
 @media (max-width: 768px) {
-    .btn-mobile {
-        width: 100%;
-    }
+    .btn-mobile { width: 100%; }
 }
 </style>
 
@@ -127,7 +112,6 @@
     <form method="GET" action="{{ route('barang-sewa.index') }}">
         <div class="card filter-card shadow-sm mb-3">
             <div class="card-body">
-
                 <div class="row g-3 align-items-end">
 
                     <div class="col-lg-6">
@@ -224,25 +208,26 @@
 
     {{-- TABLE --}}
     <div class="card shadow-sm border-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0 table-fix">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-excel mb-0">
 
-                <thead class="table-light">
-                    <tr class="small text-uppercase text-muted">
-                        <th class="col-kode">Kode</th>
-                        <th class="col-pic">PIC</th>
-                        <th class="col-fungsi">Fungsi</th>
-                        <th class="col-nama">Nama Item</th>
-                        <th class="col-lokasi">Lokasi</th>
-                        <th class="col-tahun">Tahun</th>
-                        <th class="col-kondisi">Kondisi</th>
-                        <th class="col-aksi">Aksi</th>
-                    </tr>
-                </thead>
+                    <thead>
+                        <tr>
+                            <th>Kode</th>
+                            <th>PIC</th>
+                            <th>Fungsi</th>
+                            <th>Nama Item</th>
+                            <th>Lokasi</th>
+                            <th>Tahun</th>
+                            <th>Kondisi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    @forelse($data as $d)
-                    <tr>
+                    <tbody>
+                        @forelse($data as $d)
+                        <tr>
 
                         {{-- KODE --}}
                         <td class="text-left">
@@ -251,85 +236,68 @@
                             </span>
                         </td>
 
-                        {{-- PIC --}}
-                        <td>
-                            {{ $d->pic->nama_pic ?? '-' }}
-                        </td>
+                            <td>{{ $d->pic->nama_pic ?? '-' }}</td>
+                            <td>{{ $d->divisi->nama_divisi ?? '-' }}</td>
+                            <td>{{ $d->nama_barang }}</td>
+                            <td>{{ $d->ruang->nama_ruang ?? '-' }}</td>
 
-                        {{-- FUNGSI --}}
-                        <td>
-                            {{ $d->divisi->nama_divisi ?? '-' }}
-                        </td>
+                            <td class="text-center">{{ $d->tahun }}</td>
 
-                        {{-- NAMA ITEM --}}
-                        <td>
-                            {{ $d->nama_barang }}
-                        </td>
+                            <td class="text-center">
+                                @if($d->kondisi == 'Baik')
+                                    <span class="kondisi-baik">Baik</span>
+                                @elseif($d->kondisi == 'Perlu Perbaikan')
+                                    <span class="kondisi-perbaikan">Perlu Perbaikan</span>
+                                @else
+                                    <span class="kondisi-rusak">Rusak</span>
+                                @endif
+                            </td>
 
-                        {{-- LOKASI --}}
-                        <td>
-                            {{ $d->ruang->nama_ruang ?? '-' }}
-                        </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1">
 
-                        {{-- TAHUN --}}
-                        <td class="text-center fw-semibold">
-                            {{ $d->tahun }}
-                        </td>
-
-                        {{-- KONDISI --}}
-                        <td>
-                            @if($d->kondisi == 'Baik')
-                                <span class="badge bg-success">Baik</span>
-                            @elseif($d->kondisi == 'Perlu Perbaikan')
-                                <span class="badge bg-warning text-dark">Perlu Perbaikan</span>
-                            @else
-                                <span class="badge bg-danger">Rusak</span>
-                            @endif
-                        </td>
-
-                        {{-- AKSI --}}
-                        <td>
-                            <div class="d-flex justify-content-center gap-1">
-
-                                <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
-                                    <i class="fa-solid fa-eye"></i>
-                                </a>
-
-                                @if(!auth()->user()->hasRole('user'))
-                                    <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
-                                        <i class="fa-solid fa-pen"></i>
+                                    <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
+                                        <i class="fa-solid fa-eye"></i>
                                     </a>
 
-                                    <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </form>
-                                @endif
+                                    @if(!auth()->user()->hasRole('user'))
+                                        <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
 
-                            </div>
-                        </td>
+                                        <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
 
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="8" class="text-center text-muted py-4">
-                            Data Item sewa belum tersedia
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
+                                </div>
+                            </td>
 
-            </table>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">
+                                Tidak ada data Item Sewa
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+
+                </table>
+            </div>
         </div>
     </div>
 
     {{-- PAGINATION --}}
-    <div class="mt-3">
-        {{ $data->links('pagination::bootstrap-5') }}
-    </div>
+    <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+
+        <div class="text-muted small">
+            Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+        </div>
 
 </div>
 
