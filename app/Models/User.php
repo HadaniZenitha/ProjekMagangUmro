@@ -48,4 +48,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the associated PIC through nid matching
+     */
+    public function pic()
+    {
+        return $this->hasOne(Pic::class, 'nid_pic', 'nid');
+    }
+
+    /**
+     * Get the division through the associated PIC
+     */
+    public function divisi()
+    {
+        return $this->hasOneThrough(Divisi::class, Pic::class, 'nid_pic', 'id', 'nid', 'divisi_id');
+    }
 }

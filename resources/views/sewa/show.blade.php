@@ -69,11 +69,18 @@
 
                     <hr class="opacity-50">
 
-                    <!-- LOKASI -->
+                    <!-- LOKASI & PIC -->
                     <div class="row mb-3 align-items-center">
-                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Lokasi</label>
+                        <label class="col-sm-4 text-muted small text-uppercase fw-bold">Lokasi & PIC</label>
                         <div class="col-sm-8 text-dark">
-                            {{ $sewa->ruang->nama_ruang ?? '-' }}
+                            <span class="d-block text-capitalize">{{ $sewa->ruang->nama_ruang ?? '-' }}</span>
+                            <span class="small text-muted">Oleh: {{ $sewa->pic->nama_pic ?? '-' }} - 
+                                @if($sewa->pic && $sewa->pic->is_active)
+                                    <span class="badge bg-success text-white">PIC Aktif</span>
+                                @else
+                                    <span class="badge bg-secondary text-white">PIC Nonaktif</span>
+                                @endif
+                            </span>
                         </div>
                     </div>
 
@@ -93,9 +100,9 @@
                     @php
                         $kondisi = strtolower($sewa->kondisi);
                         $warna = match($kondisi) {
-                            'baik' => 'success',
-                            'perlu perbaikan' => 'warning',
-                            'rusak' => 'danger',
+                            'Baik' => 'success',
+                            'Perlu perbaikan' => 'warning',
+                            'Rusak' => 'danger',
                             default => 'secondary'
                         };
                     @endphp

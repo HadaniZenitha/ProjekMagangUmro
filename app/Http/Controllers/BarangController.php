@@ -94,7 +94,7 @@ class BarangController extends Controller
             'pic_id'              => 'nullable|exists:pics,id',
             'nama_barang'         => 'required|string|max:255',
             'tahun_perolehan'     => 'required|integer',
-            'kondisi'             => 'required|in:baik,perlu perbaikan,rusak',
+            'kondisi'             => 'required|in:Baik,Perlu Perbaikan,Rusak',
             'foto'                => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -196,7 +196,6 @@ class BarangController extends Controller
             ->where('is_active', true)
             ->get();
 
-        // 🔥 TAMBAHKAN INI
         $subjenisList = SubJenisBarang::with('jenis')
             ->where('is_active', true)
             ->orderBy('kode_subjenis')
@@ -207,7 +206,7 @@ class BarangController extends Controller
             'divisis',
             'ruangs',
             'pics',
-            'subjenisList' // 🔥 WAJIB
+            'subjenisList' 
         ));
     }
 
@@ -222,12 +221,23 @@ class BarangController extends Controller
             'divisi_id'       => 'required|exists:divisis,id',
             'pic_id'          => 'required|exists:pics,id',
             'ruang_id'        => 'required|exists:ruangs,id',
-            'kondisi'         => 'required|in:baik,perlu perbaikan,rusak',
+            'kondisi'         => 'required|in:Baik,Perlu Perbaikan,Rusak',
             'is_active'       => 'required|boolean',
             'tahun_perolehan' => 'required|integer',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'catatan_nonaktif' => 'nullable|string',
         ]);
+
+        $ruang = Ruang::findOrFail($request->ruang_id);
+        $subjenis = SubJenisBarang::with('jenis.kelompok')
+            ->findOrFail($barang->sub_jenis_barang_id);
+
+        $kodeBarangBaru =
+            $subjenis->jenis->kelompok->kode_kelompok . ' / ' .
+            $subjenis->kode_subjenis . ' / ' .
+            str_pad($barang->urutan, 2, '0', STR_PAD_LEFT) . ' / ' .
+            $request->tahun_perolehan . ' / ' .
+            $ruang->nama_ruang;
 
         $fotoPath = $barang->foto;
 
@@ -240,8 +250,8 @@ class BarangController extends Controller
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
 
-            // Nama file tetap pakai kode barang yang sudah ada
-            $fileName = str_replace('/', '-', $barang->kode_barang) . '_' . now()->format('Ymd_His') . '.' . $extension;
+            // Nama file mengikuti kode barang terbaru
+            $fileName = str_replace('/', '-', $kodeBarangBaru) . '_' . now()->format('Ymd_His') . '.' . $extension;
 
             $fotoPath = $file->storeAs('barang_foto', $fileName, 'public');
         }
@@ -253,6 +263,7 @@ class BarangController extends Controller
             'tahun_perolehan'     => $request->tahun_perolehan,
             'kondisi'             => $request->kondisi,
             'ruang_id'            => $request->ruang_id,
+            'kode_barang'         => $kodeBarangBaru,
             'is_active'           => $request->is_active,
             'foto'                => $fotoPath,
             'catatan_nonaktif'    => $request->is_active == 1 ? null : $request->catatan_nonaktif,

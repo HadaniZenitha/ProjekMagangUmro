@@ -80,9 +80,9 @@
                 <div class="col-md-6 mb-4">
                     <label class="form-label fw-semibold">Kondisi Item <span class="text-danger">*</span></label>
                     <select name="kondisi" class="form-select" required>
-                        <option value="baik">Baik</option>
-                        <option value="perlu perbaikan">Perlu Perbaikan</option>
-                        <option value="rusak">Rusak</option>
+                        <option value="Baik">Baik</option>
+                        <option value="Perlu Perbaikan">Perlu Perbaikan</option>
+                        <option value="Rusak">Rusak</option>
                     </select>
                 </div>
             </div>
