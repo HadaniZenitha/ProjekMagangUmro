@@ -77,9 +77,46 @@
 .btn-warning { background-color: #ffc107; border: none; color: #000; }
 .btn-danger { background-color: #dc3545; border: none; }
 
-@media (max-width: 768px) {
-    .btn-mobile { width: 100%; }
-}
+    .btn-pro {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 7px 16px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.25s ease;
+        border: none;
+    }
+
+    .btn-pro:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-pro:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-icon {
+        align-items: center;
+        justify-content: center;
+        display: inline-flex;
+        padding: 0px;
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+    }
+
+    .btn-icon i {
+        margin-right: 0 !important;
+        line-height: 1;
+    }
+
+    .action-btn {
+        display: flex;
+        gap: 8px;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
 </style>
 
 <div class="container-fluid">
@@ -254,21 +291,21 @@
                             </td>
 
                             <td class="text-center">
-                                <div class="d-flex justify-content-center gap-1">
+                                <div class="action-btn">
 
-                                    <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm btn-pro btn-icon" title="Lihat Detail">
                                         <i class="fa-solid fa-eye"></i>
                                     </a>
 
                                     @if(!auth()->user()->hasRole('user'))
-                                        <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm">
+                                        <a href="{{ route('barang-sewa.edit', $d->id) }}" class="btn btn-warning btn-sm btn-pro btn-icon" title="Edit">
                                             <i class="fa-solid fa-pen"></i>
                                         </a>
 
                                         <form action="{{ route('barang-sewa.destroy', $d->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm">
+                                            <button onclick="return confirm('Hapus barang ini?')" class="btn btn-danger btn-sm btn-pro btn-icon" title="Hapus">
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </form>
