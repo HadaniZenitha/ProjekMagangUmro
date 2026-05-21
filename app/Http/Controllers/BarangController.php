@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BarangExport;
 use App\Imports\BarangImport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class BarangController extends Controller
 {
@@ -244,7 +245,7 @@ class BarangController extends Controller
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
             if ($barang->foto) {
-                \Storage::disk('public')->delete($barang->foto);
+                Storage::disk('public')->delete($barang->foto);
             }
 
             $file = $request->file('foto');
@@ -282,8 +283,8 @@ class BarangController extends Controller
         // 1. Cek apakah barang memiliki foto
         if ($barang->foto) {
             // 2. Hapus file foto dari storage public
-            if (\Storage::disk('public')->exists($barang->foto)) {
-                \Storage::disk('public')->delete($barang->foto);
+            if (Storage::disk('public')->exists($barang->foto)) {
+                Storage::disk('public')->delete($barang->foto);
             }
         }
         $barang->delete();

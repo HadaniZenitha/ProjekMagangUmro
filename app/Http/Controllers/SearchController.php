@@ -7,6 +7,7 @@ use App\Models\Barang;
 use App\Models\Ruang;
 use App\Models\Pic;
 use App\Models\Gedung;
+use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
