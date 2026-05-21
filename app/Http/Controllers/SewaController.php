@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BarangSewa;
+use App\Models\BarangSewaHistory;
 use App\Models\Divisi;
 use App\Models\Ruang;
 use App\Models\Pic;
@@ -13,35 +14,32 @@ use App\Exports\BarangSewaExport;
 
 class SewaController extends Controller
 {
-
+    /* =========================
+       INDEX
+    ========================== */
     public function index(Request $request)
     {
         $query = BarangSewa::with(['divisi', 'pic', 'ruang'])->latest();
 
-        // 🔍 SEARCH
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('nama_barang', 'like', '%' . $request->search . '%')
-                  ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+                    ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
             });
         }
 
-        // FILTER DIVISI
         if ($request->divisi) {
             $query->where('divisi_id', $request->divisi);
         }
 
-        // FILTER PIC
         if ($request->pic) {
             $query->where('pic_id', $request->pic);
         }
 
-        // FILTER RUANG
         if ($request->ruang) {
             $query->where('ruang_id', $request->ruang);
         }
 
-        // FILTER TAHUN
         if ($request->tahun_awal && $request->tahun_akhir) {
             $query->whereBetween('tahun', [
                 $request->tahun_awal,
@@ -58,10 +56,13 @@ class SewaController extends Controller
         return view('sewa.index', compact('data', 'divisis', 'pics', 'ruangs'));
     }
 
+    /* =========================
+       CREATE
+    ========================== */
     public function create()
     {
         if (auth()->user()->hasRole('user')) {
-            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+            abort(403);
         }
 
         $divisis = Divisi::where('is_active', true)->orderBy('nama_divisi')->get();
@@ -71,40 +72,38 @@ class SewaController extends Controller
         return view('sewa.create', compact('divisis', 'ruangs', 'pics'));
     }
 
+    /* =========================
+       STORE
+    ========================== */
     public function store(Request $request)
     {
         if (auth()->user()->hasRole('user')) {
-            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+            abort(403);
         }
 
         $request->validate([
             'kode_barang' => 'required|unique:barang_sewa,kode_barang',
             'nama_barang' => 'required',
-            'divisi_id'   => 'required|exists:divisis,id',
-            'pic_id'      => 'required|exists:pics,id',
-            'ruang_id'    => 'required|exists:ruangs,id',
-            'tahun'       => 'required|numeric',
-            'kondisi'     => 'required'
+            'divisi_id' => 'required|exists:divisis,id',
+            'pic_id' => 'required|exists:pics,id',
+            'ruang_id' => 'required|exists:ruangs,id',
+            'tahun' => 'required|numeric',
+            'kondisi' => 'required'
         ]);
 
-        BarangSewa::create([
-            'kode_barang' => $request->kode_barang,
-            'nama_barang' => $request->nama_barang,
-            'divisi_id'   => $request->divisi_id,
-            'pic_id'      => $request->pic_id,
-            'ruang_id'    => $request->ruang_id,
-            'tahun'       => $request->tahun,
-            'kondisi'     => $request->kondisi,
-        ]);
+        BarangSewa::create($request->all());
 
         return redirect()->route('barang-sewa.index')
             ->with('success', 'Barang sewa berhasil ditambahkan');
     }
 
+    /* =========================
+       EDIT
+    ========================== */
     public function edit(BarangSewa $sewa)
     {
         if (auth()->user()->hasRole('user')) {
-            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+            abort(403);
         }
 
         $divisis = Divisi::where('is_active', true)->orderBy('nama_divisi')->get();
@@ -115,56 +114,80 @@ class SewaController extends Controller
             ->orderBy('nama_pic')
             ->get();
 
-        $selectedDivisi = Divisi::find($sewa->divisi_id);
-
-        return view('sewa.edit', compact('sewa', 'divisis', 'pics', 'ruangs', 'selectedDivisi'));
+        return view('sewa.edit', compact('sewa', 'divisis', 'pics', 'ruangs'));
     }
 
+    /* =========================
+       SHOW (DETAIL + HISTORY)
+    ========================== */
     public function show(BarangSewa $sewa)
     {
-        $sewa->load(['divisi', 'pic', 'ruang']);
+        $sewa->load([
+            'divisi',
+            'pic',
+            'ruang',
+            'histories.picLama',
+            'histories.picBaru',
+            'histories.user'
+        ]);
+
         return view('sewa.show', compact('sewa'));
     }
 
+    /* =========================
+       UPDATE + SIMPAN MUTASI
+    ========================== */
     public function update(Request $request, BarangSewa $sewa)
     {
         if (auth()->user()->hasRole('user')) {
-            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+            abort(403);
         }
 
         $request->validate([
-            'kode_barang' => 'required|string|unique:barang_sewa,kode_barang,' . $sewa->id,
             'nama_barang' => 'required',
-            'divisi_id'   => 'required|exists:divisis,id',
-            'pic_id'      => 'required|exists:pics,id',
-            'ruang_id'    => 'required|exists:ruangs,id',
-            'tahun'       => 'required|numeric',
-            'kondisi'     => 'required'
+            'divisi_id' => 'required|exists:divisis,id',
+            'pic_id' => 'required|exists:pics,id',
+            'ruang_id' => 'required|exists:ruangs,id',
+            'tahun' => 'required|numeric',
+            'kondisi' => 'required'
         ]);
 
-        // Kode barang hanya berubah jika user mengedit field-nya secara manual.
-        $inputKode = trim((string) $request->input('kode_barang', ''));
-        $originalKode = trim((string) $sewa->kode_barang);
-        $newKode = $inputKode !== '' ? $inputKode : $originalKode;
+        // simpan data lama
+        $oldPic = $sewa->pic_id;
+        $oldKondisi = $sewa->kondisi;
 
+        // update barang
         $sewa->update([
             'nama_barang' => $request->nama_barang,
-            'divisi_id'   => $request->divisi_id,
-            'pic_id'      => $request->pic_id,
-            'ruang_id'    => $request->ruang_id,
-            'tahun'       => $request->tahun,
-            'kondisi'     => $request->kondisi,
-            'kode_barang' => $newKode,
+            'divisi_id' => $request->divisi_id,
+            'pic_id' => $request->pic_id,
+            'ruang_id' => $request->ruang_id,
+            'tahun' => $request->tahun,
+            'kondisi' => $request->kondisi,
+        ]);
+
+        // simpan history / mutasi
+        BarangSewaHistory::create([
+            'barang_sewa_id' => $sewa->id,
+            'pic_id_lama' => $oldPic,
+            'pic_id_baru' => $request->pic_id,
+            'kondisi' => $request->kondisi,
+            'tanggal_perubahan' => now(),
+            'user_id' => auth()->id(),
+            'catatan' => 'Perubahan data barang sewa',
         ]);
 
         return redirect()->route('barang-sewa.index')
             ->with('success', 'Barang sewa berhasil diupdate');
     }
 
+    /* =========================
+       DELETE
+    ========================== */
     public function destroy(BarangSewa $sewa)
     {
         if (auth()->user()->hasRole('user')) {
-            abort(403, 'Anda tidak memiliki akses untuk melakukan aksi ini.');
+            abort(403);
         }
 
         $sewa->delete();
@@ -174,9 +197,8 @@ class SewaController extends Controller
     }
 
     /* =========================
-       🔥 EXPORT SECTION
+       FILTER EXPORT
     ========================== */
-
     private function buildFilterQuery(Request $request)
     {
         $query = BarangSewa::with(['divisi', 'pic', 'ruang']);
@@ -184,7 +206,7 @@ class SewaController extends Controller
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('nama_barang', 'like', '%' . $request->search . '%')
-                  ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
+                    ->orWhere('kode_barang', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -210,6 +232,9 @@ class SewaController extends Controller
         return $query;
     }
 
+    /* =========================
+       EXPORT
+    ========================== */
     public function exportPreview(Request $request)
     {
         $data = $this->buildFilterQuery($request)->get();
