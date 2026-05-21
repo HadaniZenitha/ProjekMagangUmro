@@ -73,18 +73,59 @@
             text-align:center;
         }
     }
+
+    /* ===== HEADER FLEX FIX ===== */
+    .header-detail{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+        gap:10px;
+    }
+
+    /* WRAPPER BUTTON */
+    .action-btn{
+        display:flex;
+        gap:10px;
+    }
+
+    /* ===== MOBILE FIX ===== */
+    @media (max-width:768px){
+
+        .header-detail{
+            flex-direction:column;
+            align-items:flex-start;
+        }
+
+        .action-btn{
+            width:100%;
+            flex-direction:column;
+        }
+
+        .action-btn .btn{
+            width:100%;
+            justify-content:center;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+    }
 </style>
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="header-detail mb-4">
+
         <h4 class="fw-bold mb-0">Detail Inventaris</h4>
-        <div class="d-flex gap-2">
+
+        <div class="action-btn">
             <a href="{{ route('barang.cetak', $barang->id) }}" target="_blank"
-                    class="btn btn-success btn-clean shadow-sm">
-                    <i class="fa-solid fa-print"></i> Cetak Stiker
+            class="btn btn-success btn-clean shadow-sm">
+                <i class="fa-solid fa-print"></i> Cetak Stiker
             </a>
-            <a href="{{ route('barang.index') }}" class="btn btn-secondary btn-clean shadow-sm">
+
+            <a href="{{ route('barang.index') }}"
+            class="btn btn-secondary btn-clean shadow-sm">
                 <i class="fa-solid fa-arrow-left"></i> Kembali
             </a>
         </div>
