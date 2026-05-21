@@ -571,6 +571,92 @@
             .overlay.show {
                 display: block;
             }
+
+            //* ================= LIVE SEARCH ================= */
+
+            .search-item {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 12px 14px;
+                text-decoration: none;
+                color: #333;
+                transition: 0.2s;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .search-item:last-child {
+                border-bottom: none;
+            }
+
+            .search-item:hover {
+                background: #f7f7f7;
+            }
+
+            .search-item i {
+                margin-top: 4px;
+                color: #9aa0a6;
+                font-size: 15px;
+                flex-shrink: 0;
+            }
+
+            .search-title {
+                font-size: 15px;
+                font-weight: 500;
+                line-height: 1.4;
+                color: #222;
+            }
+
+            .search-category {
+                padding: 10px 14px 6px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #666;
+                background: #fafafa;
+                border-bottom: 1px solid #eee;
+            }
+
+            .search-highlight {
+                background: #fff3c4;
+                padding: 0 2px;
+                border-radius: 3px;
+            }
+
+            /* BOX RESULT */
+            #searchResults {
+                position: absolute;
+                top: 42px;
+                left: 0;
+                width: 420px;
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+                display: none;
+                max-height: 420px;
+                overflow-y: auto;
+                z-index: 9999;
+            }
+
+            /* MOBILE */
+            @media (max-width: 768px) {
+
+                #searchResults {
+                    width: 100%;
+                    min-width: 280px;
+                    max-width: 380px;
+                    border-radius: 18px;
+                    top: 45px;
+                }
+
+                .search-box {
+                    width: 100%;
+                    max-width: 180px;
+                }
+
+                .search-title {
+                    font-size: 14px;
+                }
+            }
         }
     </style>
 </head>
@@ -942,47 +1028,127 @@
         </div>
     </div>
 
-    <script>
-        function toggleSidebar() {
+<script>
+
+    /* ================= SIDEBAR ================= */
+
+    function toggleSidebar() {
+
+        if (window.innerWidth <= 991) {
 
             document.querySelector('.sidebar').classList.toggle('show');
             document.getElementById('overlay').classList.toggle('show');
 
         }
 
-        const searchInput = document.getElementById('liveSearch');
-        const resultsBox = document.getElementById('searchResults');
+    }
 
-        let debounceTimer;
-        let currentIndex = -1;
+    /* ================= LIVE SEARCH ================= */
 
-        /* 🔥 KEYUP + DEBOUNCE */
-        searchInput.addEventListener('keyup', function () {
+    const searchInput = document.getElementById('liveSearch');
+    const resultsBox = document.getElementById('searchResults');
 
-            clearTimeout(debounceTimer);
+    let timeout = null;
 
-            let keyword = this.value.trim();
+    /* HIGHLIGHT TEXT */
+    function highlight(text, keyword) {
 
-            if (keyword.length < 2) {
-                resultsBox.style.display = 'none';
-                resultsBox.innerHTML = '';
-                return;
-            }
+        if (!text) return '';
 
-            debounceTimer = setTimeout(() => {
-                fetchData(keyword);
-            }, 300);
-        });
+        let regex = new RegExp(`(${keyword})`, 'gi');
+
+        return text.replace(
+            regex,
+            `<span class="search-highlight">$1</span>`
+        );
+
+    }
+
+    searchInput.addEventListener('keyup', function () {
+
+        clearTimeout(timeout);
+
+        let keyword = this.value.trim();
+
+        if (keyword.length < 2) {
+
+            resultsBox.style.display = 'none';
+            resultsBox.innerHTML = '';
+
+            return;
+
+        }
+
+        timeout = setTimeout(() => {
+
+            fetch(`/search?q=${encodeURIComponent(keyword)}`)
+
+                .then(res => res.json())
+
+                .then(data => {
+
+                    let html = '';
+
+                    /* ================= BARANG ================= */
+
+                    if (data.barang && data.barang.length > 0) {
+
+                        html += `<div class="search-category">Barang</div>`;
+
+                        data.barang.forEach(item => {
+
+                            html += `
+                                <a href="/barang/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_barang, keyword)}
+                                        </div>
+
+                                        <small class="text-muted">
+                                            ${highlight(item.kode_barang ?? '-', keyword)}
+                                        </small>
+
+                                    </div>
+
+                                </a>
+                            `;
+                        });
+
+                    }
+
+                    /* ================= RUANG ================= */
+
+                    if (data.ruang && data.ruang.length > 0) {
+
+                        html += `<div class="search-category">Ruang</div>`;
+
+                        data.ruang.forEach(item => {
+
+                            html += `
+                                <a href="/ruangs/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_ruang, keyword)}
+                                        </div>
+
+                                    </div>
+
+                                </a>
+                            `;
+                        });
 
         /* 🚀 FETCH DATA */
         function fetchData(keyword) {
 
-            resultsBox.innerHTML = `
-        <div style="padding:10px;text-align:center">
-            <span class="spinner-border spinner-border-sm"></span> Searching...
-        </div>
-    `;
-            resultsBox.style.display = 'block';
+                    /* ================= KARYAWAN ================= */
 
             fetch(`/search?q=${keyword}`)
                 .then(res => res.json())
@@ -1007,15 +1173,28 @@
             return text.replace(regex, `<mark>$1</mark>`);
         }
 
-        /* 🎨 RENDER RESULT */
-        function renderResults(data, keyword) {
+                        data.karyawan.forEach(item => {
+
+                            html += `
+                                <a href="/pic/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_pic, keyword)}
+                                        </div>
+
+                                    </div>
+
+                                </a>
+                            `;
+                        });
 
             let html = '';
 
-            function createItem(title, subtitle, link) {
-                return `
-            <a href="${link}" class="search-item">
-                <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
+                    /* ================= GEDUNG ================= */
 
                 <div class="search-text">
                     <div class="search-title">${highlight(title, keyword)}</div>
@@ -1027,46 +1206,24 @@
         `;
             }
 
-            // 🔥 GABUNG SEMUA DATA TANPA KATEGORI
+                        data.gedung.forEach(item => {
 
-            data?.barang?.forEach(item => {
-                html += createItem(
-                    item.nama_barang,
-                    null,
-                    `/barang/${item.id}`
-                );
-            });
+                            html += `
+                                <a href="/gedung/${item.id}" class="search-item">
 
-            data?.ruang?.forEach(item => {
-                html += createItem(
-                    item.nama_ruang,
-                    null,
-                    `/ruangs/${item.id}`
-                );
-            });
+                                    <i class="fa-solid fa-magnifying-glass"></i>
 
-            data?.karyawan?.forEach(item => {
-                html += createItem(
-                    item.nama_pic,
-                    null,
-                    `/pic?search=${encodeURIComponent(item.nama_pic)}`,
-                );
-            });
+                                    <div>
 
-            data?.gedung?.forEach(item => {
-                html += createItem(
-                    item.nama_gedung,
-                    null,
-                    `/gedung/${item.id}`
-                );
-            });
+                                        <div class="search-title">
+                                            ${highlight(item.nama_gedung, keyword)}
+                                        </div>
 
-            if (html === '') {
-                html = `
-        <div style="padding:12px;text-align:center;color:#888">
-            🔍 Tidak ada hasil ditemukan
-        </div>`;
-            }
+                                    </div>
+
+                                </a>
+                            `;
+                        });
 
             resultsBox.innerHTML = html;
             resultsBox.style.display = 'block';
@@ -1074,9 +1231,21 @@
         /* ⌨️ KEYBOARD NAVIGATION */
         searchInput.addEventListener('keydown', function (e) {
 
-            let items = document.querySelectorAll('.search-item');
+                    /* ================= TIDAK ADA DATA ================= */
 
-            if (!items.length) return;
+                    if (html === '') {
+
+                        html = `
+                            <div style="
+                                padding:14px;
+                                text-align:center;
+                                color:#888;
+                                font-size:14px;
+                            ">
+                                Tidak ada hasil ditemukan
+                            </div>
+                        `;
+                    }
 
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
@@ -1085,39 +1254,47 @@
                 setActive(items);
             }
 
-            if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                currentIndex--;
-                if (currentIndex < 0) currentIndex = items.length - 1;
-                setActive(items);
-            }
+                })
 
-            if (e.key === 'Enter' && currentIndex >= 0) {
-                window.location = items[currentIndex].href;
-            }
-        });
+                .catch(error => {
 
-        function setActive(items) {
-            items.forEach(i => i.classList.remove('active'));
-            items[currentIndex].classList.add('active');
+                    console.log(error);
+
+                    resultsBox.innerHTML = `
+                        <div style="
+                            padding:14px;
+                            text-align:center;
+                            color:red;
+                            font-size:14px;
+                        ">
+                            Terjadi kesalahan
+                        </div>
+                    `;
+
+                    resultsBox.style.display = 'block';
+
+                });
+
+        }, 300);
+
+    });
+
+    /* ================= CLOSE SEARCH ================= */
+
+    document.addEventListener('click', function (e) {
+
+        if (
+            !searchInput.contains(e.target) &&
+            !resultsBox.contains(e.target)
+        ) {
+
+            resultsBox.style.display = 'none';
+
         }
 
-        /* ❌ CLICK OUTSIDE */
-        document.addEventListener('click', function (e) {
-            if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
-                resultsBox.style.display = 'none';
-            }
-        });
-        function showEditProfile() {
-            document.getElementById("profileView").style.display = "none";
-            document.getElementById("profileEdit").style.display = "block";
-        }
+    });
 
-        function cancelEditProfile() {
-            document.getElementById("profileView").style.display = "block";
-            document.getElementById("profileEdit").style.display = "none";
-        }
-    </script>
+</script>
 
     </div>
     <!-- ================= MODAL NOTIFIKASI ================= -->
