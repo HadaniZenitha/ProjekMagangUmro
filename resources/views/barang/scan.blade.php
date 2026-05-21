@@ -68,10 +68,16 @@ body {
     background: var(--menu-active);
     border: 1px solid var(--menu-bg);
     font-size: 14px;
+    overflow: hidden;
 }
 
 #result {
     color: var(--text-dark);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
 /* BUTTON */
