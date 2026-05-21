@@ -4,16 +4,70 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="fw-bold mb-0">Preview Data Item Sewa untuk Export Excel</h5>
-    <div>
-        <a href="{{ route('barang-sewa.exportExcel', request()->query()) }}" class="btn btn-success">
+<style>
+.btn-wrapper-fix{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-custom-fix{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    width: 100%;
+    padding: 12px;
+
+    border-radius: 10px;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.btn-green-fix{
+    background: #198754;
+    color: #fff;
+}
+
+.btn-gray-fix{
+    background: #6c757d;
+    color: #fff;
+}
+
+@media (min-width:768px){
+    .btn-wrapper-fix{
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .btn-custom-fix{
+        width: auto;
+    }
+}
+</style>
+
+<div class="mb-4">
+
+    <h5 class="fw-bold mb-2">
+        Preview Item Sewa
+    </h5>
+
+    <div class="btn-wrapper-fix">
+
+        <a href="{{ route('barang-sewa.exportExcel', request()->query()) }}"
+           class="btn-custom-fix btn-green-fix">
             <i class="fas fa-download"></i> Download Excel
         </a>
-        <a href="{{ route('barang-sewa.index', request()->query()) }}" class="btn btn-secondary">
+
+        <a href="{{ route('barang-sewa.index', request()->query()) }}"
+           class="btn-custom-fix btn-gray-fix">
             <i class="fas fa-arrow-left"></i> Kembali
         </a>
+
     </div>
+
 </div>
 
 <div class="card shadow-sm border-0">

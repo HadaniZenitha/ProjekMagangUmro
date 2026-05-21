@@ -408,6 +408,92 @@
             .overlay.show {
                 display: block;
             }
+
+            //* ================= LIVE SEARCH ================= */
+
+            .search-item {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 12px 14px;
+                text-decoration: none;
+                color: #333;
+                transition: 0.2s;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .search-item:last-child {
+                border-bottom: none;
+            }
+
+            .search-item:hover {
+                background: #f7f7f7;
+            }
+
+            .search-item i {
+                margin-top: 4px;
+                color: #9aa0a6;
+                font-size: 15px;
+                flex-shrink: 0;
+            }
+
+            .search-title {
+                font-size: 15px;
+                font-weight: 500;
+                line-height: 1.4;
+                color: #222;
+            }
+
+            .search-category {
+                padding: 10px 14px 6px;
+                font-size: 13px;
+                font-weight: 700;
+                color: #666;
+                background: #fafafa;
+                border-bottom: 1px solid #eee;
+            }
+
+            .search-highlight {
+                background: #fff3c4;
+                padding: 0 2px;
+                border-radius: 3px;
+            }
+
+            /* BOX RESULT */
+            #searchResults {
+                position: absolute;
+                top: 42px;
+                left: 0;
+                width: 420px;
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+                display: none;
+                max-height: 420px;
+                overflow-y: auto;
+                z-index: 9999;
+            }
+
+            /* MOBILE */
+            @media (max-width: 768px) {
+
+                #searchResults {
+                    width: 100%;
+                    min-width: 280px;
+                    max-width: 380px;
+                    border-radius: 18px;
+                    top: 45px;
+                }
+
+                .search-box {
+                    width: 100%;
+                    max-width: 180px;
+                }
+
+                .search-title {
+                    font-size: 14px;
+                }
+            }
         }
     </style>
 </head>
@@ -771,150 +857,239 @@
         </div>
     </div>
 
-    <script>
-        function toggleSidebar() {
+<script>
+
+    /* ================= SIDEBAR ================= */
+
+    function toggleSidebar() {
+
+        if (window.innerWidth <= 991) {
 
             document.querySelector('.sidebar').classList.toggle('show');
             document.getElementById('overlay').classList.toggle('show');
 
         }
 
-        /* ================= LIVE SEARCH ================= */
+    }
 
-        const searchInput = document.getElementById('liveSearch');
-        const resultsBox = document.getElementById('searchResults');
+    /* ================= LIVE SEARCH ================= */
 
-        searchInput.addEventListener('keyup', function() {
+    const searchInput = document.getElementById('liveSearch');
+    const resultsBox = document.getElementById('searchResults');
 
-            let keyword = this.value.trim();
+    let timeout = null;
 
-            if (keyword.length < 2) {
-                resultsBox.style.display = 'none';
-                resultsBox.innerHTML = '';
-                return;
-            }
+    /* HIGHLIGHT TEXT */
+    function highlight(text, keyword) {
 
-            fetch(`/search?q=${keyword}`)
+        if (!text) return '';
+
+        let regex = new RegExp(`(${keyword})`, 'gi');
+
+        return text.replace(
+            regex,
+            `<span class="search-highlight">$1</span>`
+        );
+
+    }
+
+    searchInput.addEventListener('keyup', function () {
+
+        clearTimeout(timeout);
+
+        let keyword = this.value.trim();
+
+        if (keyword.length < 2) {
+
+            resultsBox.style.display = 'none';
+            resultsBox.innerHTML = '';
+
+            return;
+
+        }
+
+        timeout = setTimeout(() => {
+
+            fetch(`/search?q=${encodeURIComponent(keyword)}`)
+
                 .then(res => res.json())
+
                 .then(data => {
 
                     let html = '';
 
-                    /* BARANG */
+                    /* ================= BARANG ================= */
 
                     if (data.barang && data.barang.length > 0) {
 
                         html += `<div class="search-category">Barang</div>`;
 
                         data.barang.forEach(item => {
+
                             html += `
-                            <a href="/barang/${item.id}" class="search-item">
-                            <i class="fa-solid fa-box text-primary"></i>
-                            <div>
-                            <div class="search-title">${item.nama_barang}</div>
-                            <small class="text-muted">${item.kode_barang}</small>
-                            </div>
-                            </a>
+                                <a href="/barang/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_barang, keyword)}
+                                        </div>
+
+                                        <small class="text-muted">
+                                            ${highlight(item.kode_barang ?? '-', keyword)}
+                                        </small>
+
+                                    </div>
+
+                                </a>
                             `;
                         });
 
                     }
 
-                    /* RUANG */
+                    /* ================= RUANG ================= */
 
                     if (data.ruang && data.ruang.length > 0) {
 
                         html += `<div class="search-category">Ruang</div>`;
 
                         data.ruang.forEach(item => {
+
                             html += `
-                            <a href="/ruangs/${item.id}" class="search-item">
-                            <i class="fa-solid fa-door-open text-success"></i>
-                            <div>
-                            <div class="search-title">${item.nama_ruang}</div>
-                            </div>
-                            </a>
+                                <a href="/ruangs/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_ruang, keyword)}
+                                        </div>
+
+                                    </div>
+
+                                </a>
                             `;
                         });
 
                     }
 
-                    /* KARYAWAN */
+                    /* ================= KARYAWAN ================= */
 
                     if (data.karyawan && data.karyawan.length > 0) {
 
                         html += `<div class="search-category">Karyawan</div>`;
 
                         data.karyawan.forEach(item => {
+
                             html += `
-                            <a href="/pic/${item.id}" class="search-item">
-                            <i class="fa-solid fa-user text-warning"></i>
-                            <div>
-                            <div class="search-title">${item.nama_pic}</div>
-                            </div>
-                            </a>
+                                <a href="/pic/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_pic, keyword)}
+                                        </div>
+
+                                    </div>
+
+                                </a>
                             `;
                         });
 
                     }
 
-                    /* GEDUNG */
+                    /* ================= GEDUNG ================= */
 
                     if (data.gedung && data.gedung.length > 0) {
 
                         html += `<div class="search-category">Gedung</div>`;
 
                         data.gedung.forEach(item => {
+
                             html += `
-                            <a href="/gedung/${item.id}" class="search-item">
-                            <i class="fa-solid fa-building text-danger"></i>
-                            <div>
-                            <div class="search-title">${item.nama_gedung}</div>
-                            </div>
-                            </a>
+                                <a href="/gedung/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_gedung, keyword)}
+                                        </div>
+
+                                    </div>
+
+                                </a>
                             `;
                         });
 
                     }
 
-                    /* JIKA TIDAK ADA DATA */
+                    /* ================= TIDAK ADA DATA ================= */
 
                     if (html === '') {
+
                         html = `
-                    <div style="padding:12px;text-align:center;color:#888">
-                    Tidak ada hasil ditemukan
-                    </div>
-                    `;
+                            <div style="
+                                padding:14px;
+                                text-align:center;
+                                color:#888;
+                                font-size:14px;
+                            ">
+                                Tidak ada hasil ditemukan
+                            </div>
+                        `;
                     }
 
                     resultsBox.innerHTML = html;
                     resultsBox.style.display = 'block';
 
+                })
+
+                .catch(error => {
+
+                    console.log(error);
+
+                    resultsBox.innerHTML = `
+                        <div style="
+                            padding:14px;
+                            text-align:center;
+                            color:red;
+                            font-size:14px;
+                        ">
+                            Terjadi kesalahan
+                        </div>
+                    `;
+
+                    resultsBox.style.display = 'block';
+
                 });
 
-        });
+        }, 300);
 
+    });
 
-        /* ================= CLOSE RESULT ================= */
+    /* ================= CLOSE SEARCH ================= */
 
-        document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
 
-            if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
-                resultsBox.style.display = 'none';
-            }
+        if (
+            !searchInput.contains(e.target) &&
+            !resultsBox.contains(e.target)
+        ) {
 
-        });
+            resultsBox.style.display = 'none';
 
-        function showEditProfile() {
-            document.getElementById("profileView").style.display = "none";
-            document.getElementById("profileEdit").style.display = "block";
         }
 
-        function cancelEditProfile() {
-            document.getElementById("profileView").style.display = "block";
-            document.getElementById("profileEdit").style.display = "none";
-        }
-    </script>
+    });
+
+</script>
 
     <!-- ================= MODAL INFORMASI SISTEM ================= -->
     <div class="modal fade" id="infoModal" tabindex="-1">
