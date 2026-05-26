@@ -987,6 +987,73 @@
             fetch(`/search?q=${keyword}`)
                 .then(res => res.json())
                 .then(data => {
+
+                    let html = '';
+
+                    /* ================= BARANG ================= */
+
+                    if (data.barang && data.barang.length > 0) {
+
+                        html += `<div class="search-category">Barang</div>`;
+
+                        data.barang.forEach(item => {
+
+                            html += `
+                                <a href="/barang/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_barang, keyword)}
+                                        </div>
+
+                                        <small class="text-muted">
+                                            ${highlight(item.kode_barang ?? '-', keyword)}
+                                        </small>
+
+                                    </div>
+
+                                </a>
+                            `;
+                        });
+
+                    }
+
+                    /* ================= RUANG ================= */
+
+                    if (data.ruang && data.ruang.length > 0) {
+
+                        html += `<div class="search-category">Ruang</div>`;
+
+                        data.ruang.forEach(item => {
+
+                            html += `
+                                <a href="/ruangs/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_ruang, keyword)}
+                                        </div>
+
+                                    </div>
+
+                                </a>
+                            `;
+                        });
+
+        /* 🚀 FETCH DATA */
+        function fetchData(keyword) {
+
+                    /* ================= KARYAWAN ================= */
+
+            fetch(`/search?q=${keyword}`)
+                .then(res => res.json())
+                .then(data => {
                     renderResults(data, keyword);
                     currentIndex = -1; // reset navigation
                 })
@@ -1007,15 +1074,28 @@
             return text.replace(regex, `<mark>$1</mark>`);
         }
 
-        /* 🎨 RENDER RESULT */
-        function renderResults(data, keyword) {
+                        data.karyawan.forEach(item => {
+
+                            html += `
+                                <a href="/pic/${item.id}" class="search-item">
+
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                                    <div>
+
+                                        <div class="search-title">
+                                            ${highlight(item.nama_pic, keyword)}
+                                        </div>
+
+                                    </div>
+
+                                </a>
+                            `;
+                        });
 
             let html = '';
 
-            function createItem(title, subtitle, link) {
-                return `
-            <a href="${link}" class="search-item">
-                <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
+                    /* ================= GEDUNG ================= */
 
                 <div class="search-text">
                     <div class="search-title">${highlight(title, keyword)}</div>
@@ -1027,46 +1107,24 @@
         `;
             }
 
-            // 🔥 GABUNG SEMUA DATA TANPA KATEGORI
+                        data.gedung.forEach(item => {
 
-            data?.barang?.forEach(item => {
-                html += createItem(
-                    item.nama_barang,
-                    null,
-                    `/barang/${item.id}`
-                );
-            });
+                            html += `
+                                <a href="/gedung/${item.id}" class="search-item">
 
-            data?.ruang?.forEach(item => {
-                html += createItem(
-                    item.nama_ruang,
-                    null,
-                    `/ruangs/${item.id}`
-                );
-            });
+                                    <i class="fa-solid fa-magnifying-glass"></i>
 
-            data?.karyawan?.forEach(item => {
-                html += createItem(
-                    item.nama_pic,
-                    null,
-                    `/pic?search=${encodeURIComponent(item.nama_pic)}`,
-                );
-            });
+                                    <div>
 
-            data?.gedung?.forEach(item => {
-                html += createItem(
-                    item.nama_gedung,
-                    null,
-                    `/gedung/${item.id}`
-                );
-            });
+                                        <div class="search-title">
+                                            ${highlight(item.nama_gedung, keyword)}
+                                        </div>
 
-            if (html === '') {
-                html = `
-        <div style="padding:12px;text-align:center;color:#888">
-            🔍 Tidak ada hasil ditemukan
-        </div>`;
-            }
+                                    </div>
+
+                                </a>
+                            `;
+                        });
 
             resultsBox.innerHTML = html;
             resultsBox.style.display = 'block';
@@ -1074,9 +1132,21 @@
         /* ⌨️ KEYBOARD NAVIGATION */
         searchInput.addEventListener('keydown', function (e) {
 
-            let items = document.querySelectorAll('.search-item');
+                    /* ================= TIDAK ADA DATA ================= */
 
-            if (!items.length) return;
+                    if (html === '') {
+
+                        html = `
+                            <div style="
+                                padding:14px;
+                                text-align:center;
+                                color:#888;
+                                font-size:14px;
+                            ">
+                                Tidak ada hasil ditemukan
+                            </div>
+                        `;
+                    }
 
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
@@ -1085,39 +1155,20 @@
                 setActive(items);
             }
 
-            if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                currentIndex--;
-                if (currentIndex < 0) currentIndex = items.length - 1;
-                setActive(items);
-            }
-
-            if (e.key === 'Enter' && currentIndex >= 0) {
-                window.location = items[currentIndex].href;
-            }
-        });
-
-        function setActive(items) {
-            items.forEach(i => i.classList.remove('active'));
-            items[currentIndex].classList.add('active');
+                })
+                .catch(err => {
+                    console.error(err);
+                    resultsBox.innerHTML = `
+                <div style="padding:12px;text-align:center;color:red">
+                    Terjadi error
+                </div>
+            `;
+                });
         }
 
-        /* ❌ CLICK OUTSIDE */
-        document.addEventListener('click', function (e) {
-            if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
-                resultsBox.style.display = 'none';
-            }
-        });
-        function showEditProfile() {
-            document.getElementById("profileView").style.display = "none";
-            document.getElementById("profileEdit").style.display = "block";
-        }
+    });
 
-        function cancelEditProfile() {
-            document.getElementById("profileView").style.display = "block";
-            document.getElementById("profileEdit").style.display = "none";
-        }
-    </script>
+</script>
 
     </div>
     <!-- ================= MODAL NOTIFIKASI ================= -->
