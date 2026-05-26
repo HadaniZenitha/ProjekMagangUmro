@@ -9,9 +9,57 @@
             font-family: Arial, sans-serif;
             font-size: 11px;
             margin: 20px;
+            line-height: 1.5;
         }
 
-        /* ===== HEADER (TIDAK DIUBAH) ===== */
+        /* ===== KOP SURAT ===== */
+        .kop-wrapper {
+            width: 100%;
+            border-bottom: 3px solid #000;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .kop-table {
+            width: 100%;
+            border: none !important;
+        }
+
+        .kop-table td {
+            border: none !important;
+            vertical-align: middle;
+        }
+
+        .logo-col {
+            width: 90px;
+        }
+
+        .logo {
+            width: 75px;
+        }
+
+        .kop-text {
+            text-align: center;
+        }
+
+        .kop-text h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .kop-text h3 {
+            margin: 2px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .kop-text p {
+            margin: 2px 0;
+            font-size: 11px;
+        }
+
+        /* ===== HEADER ===== */
         .header {
             text-align: center;
             margin-bottom: 15px;
@@ -20,10 +68,11 @@
         .header h3 {
             margin: 0;
             font-size: 16px;
+            letter-spacing: 0.5px;
         }
 
         .header p {
-            margin: 4px 0;
+            margin: 5px 0;
             font-size: 10px;
         }
 
@@ -33,7 +82,9 @@
             border-collapse: collapse;
         }
 
-        table, th, td {
+        table,
+        th,
+        td {
             border: 1px solid #333;
         }
 
@@ -43,7 +94,8 @@
             font-weight: bold;
         }
 
-        th, td {
+        th,
+        td {
             padding: 6px;
         }
 
@@ -91,68 +143,143 @@
 
 <body>
 
-    <!-- HEADER (TETAP) -->
+    @php
+        \Carbon\Carbon::setLocale('id');
+    @endphp
+
+    <!-- ===== KOP SURAT ===== -->
+    <div class="kop-wrapper">
+
+        <table class="kop-table">
+            <tr>
+
+                <!-- LOGO -->
+                <td class="logo-col">
+                    <img src="{{ public_path('images/icon.png') }}" class="logo">
+                </td>
+
+                <!-- TEXT -->
+                <td class="kop-text">
+                    <h2>PT PLN NUSANTARA POWER</h2>
+                    <h3>UNIT MAINTENANCE REPAIR OVERHAUL GRESIK</h3>
+
+                    <p>
+                        SMART-UMRO | Smart Management of Assets and Resource Terintegrasi
+                    </p>
+
+                    <p>
+                        Jl. Harun Thohir No.1, Pulopancikan, Kec. Gresik, Kabupaten Gresik
+                    </p>
+
+                    <p>
+                        Telp: (031) 3981811 | Website: https://www.plnnusantarapower.co.id
+                    </p>
+                </td>
+
+            </tr>
+        </table>
+
+    </div>
+
+    <!-- ===== HEADER ===== -->
     <div class="header">
         <h3>LAPORAN ITEM SEWA</h3>
+
         <p>
-            Periode: {{ $tahun_awal ?? 'Semua' }} - {{ $tahun_akhir ?? date('Y') }} <br>
-            Dicetak: {{ date('d/M/Y H:i') }}
+            Periode:
+            {{ $tahun_awal ?? 'Semua' }}
+            -
+            {{ $tahun_akhir ?? date('Y') }}
+            <br>
+
+            Dicetak: {{ date('d/F/Y H:i') }}
         </p>
     </div>
 
     @if($data->count() > 0)
 
-    <table>
-        <thead>
-            <tr>
-                <th width="30">No</th>
-                <th>Kode</th>
-                <th>PIC</th>
-                <th>Fungsi</th>
-                <th>Nama Item</th>
-                <th>Lokasi</th>
-                <th width="60">Tahun</th>
-                <th width="90">Kondisi</th>
-            </tr>
-        </thead>
+        <table>
+            <thead>
+                <tr>
+                    <th width="30">No</th>
+                    <th>Kode</th>
+                    <th>PIC</th>
+                    <th>Fungsi</th>
+                    <th>Nama Item</th>
+                    <th>Lokasi</th>
+                    <th width="60">Tahun</th>
+                    <th width="90">Kondisi</th>
+                </tr>
+            </thead>
 
-        <tbody>
-            @foreach($data as $i => $d)
-            <tr>
-                <td class="text-center">{{ $i + 1 }}</td>
-                <td class="text-left">{{ $d->kode_barang }}</td>
-                <td class="text-left">{{ $d->pic->nama_pic ?? '-' }}</td>
-                <td class="text-left">{{ $d->divisi->nama_divisi ?? '-' }}</td>
-                <td class="text-left">{{ $d->nama_barang }}</td>
-                <td class="text-left">{{ $d->ruang->nama_ruang ?? '-' }}</td>
-                <td class="text-center">{{ $d->tahun }}</td>
+            <tbody>
+                @foreach($data as $i => $d)
+                    <tr>
 
-                <td class="text-center">
-                    @if($d->kondisi == 'Baik')
-                        <span class="baik">Baik</span>
-                    @elseif($d->kondisi == 'Perlu Perbaikan')
-                        <span class="perbaikan">Perlu Perbaikan</span>
-                    @else
-                        <span class="rusak">Rusak</span>
-                    @endif
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                        <td class="text-center">
+                            {{ $i + 1 }}
+                        </td>
+
+                        <td class="text-left">
+                            {{ $d->kode_barang }}
+                        </td>
+
+                        <td class="text-left">
+                            {{ $d->pic->nama_pic ?? '-' }}
+                        </td>
+
+                        <td class="text-left">
+                            {{ $d->divisi->nama_divisi ?? '-' }}
+                        </td>
+
+                        <td class="text-left">
+                            {{ $d->nama_barang }}
+                        </td>
+
+                        <td class="text-left">
+                            {{ $d->ruang->nama_ruang ?? '-' }}
+                        </td>
+
+                        <td class="text-center">
+                            {{ $d->tahun }}
+                        </td>
+
+                        <td class="text-center">
+
+                            @if($d->kondisi == 'Baik')
+                                <span class="baik">Baik</span>
+
+                            @elseif($d->kondisi == 'Perlu Perbaikan')
+                                <span class="perbaikan">
+                                    Perlu Perbaikan
+                                </span>
+
+                            @else
+                                <span class="rusak">Rusak</span>
+                            @endif
+
+                        </td>
+
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
 
     @else
+
         <div class="no-data">
             Tidak ada data Item Sewa
         </div>
+
     @endif
 
-    <!-- FOOTER -->
+    <!-- ===== FOOTER ===== -->
     <div class="footer">
 
         <div class="ttd">
             <p>
                 Mengetahui,<br><br><br><br>
+
                 ________________________<br>
                 (Nama & Jabatan)
             </p>
@@ -161,7 +288,7 @@
         <div style="clear: both;"></div>
 
         <p style="text-align:center; font-size:10px;">
-            Dicetak oleh Sistem Inventaris - {{ date('d/m/Y') }}
+            Dicetak oleh Sistem Inventaris - {{ date('d/F/Y') }}
         </p>
 
     </div>

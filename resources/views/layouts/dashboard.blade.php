@@ -571,92 +571,6 @@
             .overlay.show {
                 display: block;
             }
-
-            //* ================= LIVE SEARCH ================= */
-
-            .search-item {
-                display: flex;
-                align-items: flex-start;
-                gap: 12px;
-                padding: 12px 14px;
-                text-decoration: none;
-                color: #333;
-                transition: 0.2s;
-                border-bottom: 1px solid #f1f1f1;
-            }
-
-            .search-item:last-child {
-                border-bottom: none;
-            }
-
-            .search-item:hover {
-                background: #f7f7f7;
-            }
-
-            .search-item i {
-                margin-top: 4px;
-                color: #9aa0a6;
-                font-size: 15px;
-                flex-shrink: 0;
-            }
-
-            .search-title {
-                font-size: 15px;
-                font-weight: 500;
-                line-height: 1.4;
-                color: #222;
-            }
-
-            .search-category {
-                padding: 10px 14px 6px;
-                font-size: 13px;
-                font-weight: 700;
-                color: #666;
-                background: #fafafa;
-                border-bottom: 1px solid #eee;
-            }
-
-            .search-highlight {
-                background: #fff3c4;
-                padding: 0 2px;
-                border-radius: 3px;
-            }
-
-            /* BOX RESULT */
-            #searchResults {
-                position: absolute;
-                top: 42px;
-                left: 0;
-                width: 420px;
-                background: white;
-                border-radius: 16px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-                display: none;
-                max-height: 420px;
-                overflow-y: auto;
-                z-index: 9999;
-            }
-
-            /* MOBILE */
-            @media (max-width: 768px) {
-
-                #searchResults {
-                    width: 100%;
-                    min-width: 280px;
-                    max-width: 380px;
-                    border-radius: 18px;
-                    top: 45px;
-                }
-
-                .search-box {
-                    width: 100%;
-                    max-width: 180px;
-                }
-
-                .search-title {
-                    font-size: 14px;
-                }
-            }
         }
     </style>
 </head>
@@ -1028,63 +942,50 @@
         </div>
     </div>
 
-<script>
-
-    /* ================= SIDEBAR ================= */
-
-    function toggleSidebar() {
-
-        if (window.innerWidth <= 991) {
+    <script>
+        function toggleSidebar() {
 
             document.querySelector('.sidebar').classList.toggle('show');
             document.getElementById('overlay').classList.toggle('show');
 
         }
 
-    }
+        const searchInput = document.getElementById('liveSearch');
+        const resultsBox = document.getElementById('searchResults');
 
-    /* ================= LIVE SEARCH ================= */
+        let debounceTimer;
+        let currentIndex = -1;
 
-    const searchInput = document.getElementById('liveSearch');
-    const resultsBox = document.getElementById('searchResults');
+        /* 🔥 KEYUP + DEBOUNCE */
+        searchInput.addEventListener('keyup', function () {
 
-    let timeout = null;
+            clearTimeout(debounceTimer);
 
-    /* HIGHLIGHT TEXT */
-    function highlight(text, keyword) {
+            let keyword = this.value.trim();
 
-        if (!text) return '';
+            if (keyword.length < 2) {
+                resultsBox.style.display = 'none';
+                resultsBox.innerHTML = '';
+                return;
+            }
 
-        let regex = new RegExp(`(${keyword})`, 'gi');
+            debounceTimer = setTimeout(() => {
+                fetchData(keyword);
+            }, 300);
+        });
 
-        return text.replace(
-            regex,
-            `<span class="search-highlight">$1</span>`
-        );
+        /* 🚀 FETCH DATA */
+        function fetchData(keyword) {
 
-    }
+            resultsBox.innerHTML = `
+        <div style="padding:10px;text-align:center">
+            <span class="spinner-border spinner-border-sm"></span> Searching...
+        </div>
+    `;
+            resultsBox.style.display = 'block';
 
-    searchInput.addEventListener('keyup', function () {
-
-        clearTimeout(timeout);
-
-        let keyword = this.value.trim();
-
-        if (keyword.length < 2) {
-
-            resultsBox.style.display = 'none';
-            resultsBox.innerHTML = '';
-
-            return;
-
-        }
-
-        timeout = setTimeout(() => {
-
-            fetch(`/search?q=${encodeURIComponent(keyword)}`)
-
+            fetch(`/search?q=${keyword}`)
                 .then(res => res.json())
-
                 .then(data => {
 
                     let html = '';
@@ -1255,41 +1156,14 @@
             }
 
                 })
-
-                .catch(error => {
-
-                    console.log(error);
-
+                .catch(err => {
+                    console.error(err);
                     resultsBox.innerHTML = `
-                        <div style="
-                            padding:14px;
-                            text-align:center;
-                            color:red;
-                            font-size:14px;
-                        ">
-                            Terjadi kesalahan
-                        </div>
-                    `;
-
-                    resultsBox.style.display = 'block';
-
+                <div style="padding:12px;text-align:center;color:red">
+                    Terjadi error
+                </div>
+            `;
                 });
-
-        }, 300);
-
-    });
-
-    /* ================= CLOSE SEARCH ================= */
-
-    document.addEventListener('click', function (e) {
-
-        if (
-            !searchInput.contains(e.target) &&
-            !resultsBox.contains(e.target)
-        ) {
-
-            resultsBox.style.display = 'none';
-
         }
 
     });
