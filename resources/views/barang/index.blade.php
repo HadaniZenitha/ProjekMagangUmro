@@ -143,6 +143,7 @@
 				<a href="{{ route('scan.page') }}" class="btn btn-dark btn-pro">
 					<i class="fa-solid fa-qrcode"></i> Scan QR
 				</a>
+				@endif
 			</div>
 		</div>
 
@@ -209,8 +210,8 @@
 									<i class="fa-solid fa-magnifying-glass text-muted"></i>
 								</span>
 
-								<input list="barangOptions" id="barang-input" class="form-control"
-									placeholder="Cari berdasarkan kode atau nama item..." autocomplete="off">
+								<input type="text" name="search" list="barangOptions" id="barang-input" class="form-control"
+									placeholder="Cari berdasarkan kode atau nama item..." autocomplete="off" value="{{request('search')}}">
 
 								<datalist id="barangOptions">
 									@foreach($barangList as $b)
