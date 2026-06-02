@@ -230,6 +230,17 @@ class BarangController extends Controller
             'catatan_nonaktif' => 'nullable|string',
         ]);
 
+        $ruang = Ruang::findOrFail($request->ruang_id);
+        $subjenis = SubJenisBarang::with('jenis.kelompok')
+            ->findOrFail($barang->sub_jenis_barang_id);
+
+        $kodeBarangBaru =
+            $subjenis->jenis->kelompok->kode_kelompok . ' / ' .
+            $subjenis->kode_subjenis . ' / ' .
+            str_pad($barang->urutan, 2, '0', STR_PAD_LEFT) . ' / ' .
+            $request->tahun_perolehan . ' / ' .
+            $ruang->nama_ruang;
+
         $fotoPath = $barang->foto;
 
         if ($request->hasFile('foto')) {
