@@ -63,11 +63,11 @@ class="w-[10cm] h-[6cm] bg-white rounded-2xl border-2 border-black p-3 flex flex
     <div class="flex justify-between items-center border-b border-black pb-1">
 
         <!-- LOGO -->
-        <div class="flex items-center gap-10">
+        <!-- <div class="flex items-center gap-10">
             <img src="{{ asset('images/icon.png') }}"
                  alt="Logo PLN"
                  class="w-20 h-auto object-contain">
-        </div>
+        </div> -->
 
                 <div style="display:flex; align-items:center; gap:0.2cm;">
                     <img src="{{ asset('images/icon.png') }}"
