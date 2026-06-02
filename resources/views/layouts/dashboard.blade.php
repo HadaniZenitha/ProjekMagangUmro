@@ -788,7 +788,7 @@
             <footer class="d-flex justify-content-between align-items-center mt-3">
 
                 <div class="text-muted small">
-                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhaul
+                    © 2026 PLN Nusantara Power — Sistem Inventarisasi Unit Maintenance Repair And Overhoul
                 </div>
 
                 <div class="small text-muted">
@@ -987,73 +987,6 @@
             fetch(`/search?q=${keyword}`)
                 .then(res => res.json())
                 .then(data => {
-
-                    let html = '';
-
-                    /* ================= BARANG ================= */
-
-                    if (data.barang && data.barang.length > 0) {
-
-                        html += `<div class="search-category">Barang</div>`;
-
-                        data.barang.forEach(item => {
-
-                            html += `
-                                <a href="/barang/${item.id}" class="search-item">
-
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                                    <div>
-
-                                        <div class="search-title">
-                                            ${highlight(item.nama_barang, keyword)}
-                                        </div>
-
-                                        <small class="text-muted">
-                                            ${highlight(item.kode_barang ?? '-', keyword)}
-                                        </small>
-
-                                    </div>
-
-                                </a>
-                            `;
-                        });
-
-                    }
-
-                    /* ================= RUANG ================= */
-
-                    if (data.ruang && data.ruang.length > 0) {
-
-                        html += `<div class="search-category">Ruang</div>`;
-
-                        data.ruang.forEach(item => {
-
-                            html += `
-                                <a href="/ruangs/${item.id}" class="search-item">
-
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                                    <div>
-
-                                        <div class="search-title">
-                                            ${highlight(item.nama_ruang, keyword)}
-                                        </div>
-
-                                    </div>
-
-                                </a>
-                            `;
-                        });
-
-        /* 🚀 FETCH DATA */
-        function fetchData(keyword) {
-
-                    /* ================= KARYAWAN ================= */
-
-            fetch(`/search?q=${keyword}`)
-                .then(res => res.json())
-                .then(data => {
                     renderResults(data, keyword);
                     currentIndex = -1; // reset navigation
                 })
@@ -1074,28 +1007,15 @@
             return text.replace(regex, `<mark>$1</mark>`);
         }
 
-                        data.karyawan.forEach(item => {
-
-                            html += `
-                                <a href="/pic/${item.id}" class="search-item">
-
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                                    <div>
-
-                                        <div class="search-title">
-                                            ${highlight(item.nama_pic, keyword)}
-                                        </div>
-
-                                    </div>
-
-                                </a>
-                            `;
-                        });
+        /* 🎨 RENDER RESULT */
+        function renderResults(data, keyword) {
 
             let html = '';
 
-                    /* ================= GEDUNG ================= */
+            function createItem(title, subtitle, link) {
+                return `
+            <a href="${link}" class="search-item">
+                <i class="fa-solid fa-magnifying-glass search-icon-left"></i>
 
                 <div class="search-text">
                     <div class="search-title">${highlight(title, keyword)}</div>
@@ -1107,24 +1027,46 @@
         `;
             }
 
-                        data.gedung.forEach(item => {
+            // 🔥 GABUNG SEMUA DATA TANPA KATEGORI
 
-                            html += `
-                                <a href="/gedung/${item.id}" class="search-item">
+            data?.barang?.forEach(item => {
+                html += createItem(
+                    item.nama_barang,
+                    null,
+                    `/barang/${item.id}`
+                );
+            });
 
-                                    <i class="fa-solid fa-magnifying-glass"></i>
+            data?.ruang?.forEach(item => {
+                html += createItem(
+                    item.nama_ruang,
+                    null,
+                    `/ruangs/${item.id}`
+                );
+            });
 
-                                    <div>
+            data?.karyawan?.forEach(item => {
+                html += createItem(
+                    item.nama_pic,
+                    null,
+                    `/pic?search=${encodeURIComponent(item.nama_pic)}`,
+                );
+            });
 
-                                        <div class="search-title">
-                                            ${highlight(item.nama_gedung, keyword)}
-                                        </div>
+            data?.gedung?.forEach(item => {
+                html += createItem(
+                    item.nama_gedung,
+                    null,
+                    `/gedung/${item.id}`
+                );
+            });
 
-                                    </div>
-
-                                </a>
-                            `;
-                        });
+            if (html === '') {
+                html = `
+        <div style="padding:12px;text-align:center;color:#888">
+            🔍 Tidak ada hasil ditemukan
+        </div>`;
+            }
 
             resultsBox.innerHTML = html;
             resultsBox.style.display = 'block';
@@ -1132,21 +1074,9 @@
         /* ⌨️ KEYBOARD NAVIGATION */
         searchInput.addEventListener('keydown', function (e) {
 
-                    /* ================= TIDAK ADA DATA ================= */
+            let items = document.querySelectorAll('.search-item');
 
-                    if (html === '') {
-
-                        html = `
-                            <div style="
-                                padding:14px;
-                                text-align:center;
-                                color:#888;
-                                font-size:14px;
-                            ">
-                                Tidak ada hasil ditemukan
-                            </div>
-                        `;
-                    }
+            if (!items.length) return;
 
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
@@ -1155,20 +1085,39 @@
                 setActive(items);
             }
 
-                })
-                .catch(err => {
-                    console.error(err);
-                    resultsBox.innerHTML = `
-                <div style="padding:12px;text-align:center;color:red">
-                    Terjadi error
-                </div>
-            `;
-                });
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                currentIndex--;
+                if (currentIndex < 0) currentIndex = items.length - 1;
+                setActive(items);
+            }
+
+            if (e.key === 'Enter' && currentIndex >= 0) {
+                window.location = items[currentIndex].href;
+            }
+        });
+
+        function setActive(items) {
+            items.forEach(i => i.classList.remove('active'));
+            items[currentIndex].classList.add('active');
         }
 
-    });
+        /* ❌ CLICK OUTSIDE */
+        document.addEventListener('click', function (e) {
+            if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+                resultsBox.style.display = 'none';
+            }
+        });
+        function showEditProfile() {
+            document.getElementById("profileView").style.display = "none";
+            document.getElementById("profileEdit").style.display = "block";
+        }
 
-</script>
+        function cancelEditProfile() {
+            document.getElementById("profileView").style.display = "block";
+            document.getElementById("profileEdit").style.display = "none";
+        }
+    </script>
 
     </div>
     <!-- ================= MODAL NOTIFIKASI ================= -->
