@@ -62,13 +62,6 @@ class="w-[10cm] h-[6cm] bg-white rounded-2xl border-2 border-black p-3 flex flex
     <!-- ================= HEADER ================= -->
     <div class="flex justify-between items-center border-b border-black pb-1">
 
-        <!-- LOGO -->
-        <!-- <div class="flex items-center gap-10">
-            <img src="{{ asset('images/icon.png') }}"
-                 alt="Logo PLN"
-                 class="w-20 h-auto object-contain">
-        </div> -->
-
                 <div style="display:flex; align-items:center; gap:0.2cm;">
                     <img src="{{ asset('images/icon.png') }}"
                         style="width:1.3cm; height:1.3cm; object-fit:contain; border-radius:8px;">
@@ -77,6 +70,8 @@ class="w-[10cm] h-[6cm] bg-white rounded-2xl border-2 border-black p-3 flex flex
                         <p style="font-size:12px; color:#ffca28; margin:0; line-height:1.2;">Nusantara Power</p>
                     </div>
                 </div>
+        
+        <div style="height:1.1cm; border-left:1px solid #999;"></div>
 
         <!-- UNIT -->
         <div class="text-[10px] text-left leading-tight">
