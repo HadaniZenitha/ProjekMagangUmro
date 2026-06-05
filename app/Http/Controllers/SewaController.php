@@ -152,9 +152,13 @@ class SewaController extends Controller
             'kondisi' => 'required'
         ]);
 
-        // simpan data lama
+        // simpan data lama sebelum update
         $oldPic = $sewa->pic_id;
         $oldKondisi = $sewa->kondisi;
+        $oldRuang = $sewa->ruang_id;
+        $oldDivisi = $sewa->divisi_id;
+        $oldTahun = $sewa->tahun;
+        $oldNama = $sewa->nama_barang;
 
         // update barang
         $sewa->update([
@@ -166,6 +170,39 @@ class SewaController extends Controller
             'kondisi' => $request->kondisi,
         ]);
 
+        $changes = [];
+        if ($oldNama !== $request->nama_barang) {
+            $changes[] = "Nama: $oldNama → {$request->nama_barang}";
+        }
+
+        if ($oldDivisi !== $request->divisi_id) {
+            $oldDivisiName = \App\Models\Divisi::find($oldDivisi)->nama_divisi ?? '-';
+            $newDivisiName = \App\Models\Divisi::find($request->divisi_id)->nama_divisi ?? '-';
+            $changes[] = "Divisi: $oldDivisiName → $newDivisiName";
+        }
+
+        if ($oldPic !== $request->pic_id) {
+            $oldPicName = \App\Models\Pic::find($oldPic)->nama_pic ?? '-';
+            $newPicName = \App\Models\Pic::find($request->pic_id)->nama_pic ?? '-';
+            $changes[] = "PIC: $oldPicName → $newPicName";
+        }
+
+        if ($oldRuang !== $request->ruang_id) {
+            $oldRuangName = \App\Models\Ruang::find($oldRuang)->nama_ruang ?? '-';
+            $newRuangName = \App\Models\Ruang::find($request->ruang_id)->nama_ruang ?? '-';
+            $changes[] = "Ruang: $oldRuangName → $newRuangName";
+        }
+
+        if ($oldTahun !== $request->tahun) {
+            $changes[] = "Tahun: $oldTahun → {$request->tahun}";
+        }
+
+        if ($oldKondisi !== $request->kondisi) {
+            $changes[] = "Kondisi: $oldKondisi → {$request->kondisi}";
+        }
+
+        $catatan = $changes ? implode(', ', $changes) : 'Perubahan data barang sewa';
+
         // simpan history / mutasi
         BarangSewaHistory::create([
             'barang_sewa_id' => $sewa->id,
@@ -174,7 +211,7 @@ class SewaController extends Controller
             'kondisi' => $request->kondisi,
             'tanggal_perubahan' => now(),
             'user_id' => auth()->id(),
-            'catatan' => 'Perubahan data barang sewa',
+            'catatan' => $catatan,
         ]);
 
         return redirect()->route('barang-sewa.index')

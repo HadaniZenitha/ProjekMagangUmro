@@ -139,7 +139,9 @@ Route::get('/barang/{kode}/barcode', [BarangController::class, 'barcode'])
 Route::get('/get-pic-by-divisi/{divisi}', [PicController::class, 'getByDivisi']);
 
 // Search & Profile
-Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/search', [SearchController::class, 'search'])
+    ->name('search')
+    ->middleware('auth');
 
 Route::post('/profile/update', [ProfileController::class, 'update'])
     ->name('profile.update');
