@@ -202,7 +202,7 @@
         <p>
             Periode: {{ $tahun_awal ?? 'Semua' }} - {{ $tahun_akhir ?? date('Y') }} <br>
 
-            Dicetak: {{ date('d/m/Y H:i') }}
+            Dicetak: {{ date('d/F/Y H:i') }}
 
             @if(isset($filter['ruang']))
                 | Ruangan: {{ $ruang->nama_ruang ?? '-' }}
@@ -281,7 +281,7 @@
         <div style="clear: both;"></div>
 
         <p style="text-align:center; font-size:10px;">
-            Dicetak oleh Sistem Inventaris - {{ date('d/m/Y') }}
+            Dicetak oleh Sistem Inventaris - {{ date('d/F/Y') }}
         </p>
 
     </div>

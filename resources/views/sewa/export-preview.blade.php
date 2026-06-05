@@ -88,7 +88,7 @@
                     <tbody>
                         @forelse($data as $index => $d)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td class="text-center">{{ $index + 1 }}</td>
                                 <td>{{ $d->kode_barang }}</td>
                                 <td>{{ $d->pic->nama_pic ?? '-' }}</td>
                                 <td>{{ $d->divisi->nama_divisi ?? '-' }}</td>
@@ -96,6 +96,16 @@
                                 <td>{{ $d->ruang->nama_ruang ?? '-' }}</td>
                                 <td class="text-center">{{ $d->tahun }}</td>
 
+                        <td class="text-center">
+                            @if($d->kondisi == 'Baik')
+                                Baik
+                            @elseif($d->kondisi == 'Perlu Perbaikan')
+                                Perlu Perbaikan
+                            @else
+                                Rusak
+                            @endif
+                        </td>
+                    </tr>
                                 <td class="text-center fw-semibold">
                                     @if(strtolower($d->kondisi) == 'baik')
                                         <span class="text-success">Baik</span>

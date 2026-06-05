@@ -59,7 +59,6 @@
 }
 </style>
 
-<!-- 🔥 HEADER TANPA d-flex -->
 <div class="header-box mb-4">
 
     <h5 class="fw-bold mb-2">
@@ -101,14 +100,14 @@
                 <tbody>
                     @forelse($data as $index => $barang)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
+                        <td class="text-center">{{ $index + 1 }}</td>
                         <td>{{ $barang->kode_barang }}</td>
                         <td>{{ $barang->nama_barang }}</td>
-                        <td>{{ $barang->divisi->nama_divisi ?? '-' }}</td>
-                        <td>{{ $barang->ruang->nama_ruang ?? '-' }}</td>
+                        <td  class="text-center">{{ $barang->divisi->nama_divisi ?? '-' }}</td>
+                        <td class="text-center">{{ $barang->ruang->nama_ruang ?? '-' }}</td>
                         <td>{{ $barang->pic->nama_pic ?? '-' }}</td>
                         <td class="text-center">{{ $barang->tahun_perolehan }}</td>
-                        <td>
+                        <td class="text-center">
                             <span class="badge {{ $barang->is_active ? 'bg-success' : 'bg-danger' }}">
                                 {{ $barang->is_active ? 'Aktif' : 'Nonaktif' }}
                             </span>
