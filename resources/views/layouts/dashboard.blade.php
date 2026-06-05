@@ -300,7 +300,6 @@
             display: none;
         }
 
-        /* Prevent Laravel pagination SVG arrows from stretching in non-Tailwind pages */
         .pagination svg {
             width: 1rem;
             height: 1rem;
@@ -311,6 +310,28 @@
         }
 
         @media (max-width: 576px) {
+            .top-navbar {
+                padding: 8px 6px;
+            }
+
+            .top-navbar .d-flex.align-items-center.gap-3 {
+                gap: 3px;
+                flex: 1 1 0;
+                min-width: 0;
+            }
+
+            .search-container {
+                width: clamp(56px, 14vw, 96px);
+                max-width: 96px;
+                flex: 0 1 auto;
+                margin-right: 6px; 
+            }
+
+            .icon-top {
+                gap: 4px;
+                flex: 0 0 auto;
+            }
+
             .date-desktop {
                 display: none;
             }
@@ -320,7 +341,50 @@
                 align-items: center;
                 gap: 4px;
                 white-space: nowrap;
+                font-size: 9px;
+                line-height: 1;
+                flex: 0 0 auto;
+                margin-left: 6px; 
+                margin-right: 4px; 
+            }
+
+            .icon-top i {
                 font-size: 12px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .top-navbar {
+                padding: 6px 5px;
+            }
+
+            .top-navbar .d-flex.align-items-center.gap-3 {
+                gap: 2px;
+            }
+
+            .search-container {
+                width: clamp(52px, 13vw, 80px);
+                max-width: 80px;
+                margin-right: 6px;
+            }
+
+            .search-box {
+                padding: 4px 7px;
+                font-size: 11px;
+            }
+
+            .icon-top {
+                gap: 3px;
+            }
+
+            .date-mobile {
+                font-size: 7px;
+                margin-left: 4px;
+                margin-right: 4px;
+            }
+
+            .icon-top i {
+                font-size: 11px;
             }
         }
 
@@ -432,6 +496,7 @@
                 align-items: center;
                 justify-content: space-between;
                 flex-wrap: nowrap;
+                gap: 8px;
                 position: relative;
                 z-index: 100;
             }
@@ -439,8 +504,9 @@
             .top-navbar .d-flex.align-items-center.gap-3 {
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                flex-shrink: 0;
+                gap: 8px;
+                flex: 1 1 auto;
+                min-width: 0;
             }
 
             .main-wrapper {
@@ -458,8 +524,11 @@
 
             .search-container {
                 position: relative;
-                width: 300px;
-                flex-shrink: 0;
+                width: clamp(90px, 20vw, 140px);
+                max-width: 140px;
+                min-width: 0;
+                flex: 0 1 auto;
+                margin-right: 8px;
             }
 
             /* SEARCH */
@@ -467,8 +536,9 @@
                 width: 100%;
                 background: #F0F0F0;
                 border-radius: 20px;
-                padding: 6px 15px;
+                padding: 6px 10px;
                 border: none;
+                font-size: 13px;
             }
 
             .search-dropdown {
@@ -496,8 +566,16 @@
             .icon-top {
                 display: flex;
                 align-items: center;
-                gap: 15px;
-                flex-shrink: 0;
+                gap: 6px;
+                flex: 0 0 auto;
+                justify-content: flex-end;
+                flex-wrap: nowrap;
+            }
+
+            .date-mobile {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                font-size: 10px;
             }
 
             .search-item {
@@ -517,6 +595,27 @@
 
             .icon-top i {
                 font-size: 18px;
+            }
+
+            .date-desktop {
+                display: none;
+            }
+
+            /* Tampilkan tanggal versi singkat di mobile; sembunyikan ikon kalender */
+            .date-mobile {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                white-space: nowrap;
+                font-size: 11px;
+                line-height: 1;
+                flex: 0 0 auto;
+                margin-left: 8px; /* beri jarak dari search */
+                margin-right: 4px; /* rapatkan ke ikon notifikasi */
+            }
+
+            .date-mobile i {
+                display: none;
             }
 
             .search-icon-left {
@@ -739,7 +838,7 @@
                     <div class="search-container">
 
                         <input type="text" id="liveSearch" class="search-box w-100"
-                            placeholder="telusuri..." autocomplete="off">
+                            placeholder="Telusuri..." autocomplete="off">
                         <div id="searchResults" class="search-dropdown"></div>
 
                     </div>
@@ -757,8 +856,7 @@
                 </div>
 
                 <div class="date-mobile small text-muted">
-                    <i class="fa-regular fa-calendar me-1"></i>
-                    {{\Carbon\Carbon::now()->format('d/m/y')}}
+                    {{ \Carbon\Carbon::now()->format('d') }}/{{ \Carbon\Carbon::now()->translatedFormat('F') }}/{{ \Carbon\Carbon::now()->format('Y') }}
                 </div>
 
                 <!-- NOTIFIKASI -->
