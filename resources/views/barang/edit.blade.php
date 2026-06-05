@@ -100,20 +100,16 @@
                                 <label class="form-label fw-semibold">Kondisi Item</label>
 
                                 @php
-                                    $kondisis = [
-                                        'baik' => 'Baik',
-                                        'perlu perbaikan' => 'Perlu Perbaikan',
-                                        'rusak' => 'Rusak'
-                                    ];
+                                    $kondisis = [ 'Baik', 'Perlu Perbaikan','Rusak' ];
                                 @endphp
 
                                 <select name="kondisi" class="form-select" required>
 
-                                    @foreach($kondisis as $value => $label)
+                                    @foreach($kondisis as $k)
 
-                                        <option value="{{ $value }}" {{ strtolower($barang->kondisi) == $value ? 'selected' : '' }}>
+                                        <option value="{{ $k }}" {{ ($barang->kondisi) == $k ? 'selected' : '' }}>
 
-                                            {{ $label }}
+                                            {{ ucfirst ($k) }}
 
                                         </option>
 

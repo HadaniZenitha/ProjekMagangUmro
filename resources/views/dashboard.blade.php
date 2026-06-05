@@ -227,10 +227,6 @@
                             <i class="fa-solid fa-clock-rotate-left"></i> Penambahan Terbaru
                         </span>
 
-                        <a href="{{ route('barang.index') }}" class="btn btn-primary btn-sm btn-modern">
-                            <i class="fa-solid fa-list me-1"></i>Lihat Semua
-                        </a>
-
                     </div>
 
                     <div class="card-body">

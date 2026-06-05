@@ -1273,7 +1273,7 @@
                             value="{{ Auth::user()->name }}" required>
                     </div>
 
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label class="form-label fw-600" style="color: #1b3a4a; font-weight: 600;">Email</label>
                         <input type="email" name="email" class="form-control"
                             style="border: 2px solid #e0e0e0; border-radius: 8px; padding: 10px 15px; transition: all 0.3s ease;"
@@ -1282,7 +1282,7 @@
                             onfocus="this.style.borderColor='#309FB0'; this.style.boxShadow='0 0 0 3px rgba(48, 159, 176, 0.1)'"
                             onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none'"
                             value="{{ Auth::user()->email }}" required>
-                    </div>
+                    </div> -->
 
                     <div class="mb-4">
                         <label class="form-label fw-600" style="color: #1b3a4a; font-weight: 600;">Password Baru</label>
@@ -1325,7 +1325,7 @@
         </div>
 
         <div class="text-center small text-muted pb-3"
-            style="border-top: 1px solid #f0f0f0; padding-top: 20px; margin-top: 25px;">
+            style="border-top: 1px solid #1b3a4a; padding-top: 10px; margin-top: 25px;">
             <i class="fa-solid fa-shield-alt me-1"></i>
             Sistem Inventaris UMRO
         </div>

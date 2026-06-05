@@ -294,7 +294,7 @@
 
                             <tbody>
 
-                               @forelse(($sewa->barangSewaHistories ?? collect())->sortByDesc('tanggal_perubahan') as $history)
+                               @forelse(($sewa->histories ?? collect())->sortByDesc('tanggal_perubahan') as $history)
                                     <tr>
 
                                         <!-- TANGGAL -->
@@ -349,17 +349,9 @@
                                                         : 'danger');
                                             @endphp
 
-                                            <div class="d-flex align-items-center">
-
-                                                <span class="badge rounded-pill bg-{{ $color }}"
-                                                    style="width:8px; height:8px; padding:0; margin-right:8px;">
-                                                </span>
-
-                                                <span class="badge rounded-pill text-{{ $color }}">
-                                                    {{ strtoupper($history->kondisi) }}
-                                                </span>
-
-                                            </div>
+                                            <span class="badge rounded-pill text-{{ $color }}">
+                                                {{ strtoupper($history->kondisi) }}
+                                            </span>
 
                                         </td>
 
