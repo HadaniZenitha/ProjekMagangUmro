@@ -14,6 +14,7 @@
 
         /* ===== HEADER KOP ===== */
         .kop-wrapper {
+            position: relative;
             width: 100%;
             border-bottom: 3px solid #000;
             padding-bottom: 12px;
@@ -30,12 +31,23 @@
             vertical-align: middle;
         }
 
-        .logo-col {
-            width: 90px;
+        .logo-kiri,
+        .logo.kanan {
+            width: 200px;
         }
 
-        .logo {
-            width: 75px;
+        .logo-kanan {
+            text-align: right;
+        }
+
+        .logo-danantara {
+            width: 170px;
+            height: auto;
+        }
+
+        .logo-pln {
+            width: 170px;
+            height: auto;
         }
 
         .kop-text {
@@ -44,19 +56,22 @@
 
         .kop-text h2 {
             margin: 0;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
+            line-height: 1.2;
         }
 
         .kop-text h3 {
-            margin: 2px 0;
-            font-size: 16px;
+            margin: 3px 0;
+            font-size: 17px;
             font-weight: bold;
+            line-height: 1.2;
         }
 
         .kop-text p {
             margin: 2px 0;
             font-size: 11px;
+            line-height: 1.3;
         }
 
         /* ===== JUDUL ===== */
@@ -167,34 +182,35 @@
         <table class="kop-table">
             <tr>
 
-                <!-- LOGO -->
-                <td class="logo-col">
-                    <img src="{{ public_path('images/icon.png') }}" class="logo">
-                </td>
+            <!-- LOGO DANANTARA -->
+            <td width="220" style="text-align:left; vertical-align:top;">
+                <img src="{{ public_path('images/Danantara_Logo.png') }}"
+                    style="width:150px; margin-top: -30px">
+            </td>
 
                 <!-- TEXT -->
                 <td class="kop-text">
                     <h2>PT PLN NUSANTARA POWER</h2>
-                    <h3>UNIT MAINTENANCE REPAIR OVERHAUL GRESIK</h3>
+                    <h3>UNIT MAINTENANCE REPAIR & OVERHAUL</h3>
 
                     <p>
                         SMART-UMRO | Smart Management of Assets and Resource Terintegrasi
                     </p>
 
-                    <p>
-                        Jl. Harun Thohir No.1, Pulopancikan, Kec. Gresik, Kabupaten Gresik
-                    </p>
-
-                    <p>
-                        Telp: (031) 3981811 | Website: https://www.plnnusantarapower.co.id
-                    </p>
                 </td>
+                        
+            <!-- LOGO PLN-->
+            <td width="200" style="text-align:right; vertical-align:top;">
+                <img src="{{ public_path('images/Logo-PLN.png') }}" 
+                    style="width:200px; margin-top:-35px;">
+            </td>
+
 
             </tr>
         </table>
 
     </div>
-
+    
     <!-- ===== JUDUL ===== -->
     <div class="header">
         <h3>LAPORAN ITEM INVENTARIS</h3>

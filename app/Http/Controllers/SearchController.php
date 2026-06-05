@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Barang;
 use App\Models\Ruang;
 use App\Models\Pic;
@@ -13,6 +14,7 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->q;
+        $user = Auth::user();
 
         // 🔹 BARANG
         $barang = Barang::select('id', 'nama_barang', 'kode_barang', 'ruang_id')
@@ -24,23 +26,29 @@ class SearchController extends Controller
             ->limit(5)
             ->get();
 
-        // 🔹 RUANG
-        $ruang = Ruang::select('id', 'nama_ruang')
-            ->where('nama_ruang', 'like', "%$keyword%")
-            ->limit(5)
-            ->get();
+        $ruang = collect();
+        $karyawan = collect();
+        $gedung = collect();
 
-        // 🔹 KARYAWAN
-        $karyawan = Pic::select('id', 'nama_pic')
-            ->where('nama_pic', 'like', "%$keyword%")
-            ->limit(5)
-            ->get();
+        if ($user instanceof \App\Models\User && $user->hasRole('superadmin')) {
+            // 🔹 RUANG
+            $ruang = Ruang::select('id', 'nama_ruang')
+                ->where('nama_ruang', 'like', "%$keyword%")
+                ->limit(5)
+                ->get();
 
-        // 🔹 GEDUNG
-        $gedung = Gedung::select('id', 'nama_gedung')
-            ->where('nama_gedung', 'like', "%$keyword%")
-            ->limit(5)
-            ->get();
+            // 🔹 KARYAWAN
+            $karyawan = Pic::select('id', 'nama_pic')
+                ->where('nama_pic', 'like', "%$keyword%")
+                ->limit(5)
+                ->get();
+
+            // 🔹 GEDUNG
+            $gedung = Gedung::select('id', 'nama_gedung')
+                ->where('nama_gedung', 'like', "%$keyword%")
+                ->limit(5)
+                ->get();
+        }
 
         return response()->json([
             'barang'   => $barang,

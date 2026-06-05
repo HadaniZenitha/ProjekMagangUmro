@@ -278,9 +278,9 @@
                             <td>{{ $d->nama_barang }}</td>
                             <td>{{ $d->ruang->nama_ruang ?? '-' }}</td>
 
-                            <td class="text-center">{{ $d->tahun }}</td>
+                            <td class="text-left">{{ $d->tahun }}</td>
 
-                            <td class="text-center">
+                            <td class="text-left">
                                 @if($d->kondisi == 'Baik')
                                     <span class="kondisi-baik">Baik</span>
                                 @elseif($d->kondisi == 'Perlu Perbaikan')
@@ -290,7 +290,7 @@
                                 @endif
                             </td>
 
-                            <td class="text-center">
+                            <td class="text-left">
                                 <div class="action-btn">
 
                                     <a href="{{ route('barang-sewa.show', $d->id) }}" class="btn btn-info btn-sm btn-pro btn-icon" title="Lihat Detail">
