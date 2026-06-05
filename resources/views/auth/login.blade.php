@@ -1,8 +1,8 @@
 @extends('layouts.auth', [
-    'pageTitle' => 'i-Noni - Login',
+    'pageTitle' => 'SmartUMRO - Login',
     'mode' => 'login',
     'formTitle' => 'Login',
-    'formSubtitle' => 'Masuk ke akun i-Noni Anda.'
+    'formSubtitle' => 'Masuk ke akun SmartUMRO Anda.'
 ])
 
 @section('auth-form')
