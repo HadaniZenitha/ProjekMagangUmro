@@ -365,7 +365,7 @@
 								<td>{{ $b->nama_barang }}</td>
 								<td>{{ $b->ruang->nama_ruang ?? '-' }}</td>
 								<td>{{ $b->tahun_perolehan }}</td>
-								<td>{{ $b->kondisi ?? '-' }}</td>
+								<td>{{ ucwords($b->kondisi) ?? '-' }}</td>
 								<td class="qr-box">
 									{!! QrCode::size(60)->generate(route('scan.process', $b->kode_barang)) !!}
 								</td>

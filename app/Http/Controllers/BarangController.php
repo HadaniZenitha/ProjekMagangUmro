@@ -95,7 +95,7 @@ class BarangController extends Controller
             'pic_id'              => 'nullable|exists:pics,id',
             'nama_barang'         => 'required|string|max:255',
             'tahun_perolehan'     => 'required|integer',
-            'kondisi'             => 'required|in:Baik,Perlu Perbaikan,Rusak',
+            'kondisi'             => 'required|in:baik,perlu perbaikan,rusak',
             'foto'                => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
